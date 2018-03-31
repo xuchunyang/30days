@@ -1,0 +1,11 @@
+#+TITLE: 30 Days
+
+* Day 0 <2018-03-31 Sat>
+
+** 注册 kaggle
+
+https://www.kaggle.com/xuchunyang
+
+** 安装 Python
+
+[[http://docs.python-guide.org/en/latest/starting/install3/osx/#install3-osx][Installing Python 3 on Mac OS X — The Hitchhiker's Guide to Python]]
