@@ -719,3 +719,436 @@ Docstring 的习俗，跟 Emacs 类似。
 : 'Print "Hello, World!\n".\n\n    That is it.\n    '
 
 ** 编码风格 - PEP 8
+
+* [[https://docs.python.org/3/tutorial/datastructures.html][5. Data Structures — Python 3.6.5 documentation]]
+
+** List 方法
+
+append
+
+#+begin_src python :results output
+xl = [1, 2, 3]
+xl.append(4)
+print(xl)
+
+yl = [1, 2, 3]
+yl[len(yl):] = [4]
+print(yl)
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3, 4]
+: [1, 2, 3, 4]
+
+extend
+
+#+begin_src python :session
+l = [1, 2]
+l.extend(range(3, 10))
+l
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+
+insert
+
+#+begin_src python :session
+l = ['a', 'b', 'c']
+l.insert(0, '<')
+l.insert(len(l), '>')
+l
+#+end_src
+
+#+RESULTS:
+| < | a | b | c | > |
+
+remove
+
+#+begin_src python :session
+l = [1, 2, 3, 1]
+l.remove(1)
+l
+#+end_src
+
+#+RESULTS:
+| 2 | 3 | 1 |
+
+pop
+
+#+begin_src python :session :results output
+xl = [1, 2, 3, 4]
+print(xl.pop())
+print(xl.pop(0))
+print(xl)
+#+end_src
+
+#+RESULTS:
+: 4
+: 1
+: [2, 3]
+
+clear
+
+#+begin_src python :session
+l = [1, 2]
+l.clear()
+#+end_src
+
+~lst = []~ v.s. ~lst.clear()~ 的讨论：
+
+[[https://stackoverflow.com/questions/850795/different-ways-of-clearing-lists][python - Different ways of clearing lists - Stack Overflow]]
+
+然而我并不明白
+
+index
+
+#+begin_src python :session
+[1, 2, 3, 2, 1].index(2)
+#+end_src
+
+#+RESULTS:
+: 1
+
+count
+
+#+begin_src python :session
+[1,2,3,2,1].count(1)
+#+end_src
+
+#+RESULTS:
+: 2
+
+sort
+
+#+begin_src python :session
+lst = [1, 5, 4, 2, 3]
+lst.sort()
+lst
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 | 5 |
+
+reverse
+
+#+begin_src python :session
+lst = [1,2,3]
+lst.reverse()
+lst
+#+end_src
+
+#+RESULTS:
+| 3 | 2 | 1 |
+
+copy
+
+#+begin_src python :session
+  lst = [1,2,3]
+  copy = lst.copy()
+  lst[:0] = [100]
+  copy[3:] = [200]
+  [lst, copy]
+#+end_src
+
+#+RESULTS:
+| 100 | 1 | 2 |   3 |
+|   1 | 2 | 3 | 200 |
+
+构造 List
+
+#+begin_src python :session
+  squares = []
+  for x in range(10):
+      squares.append(x**2)
+
+  squares
+#+end_src
+
+#+RESULTS:
+| 0 | 1 | 4 | 9 | 16 | 25 | 36 | 49 | 64 | 81 |
+
+#+begin_src python :session
+list(map(lambda x: x**2, range(10)))
+#+end_src
+
+#+RESULTS:
+| 0 | 1 | 4 | 9 | 16 | 25 | 36 | 49 | 64 | 81 |
+
+map
+
+#+begin_src python :session
+[x**2 for x in range(10)]
+#+end_src
+
+#+RESULTS:
+| 0 | 1 | 4 | 9 | 16 | 25 | 36 | 49 | 64 | 81 |
+
+#+begin_src python :session :results value pp
+[(x, y) for x in [1,2] for y in [3, 4]]
+#+end_src
+
+#+RESULTS:
+: [(1, 3), (1, 4), (2, 3), (2, 4)]
+
+#+begin_src python :session
+[x**2 for x in [1,2,3]]
+#+end_src
+
+#+RESULTS:
+| 1 | 4 | 9 |
+
+filter
+
+#+begin_src python :session
+[x for x in [-1, 0, 1, 2, 3] if x > 0]
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 |
+
+flattern
+
+#+begin_src python :session
+[y for x in [[1,2], [3,4]] for y in x]
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 |
+
+zip
+
+#+begin_src python :session :results value pp
+  matrix = [
+      [1, 2],
+      [3, 4],
+      [5, 6],
+  ]
+
+  [[row[i] for row in matrix] for i in range(2)]
+#+end_src
+
+#+RESULTS:
+: [[1, 3, 5], [2, 4, 6]]
+
+#+begin_src python :session :results value pp
+list(zip([1,2], [3,4]))
+#+end_src
+
+#+RESULTS:
+: [(1, 3), (2, 4)]
+
+** del
+
+#+begin_src python :session :results output
+l = list(range(0, 10))
+del l[0]
+print(l)
+del l[3:5]
+print(l)
+del l[:]
+print(l)
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+: [1, 2, 3, 6, 7, 8, 9]
+: []
+
+完全删除一个变量
+
+#+begin_src python :session
+  x = 123
+  del x
+#+end_src
+
+
+** Tuples
+
+#+begin_src python :session :results value pp
+t = 1, True, 'hello'
+t
+#+end_src
+
+#+RESULTS:
+: (1, True, 'hello')
+
+tuple 的值不能改
+
+#+begin_src python :session :results value pp
+x = 1, True, "Hello"
+first, second, third = x
+[first, second, third]
+#+end_src
+
+#+RESULTS:
+: [1, True, 'Hello']
+
+** Sets
+
+集合（无序、单一）
+
+#+begin_src python :session :results output
+  numbers = {1, 1, 2, 3, 4, 5}
+  print(numbers, len(numbers))
+  empty = set()
+  print(empty, len(empty))
+#+end_src
+
+#+RESULTS:
+: {1, 2, 3, 4, 5} 5
+: set() 0
+
+#+begin_src python :session
+ints = {1,3}
+[x in ints for x in [1, 2, 3]]
+#+end_src
+
+#+RESULTS:
+| True | False | True |
+
+** Dictionaries
+
+类似的讲法 Alist, Plist, Hash Table。Python Dictionaries 的键要求是不可变的类似的数据，如数字、字符串，Tuple。
+
+#+begin_src python :session
+{}
+#+end_src
+
+#+RESULTS:
+: {}
+
+#+begin_src python :session :results output
+tiger = {'kind': "cat", 'speed': 40}
+tiger['color'] = 'yellow'
+print(tiger)
+print(tiger['kind'])
+print(list(tiger.keys()))
+print(list(tiger.values()))
+print('life-span' in tiger)
+#+end_src
+
+#+RESULTS:
+: {'kind': 'cat', 'speed': 40, 'color': 'yellow'}
+: cat
+: ['kind', 'speed', 'color']
+: ['cat', 40, 'yellow']
+: False
+
+#+begin_src python :session :results value pp
+dict([('one', 1), ('two', 2)])
+#+end_src
+
+#+RESULTS:
+: {'one': 1, 'two': 2}
+
+#+begin_src python :session :results value pp
+dict(x=3, y=4)
+#+end_src
+
+#+RESULTS:
+: {'x': 3, 'y': 4}
+
+** Loop Techniques
+
+#+begin_src python :session :results output
+  foo = {'one': 1, 'two': 2, 'three': 3}
+  for k, v in foo.items():
+      print(k, v)
+#+end_src
+
+#+RESULTS:
+: one 1
+: two 2
+: three 3
+
+索引
+
+#+begin_src python :session :results value pp
+  [(i, v) for i, v in enumerate(['a', 'b', 'c'])]
+#+end_src
+
+#+RESULTS:
+: [(0, 'a'), (1, 'b'), (2, 'c')]
+
+同时 Loop 两个等长序列
+
+#+begin_src python :session :results output
+  questions = ['1 + 2', '2 + 3', '3 + 4']
+  answers = [3, 5, 7]
+  for q, a in zip(questions, answers):
+      print(q, '=', a)
+#+end_src
+
+#+RESULTS:
+: 1 + 2 = 3
+: 2 + 3 = 5
+: 3 + 4 = 7
+
+从后向前
+
+#+begin_src python :session :results output
+  for i in reversed(range(1, 10)):
+      print(i)
+#+end_src
+
+#+RESULTS:
+: 9
+: 8
+: 7
+: 6
+: 5
+: 4
+: 3
+: 2
+: 1
+
+按顺序
+
+#+begin_src python :session :results output
+  nums = [1, 3, 4, 2, 3, 3, 1]
+  for i in sorted(set(nums)):
+      print(i)
+#+end_src
+
+#+RESULTS:
+: 1
+: 2
+: 3
+: 4
+
+#+begin_src python :session
+  import math
+  raw_data = [56.2, float('NaN'), 51.7, 55.3, 52.5, float('NaN'), 47.8]
+  [x for x in raw_data if not math.isnan(x)]
+#+end_src
+
+#+RESULTS:
+| 56.2 | 51.7 | 55.3 | 52.5 | 47.8 |
+
+** Sequence 的比较
+
+按照词典顺序
+
+#+begin_src python :session
+[1,2,3] < [1,2,4]
+#+end_src
+
+#+RESULTS:
+: True
+
+#+begin_src python :session
+'a' < 'b' < 'c'
+#+end_src
+
+#+RESULTS:
+: True
+
+一个元素一个元素地比较，"abc" 比 "abcd" 大，字典就是如此。
+
+#+begin_src python :session
+[1,2] < [1,2,3]
+#+end_src
+
+#+RESULTS:
+: True
