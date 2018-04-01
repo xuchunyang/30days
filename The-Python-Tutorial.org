@@ -1225,3 +1225,175 @@ package/subpackage/.../module
 
 每个目录下 ~__init__.py~ 用来提醒 Python 这个目录是 Package 的一部分，它可以是个空文件。
 
+* [[https://docs.python.org/3/tutorial/inputoutput.html][7. Input and Output — Python 3.6.5 documentation]]
+
+** 格式化
+
+第一个问题是如何把 Python Value 转成 String 类型
+
+- ~str()~ 人可读
+- ~repr()~ 机器可读 REPResentation
+
+#+begin_src python :session
+str(1).rjust(4)
+#+end_src
+
+#+RESULTS:
+:    1
+
+#+begin_src python :session :results output
+  for x in range(1, 11):
+      print(str(x).rjust(2), str(x*x).rjust(3), str(x*x*x).rjust(4))
+#+end_src
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+1   1    1
+ 2   4    8
+ 3   9   27
+ 4  16   64
+ 5  25  125
+ 6  36  216
+ 7  49  343
+ 8  64  512
+ 9  81  729
+10 100 1000
+#+END_EXAMPLE
+
+#+begin_src python :session :results output
+  for x in range(1, 11):
+    print('{0:2d} {1:3d} {2:4d}'.format(x, x*x, x*x*x))
+#+end_src
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+1   1    1
+ 2   4    8
+ 3   9   27
+ 4  16   64
+ 5  25  125
+ 6  36  216
+ 7  49  343
+ 8  64  512
+ 9  81  729
+10 100 1000
+#+END_EXAMPLE
+
+~{}~ 指定替换位置
+
+#+begin_src python :session
+  name = 'Python'
+  'Hello, {}!'.format(name)
+#+end_src
+
+#+RESULTS:
+: Hello, Python!
+
+编号指定参数位置
+
+#+begin_src python :session
+"{0} + {1} = {1} + {0}".format(1, 2)
+#+end_src
+
+#+RESULTS:
+: 1 + 2 = 2 + 1
+
+可以用 keyword argument
+
+#+begin_src python :session
+'Hello, {name}!'.format(name='Python')
+#+end_src
+
+#+RESULTS:
+: Hello, Python!
+
+#+begin_src python :session :results output
+  table = {'x': 42, 'zzz': 1922}
+  for k, v in table.items():
+      print('{0:10} => {1:10d}'.format(k, v))
+#+end_src
+
+#+RESULTS:
+: x          =>         42
+: zzz        =>       1922
+
+** 读写文件
+
+一次性读出文件内容：
+
+#+begin_src python :results output silent
+  f = open("/usr/share/dict/connectives")
+  print(f.read())
+  f.close()
+#+end_src
+
+一行一行地读：
+
+#+begin_src python :session
+  import sys
+
+  f = open("/usr/share/dict/connectives")
+  while True:
+      line = f.readline()
+      if line != '':
+          sys.stdout.write(line)
+      else:
+          break
+  f.close()
+#+end_src
+
+更紧凑的写法：
+
+#+begin_src python :session
+  with open('/usr/share/dict/connectives') as f:
+      for line in f:
+          print(line, end='')
+#+end_src
+
+写入文件：
+
+#+begin_src python :results output
+  msg = 'Hello, Python!\n'
+  with open('/tmp/workfile', 'w+') as f:
+      f.write(msg)
+      f.seek(0)
+      if msg == f.read():
+          print("Success")
+      else:
+          print("Failure")
+#+end_src
+
+#+RESULTS:
+: Success
+
+** Python 数据写入 JSON
+
+查看 List 的 JSON 表示：
+
+#+begin_src python :session :results value pp
+import json
+json.dumps([1, 'simple', 'list'])
+#+end_src
+
+#+RESULTS:
+: '[1, "simple", "list"]'
+
+
+保存到文件：
+
+#+begin_src python :session
+  import json
+  with open("/tmp/a.json", "w") as f:
+      json.dump([1, 'simple', 'list', '!'], f)
+#+end_src
+
+读取 JSON 文件：
+
+#+begin_src python :session :results value pp
+  import json
+  with open("/tmp/a.json") as f:
+      json.load(f)
+#+end_src
+
+#+RESULTS:
+: [1, 'simple', 'list', '!']
