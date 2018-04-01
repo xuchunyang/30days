@@ -1,0 +1,391 @@
+* [[https://docs.python.org/3/tutorial/introduction.html][3. An Informal Introduction to Python — Python 3.6.5 documentation]]
+
+** Numbers
+
+整数自动被转换成浮点数：
+
+#+begin_src python :results output
+  print(3 / 4)
+  print(1.0 * 1)
+#+end_src
+
+#+RESULTS:
+: 0.75
+: 1.0
+
+~//~ 跟 ~/~ 类似但去掉小数部分：
+
+#+begin_src python :results output
+    print(8 / 5)
+    print(8 // 5)
+#+end_src
+
+#+RESULTS:
+: 1.6
+: 1
+
+指数运算用 ~**~
+
+#+begin_src python :results output
+  print(2 ** 10)
+#+end_src
+
+#+RESULTS:
+: 1024
+
+变量赋值用 ~=~
+
+#+begin_src python :results output
+two = 2
+ten = 10
+result = two ** ten
+print("2 的 10 次方为", result)
+#+end_src
+
+#+RESULTS:
+: 2 的 10 次方为 1024
+
+混和了整数和浮点数的计算会先把整数转换成浮点数
+
+#+begin_src python :results output
+print(2 * 0.5)
+#+end_src
+
+#+RESULTS:
+: 1.0
+
+** Strings
+
+单双引号都能表示
+
+#+begin_src python :results output
+  print("Hello, Python!")
+  print('Hello, Python!')
+#+end_src
+
+#+RESULTS:
+: Hello, Python!
+: Hello, Python!
+
+如有需要 Escape 引号的，用 ~\~
+
+#+begin_src python :results output
+print("single quote => '")
+print('single quote => \'')
+print('double quote => "')
+print("double quote => \"")
+#+end_src
+
+#+RESULTS:
+: single quote => '
+: single quote => '
+: double quote => "
+: double quote => "
+
+取消 ~\~ 的特殊含义，在前面加一个 ~r~
+
+#+begin_src python :results output
+print("Hello, World\n")
+print(r"Hello, World\n")
+#+end_src
+
+#+RESULTS:
+: Hello, World
+:
+: Hello, World\n
+
+用 3 个引号表示超过一行的字符串
+
+#+begin_src python :results output
+    print("""\
+    Usage: foo [OPTIONS]
+         --version                 Show version
+         --help                    Show help\
+    """)
+#+end_src
+
+#+RESULTS:
+: Usage: foo [OPTIONS]
+:      --version                 Show version
+:      --help                    Show help
+
+用 ~+~ 串联字符串，用 ~*~ 重复字符串
+
+#+begin_src python :results output
+msg = "Hello, " + "World" + "!"
+pad = '-' * 13
+print(pad, msg, pad)
+#+end_src
+
+#+RESULTS:
+: ------------- Hello, World! -------------
+
+两个字符串摆到一起会自动相连
+
+#+begin_src python :results output
+print('Py' 'thon')
+#+end_src
+
+#+RESULTS:
+: Python
+
+上面这个特性是为了避免「longlines」
+
+#+begin_src python :results output
+  text = ('这是一个很长的段落，'
+          '放到一个引号里写会导致'
+          ' 「Long Line」。')
+  print(text)
+#+end_src
+
+#+RESULTS:
+: 这是一个很长的段落，放到一个引号里写会导致 「Long Line」。
+
+获得字符串中的字符
+
+#+begin_src python :results output
+  word = "Hello"
+  print(word[0])
+  print(word[1])
+  print(word[2])
+  print(word[3])
+  print(word[4])
+#+end_src
+
+#+RESULTS:
+: H
+: e
+: l
+: l
+: o
+
+索引从 0 开始，如果为负数则从结尾数起
+
+#+begin_src python :results output
+print('hello'[-1])
+print('hello'[-5])
+#+end_src
+
+#+RESULTS:
+: o
+: h
+
+对于长度为 ~N~ 的字符串，用 [0, N-1] 或者 [-1, -N] 索引。
+
+~substring~ 在 Python 中叫做 Slicing 「切片？」
+
+#+begin_src python :session :results output
+  greeting = 'Hello, World!'
+  print(greeting[0:5])
+  print(greeting[7:-1])
+  print()
+  print(greeting[:5])
+  print(greeting[7:])
+#+end_src
+
+#+RESULTS:
+: Hello
+: World
+:
+: Hello
+: World!
+
+写法是 [beg:end]，区间为 [beg, end)，下图有助于理解
+
+#+begin_example
+   +---+---+---+---+---+
+   | H | E | L | L | O |
+   +---+---+---+---+---+
+   0   1   2   3   4   5
+  -5  -4  -3  -2  -1
+#+end_example
+
+Python 的 String 一经生成就不能改动。
+
+获得字符串的长度，用 ~len~
+
+#+begin_src python :session
+greeting = "Hello, World"
+len(greeting)
+#+end_src
+
+#+RESULTS:
+: 12
+
+*** TODO String - See also
+
+1. String 作为 Sequence 的一种
+2. String 常用方法
+3. 格式化字符串
+4. printf
+
+** Lists
+
+列表、序列或数组
+
+#+begin_src python :session :results value pp
+  numbers = [1, 2, 3, 4, 5]
+  numbers
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3, 4, 5]
+
+跟 String 一样，List 也属于 Sequence 类型，因此也能「切片」
+
+#+begin_src python :session :results output
+  four_numbers = [1, 2, 3, 4]
+  two_numbers = four_numbers[1:3]
+  print("four_numbers = ", four_numbers)
+  print("two_numbers = ", two_numbers)
+
+  two_numbers[0] *= 100
+  four_numbers[1] *= 200
+  print("four_numbers = ", four_numbers)
+  print("two_numbers = ", two_numbers)
+#+end_src
+
+#+RESULTS:
+: four_numbers =  [1, 2, 3, 4]
+: two_numbers =  [2, 3]
+: four_numbers =  [1, 400, 3, 4]
+: two_numbers =  [200, 3]
+
+上例可说明：
+
+1. 不像 String，List 的值可以改
+2. 「切片」返回的是一个完全新的 List，修改其中一个不会对另一个值产生影响，跟 ~seq-subseq~ 一样
+
+TODO Shallow copy 是什么意思？Python List 切片和 Emacs 的 ~seq-copy~ 都用到了这个术语。
+
+List 串联用 ~+~
+
+#+begin_src python :session
+  [1, 2] + [3, 4]
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 |
+
+加一个新元素用 ~append~
+
+#+begin_src python :session
+  # 不行，没报错，但也不返回结果
+  # [1, 2, 3].append(4)
+
+  list = [1, 2]
+  list.append(3)
+  list.append(4)
+  list
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 |
+
+甚至直接给 Slice 赋值，达到同时修改多值的目的
+
+#+begin_src python :session
+  list = [1, 2, 3, 4, 5]
+  list[2:4] = [300, 400]
+  list
+#+end_src
+
+#+RESULTS:
+| 1 | 2 | 300 | 400 | 5 |
+
+清空 List
+
+#+begin_src python :session
+  list = [1, 2, 3]
+  # 为什么不直接 list = []，还是纯粹为了举例？
+  list[:] = []
+  list
+#+end_src
+
+#+RESULTS:
+: []
+
+用 ~len~ 获得 List 的长度
+
+#+begin_src python :session
+len([1, 2, 3])
+#+end_src
+
+#+RESULTS:
+: 3
+
+List 的嵌套
+
+#+begin_src python :session :results output
+numbers = [1, 2, 3]
+characters = ['a', 'b', 'c']
+lists = [numbers, characters]
+print(lists[1])
+print(lists[1][2])
+#+end_src
+
+#+RESULTS:
+: ['a', 'b', 'c']
+: c
+
+** 第一步
+
+生成 Fibonacci 序列 1, 1, 2, 3, 5, 8, ...
+
+#+begin_src python :session :results output
+  a, b = 0, 1
+  while b < 10:
+      print(b)
+      a, b = b, a+b
+#+end_src
+
+#+RESULTS:
+: 1
+: 1
+: 2
+: 3
+: 5
+: 8
+
+Python 中同时给多个变量赋值的计算顺序跟 ~cl-psetq~ 一样：
+
+- 从左往右先计算完所以的值，最后在赋值
+
+利用它，可以很容易地交换两个变量的值
+
+#+begin_src python :session
+  x = 1
+  y = 2
+  x, y = y, x
+  [x, y]
+#+end_src
+
+#+RESULTS:
+| 2 | 1 |
+
+#+begin_src emacs-lisp
+  (let ((x 1) (y 2))
+    (cl-psetq x y
+              y x)
+    (list x y))
+#+end_src
+
+#+RESULTS:
+| 2 | 1 |
+
+Python 跟 C 一样，0 为假，其余均为真。
+
+Python 对缩进有明确要求，这个别的语言不同。
+
+~print~ 的参数 ~end~ 预设是一个空格，可以像这样修改它
+
+#+begin_src python :results output
+  numbers = [1, 2, 3, 4, 5]
+  i = 0
+  while i < len(numbers):
+      print(numbers[i], end=',')
+      i += 1
+#+end_src
+
+#+RESULTS:
+: 1,2,3,4,5,
