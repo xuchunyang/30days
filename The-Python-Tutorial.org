@@ -1397,3 +1397,69 @@ json.dumps([1, 'simple', 'list'])
 
 #+RESULTS:
 : [1, 'simple', 'list', '!']
+
+* [[https://docs.python.org/3/tutorial/errors.html][8. Errors and Exceptions — Python 3.6.5 documentation]]
+
+处理指定的异常
+
+#+begin_src python :results output
+  try:
+      with open("non-exist.txt"):
+          pass
+  except FileNotFoundError:
+      print("No such file or directory")
+#+end_src
+
+#+RESULTS:
+: No such file or directory
+
+处理一系列的异常：
+
+#+begin_src python :session
+  import sys
+
+  try:
+      f = open('myfile.txt')
+      s = f.readline()
+      i = int(s.strip())
+  except OSError as err:
+      print("OS error: {0}".format(err))
+  except ValueError:
+      print("Could not convert data to an integer.")
+  except:
+      print("Unexpected error:", sys.exc_info()[0])
+      raise
+#+end_src
+
+#+RESULTS:
+
+抛出异常：
+
+#+begin_src python :session :results output
+  try:
+      raise Exception('spam', 'eggs')
+  except Exception as inst:
+      print(type(inst))
+      print(inst.args)
+      print(inst)
+#+end_src
+
+#+RESULTS:
+: <class 'Exception'>
+: ('spam', 'eggs')
+: ('spam', 'eggs')
+
+检查异常，但不处理它
+
+#+begin_src python :session
+  try:
+      raise NameError("foobar")
+  except NameError:
+      print("An exception occurs")
+      raise
+#+end_src
+
+TODO 自定义异常：
+
+
+try ... except ... else ... finally
