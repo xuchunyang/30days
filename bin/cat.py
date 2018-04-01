@@ -3,9 +3,17 @@
 
 def cat(name):
     "Print the file contents."
-    # TODO: 这里要做异常处理，失败的情况得跳过
-    with open(name) as f:
+    try:
+        f = open(name)
+    except OSError as err:
+        # https://misc.flogisoft.com/bash/tip_colors_and_formatting
+        red = '\033[31m'
+        reset = '\033[0m'
+        print('{0}OSError: {1}: {2}{3}'.format(red, name, err, reset))
+    else:
         print(f.read(), end='')
+    finally:
+        f.close()
 
 if __name__ == "__main__":
     import sys
