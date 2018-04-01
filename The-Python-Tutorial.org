@@ -1152,3 +1152,76 @@ dict(x=3, y=4)
 
 #+RESULTS:
 : True
+
+* [[https://docs.python.org/3/tutorial/modules.html][6. Modules — Python 3.6.5 documentation]]
+
+文件对应模块，模块有 Namespace，就是它的文件名。
+
+** 导入模块
+
+#+begin_src python :session
+  # 模块
+  import fibo
+  # 模块中的方法
+  from fibo import fib, fib2
+  from fibo import *
+  # 别名
+  import fibo as fib
+  from fibo import fib as fibonacci
+#+end_src
+
+** 模块同时作为程序本身
+
+#+begin_src python :session
+  if __name__ == "__main__":
+      import sys
+      print("Hello, " + sys.argv[1] + "!")
+#+end_src
+
+** 模块的 ~load-path~
+
+~import foo~ 的搜索顺序：
+
+1. 看看 ~foo~ 是不是内置的
+2. 看看 ~sys.path~ 中有没有一个 ~foo.py~ 文件， ~sys.path~ 包含了：
+   - 当前路径
+   - ~PYTHONPATH~
+
+** Standard Modules
+
+举例 ~sys~
+
+#+begin_src python :session :results value pp
+import sys
+[sys.ps1, sys.ps2]
+#+end_src
+
+#+RESULTS:
+: ['>>> ', '... ']
+
+#+begin_src python :session :results pp
+sys.path
+#+end_src
+
+#+RESULTS:
+: ['',
+:  '/usr/local/Cellar/python/3.6.4_4/Frameworks/Python.framework/Versions/3.6/lib/python36.zip',
+:  '/usr/local/Cellar/python/3.6.4_4/Frameworks/Python.framework/Versions/3.6/lib/python3.6',
+:  '/usr/local/Cellar/python/3.6.4_4/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload',
+:  '/usr/local/lib/python3.6/site-packages']
+
+** ~dir()~ - 探索模块
+
+#+begin_src python :session :results pp
+[m for m in dir(fibo) if not m.startswith('__')]
+#+end_src
+
+#+RESULTS:
+: ['fib', 'fib2']
+
+** Packages
+
+package/subpackage/.../module
+
+每个目录下 ~__init__.py~ 用来提醒 Python 这个目录是 Package 的一部分，它可以是个空文件。
+
