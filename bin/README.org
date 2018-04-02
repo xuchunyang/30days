@@ -1,7 +1,8 @@
-| File        | Purpose | Skill         |
-|-------------+---------+---------------|
-| [[file:cat.py]] | cat(1)  | Read file     |
-|             | wc(1)   | String & List |
-|             | grep(1) | regexp        |
-|             | find(1) | Read dir      |
-|             | Youdao  | HTTP & JSON   |
+* File Listings
+
+| File         | About   | Skill         |
+|--------------+---------+---------------|
+| file:cat.py  | cat(1)  | Read file     |
+| file:wc.py   | wc(1)   | String & list |
+| file:grep.py | grep(1) | re            |
+
