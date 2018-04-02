@@ -1653,3 +1653,221 @@ sum([i for i in range(1, 101)])
 # Out[37]:
 : 5050
 :end:
+
+* [[https://docs.python.org/3/tutorial/stdlib.html][10. Brief Tour of the Standard Library — Python 3.6.5 documentation]]
+
+** os
+
+#+begin_src python :session os
+import os
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :session os
+os.getcwd()
+#+end_src
+
+#+RESULTS:
+: /Users/xcy/src/30days
+
+#+begin_src python :session os
+os.chdir('/tmp/')
+os.getcwd()
+#+end_src
+
+#+RESULTS:
+: /private/tmp
+
+** glob
+
+#+begin_src python :session
+import glob
+glob.glob('*.org')
+#+end_src
+
+#+RESULTS:
+| 30days.org | The-Python-Tutorial.org |
+
+** sys
+
+Command Line Arguments:
+
+#+begin_src python :session :results value pp
+import sys
+sys.argv
+#+end_src
+
+#+RESULTS:
+: ['']
+
+stderr
+
+#+begin_src python :session
+import sys
+sys.stderr.write('Warning, log file not found\n')
+#+end_src
+
+#+RESULTS:
+: 28
+
+** re
+
+#+begin_src python :session :results output
+  import re
+  import glob
+  for f in glob.glob('*'):
+      if re.fullmatch(r'.*\.org', f):
+          print(f)
+#+end_src
+
+#+RESULTS:
+: 30days.org
+: The-Python-Tutorial.org
+
+** math
+
+#+begin_src python :session
+import math
+math.pi
+#+end_src
+
+#+RESULTS:
+: 3.141592653589793
+
+#+begin_src python :session
+math.log(512, 2)
+#+end_src
+
+#+RESULTS:
+: 9.0
+
+#+begin_src python :session :results value pp
+list((math.cos(0), math.sin(math.pi/2)))
+#+end_src
+
+#+RESULTS:
+: [1.0, 1.0]
+
+** random
+
+#+begin_src python :session :results output
+  import random
+  print(random.choice(range(100)))
+  print(random.choice(['Cat', 'Dog', 'Lion', 'Jerry']))
+  print(random.sample(range(100), 10))
+  print(random.random())
+  print(random.randrange(3))      # 0, 1, 2
+#+end_src
+
+#+RESULTS:
+: 22
+: Dog
+: [60, 68, 20, 69, 23, 18, 83, 74, 36, 32]
+: 0.6962689592822215
+: 1
+
+** statistics
+
+#+begin_src python :session :results output
+import statistics
+data = [2.75, 1.75, 1.25, 0.25, 0.5, 1.25, 3.5]
+print('平均数', statistics.mean(data))
+print('中位数', statistics.median(data))
+print('方差', statistics.variance(data))
+#+end_src
+
+#+RESULTS:
+: 平均数 1.6071428571428572
+: 中位数 1.25
+: 方差 1.3720238095238095
+
+** urllib
+
+#+begin_src python :session :results output
+  import re
+  from urllib.request import urlopen
+  with urlopen('http://example.com/index.html') as response:
+      for line in response:
+          line = line.decode('utf-8')
+          if re.search(r'<title>', line):
+              print(line)
+#+end_src
+
+#+RESULTS:
+: <title>Example Domain</title>
+
+** datetime
+
+#+begin_src python :session
+import datetime
+datetime.date.today()
+#+end_src
+
+#+RESULTS:
+: 2018-04-02
+
+#+begin_src python :session
+from datetime import date
+birthday = date(1993, 9, 23)
+age = date.today() - birthday
+age.days
+#+end_src
+
+#+RESULTS:
+: 8957
+
+** zlib
+
+#+begin_src python :session
+import zlib
+s = b'witch which has which witches wrist watch'
+len(s)
+#+end_src
+
+#+RESULTS:
+: 41
+
+#+begin_src python :session
+t = zlib.compress(s)
+len(t)
+#+end_src
+
+#+RESULTS:
+: 37
+
+#+begin_src python :session
+zlib.decompress(t)
+#+end_src
+
+#+RESULTS:
+: b'witch which has which witches wrist watch'
+
+** timeit
+
+#+begin_src python :session
+  from timeit import Timer
+  [Timer('t=a; a=b; b=t', 'a=1; b=2').timeit(),
+   Timer('a,b = b,a', 'a=1; b=2').timeit()]
+#+end_src
+
+#+RESULTS:
+| 0.03679685096722096 | 0.027106098015792668 |
+
+** doctest
+
+#+begin_src python :session
+  def three():
+      """Return 3.
+
+      >>> three()
+      3
+      """
+      return 3
+
+  import doctest
+  doctest.testmod()
+#+end_src
+
+#+RESULTS:
+: TestResults(failed=0, attempted=1)
