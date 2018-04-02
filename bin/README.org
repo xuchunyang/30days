@@ -6,4 +6,5 @@
 | file:wc.py   | wc(1)   | String & list |
 | file:grep.py | grep(1) | re            |
 | file:ydcv.py | Youdao  | urllib, json  |
+| file:find.py | find(1) | glob, os.walk |
 
