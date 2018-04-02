@@ -13,3 +13,13 @@ https://www.kaggle.com/xuchunyang
 * Day 1 <2018-04-01 Sun>
 
 ** 学习 Python - [[https://docs.python.org/3/tutorial/index.html][The Python Tutorial — Python 3.6.5 documentation]]
+
+* DAy 2 <2018-04-02 Mon>
+
+** 学习 Python - [[https://docs.python.org/3/tutorial/index.html][The Python Tutorial — Python 3.6.5 documentation]]
+
+** 了解 Jupyter Notebook
+
+- [[https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/What%2520is%2520the%2520Jupyter%2520Notebook.html][What is the Jupyter Notebook? — Jupyter Notebook 5.4.1 documentation]]
+
+** 学习 Python - [[https://www.datacamp.com/courses/intro-to-python-for-data-science][Learn Python for Data Science - Online Course | DataCamp]] (Numpy)
