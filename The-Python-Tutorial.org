@@ -1463,3 +1463,193 @@ TODO 自定义异常：
 
 
 try ... except ... else ... finally
+
+* [[https://docs.python.org/3/tutorial/classes.html][9. Classes — Python 3.6.5 documentation]]
+
+** 定义 Class 
+
+- ~__init__~ 初始化
+- 一个类实例包含了 data 和 method
+  + data 指 class/instance variable
+  + method 第一个参数 self，指的是实例本身，调用时不写
+
+#+begin_src ipython :session class :results raw drawer
+  class Dog:
+
+      kind = '家养'
+
+      def __init__(self, name):
+          self.name = name
+
+      def bark(self):
+          return str("汪汪")
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+:end:
+
+使用 Class
+
+#+begin_src ipython :session class :results raw drawer
+  d = Dog('小黄')
+  [d.kind, d.name, d.bark()]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[6]:
+: ['家养', '小黄', '汪汪']
+:end:
+
+** Class v.s. instance Variables
+
+Class variables 被所有的实例共享，对于 List 这样的 mutable 类似，修改它会影响所有实例
+
+#+begin_src ipython :session :results raw drawer
+  class MyClass:
+      num = 0
+      lst = []
+
+      def p(self):
+          print(self.num, self.lst)
+
+  a = MyClass()
+  a.num += 1
+  a.lst.append(1)
+  a.p()
+  b = MyClass()
+  b.p()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[13]:
+:end:
+
+应该用 Instance variables
+
+#+begin_src ipython :session :results raw drawer
+  class MyClass:
+
+      def __init__(self, name):
+          self.name = name
+          self.numbers = []
+
+      def add_number(self, number):
+          self.numbers.append(number)
+
+  a, b, c = [MyClass(n) for n in ["a", "b", "c"]]
+  a.add_number(1)
+  b.add_number(2)
+  c.add_number(3)
+  print(a.numbers, b.numbers, c.numbers)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[19]:
+:end:
+
+** 杂
+
+- 同名 data/method, 优先 data
+- 需要调用同类中的其它方法，用 self.方法
+- 习惯上用 self 作为第一个参数
+
+** 用 Class 做 Structure
+
+#+begin_src ipython :session
+  class Cat:
+    pass
+
+tom = Cat()
+
+tom.name = "Tom"
+tom.age = 7
+tom.color = 'blue & white'
+
+print(tom.name)
+#+end_src
+
+#+RESULTS:
+: # Out[22]:
+
+** 迭代 (遍历、循环)
+
+以下数据都能用 ~for~ 语句实现遍历
+
+- List
+- Tuple
+- Dict
+- Str
+- file
+
+因为它们实现了 Iterator protocol
+
+#+begin_src ipython :session :results raw drawer
+  class Reverse:
+      """从后向前遍历一个序列的迭代器."""
+      def __init__(self, data):
+          self.data = data
+          self.index = len(data)
+
+      def __iter__(self):
+          return self
+
+      def __next__(self):
+          if self.index == 0:
+              raise StopIteration
+          self.index -= 1
+          return self.data[self.index]
+
+  rev = Reverse('abcd')
+  [x for x in rev]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[33]:
+: ['d', 'c', 'b', 'a']
+:end:
+
+使用 Generator 生成 Iterator
+
+#+begin_src ipython :session :results raw drawer
+  def reverse(data):
+      for index in range(len(data)-1, -1, -1):
+          yield data[index]
+
+  for char in reverse('hello'):
+      print(char)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[34]:
+:end:
+
+generator expression
+
+#+begin_src ipython :session :results raw drawer
+sum(i for i in range(1, 101))
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[36]:
+: 5050
+:end:
+
+跟构造 List 的相似
+
+#+begin_src ipython :session :results raw drawer
+sum([i for i in range(1, 101)])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[37]:
+: 5050
+:end:
