@@ -1871,3 +1871,19 @@ zlib.decompress(t)
 
 #+RESULTS:
 : TestResults(failed=0, attempted=1)
+
+* [[https://docs.python.org/3/tutorial/stdlib2.html][11. Brief Tour of the Standard Library — Part II — Python 3.6.5 documentation]]
+
+** 格式化字符串
+
+#+begin_src python :session
+import locale
+locale.setlocale(locale.LC_ALL, 'zh_CN')
+conv = locale.localeconv()
+conv['currency_symbol']
+#+end_src
+
+#+RESULTS:
+: ￥
+
+** ~threading~
