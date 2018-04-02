@@ -12,7 +12,6 @@ def cat(name):
         print('{0}OSError: {1}: {2}{3}'.format(red, name, err, reset))
     else:
         print(f.read(), end='')
-    finally:
         f.close()
 
 if __name__ == "__main__":
