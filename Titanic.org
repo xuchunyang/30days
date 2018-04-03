@@ -111,7 +111,7 @@ train['Survived'][train['Sex'] == 'male'].value_counts(normalize = True)
 *** 女性的存活率
 
 #+begin_src ipython :session Titanic :results raw drawer
-train['Survived'][train['Sex'] == 'female'].value_counts()
+  train['Survived'][train['Sex'] == 'female'].value_counts()
 #+end_src
 
 #+RESULTS:
@@ -187,3 +187,345 @@ test 的生存率为 0.36，接近于 train 的 0.38
 :end:
 
 得分 0.76555
+
+* 逐一观察其它因素
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+  import pandas as pd
+  train = pd.read_csv("train.csv")
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[17]:
+:end:
+
+** Age
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Survived'][train['Age'] < 18].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+#+BEGIN_EXAMPLE
+  1    0.539823
+  0    0.460177
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+未成年人生存率为 .53
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Survived'][train['Age'] >= 18].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[6]:
+#+BEGIN_EXAMPLE
+  0    0.618968
+  1    0.381032
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+成年人生存率为 .38
+
+** 登船地点
+
+不清楚的算作 Southampton
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Embarked'] = train['Embarked'].fillna('S')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[26]:
+:end:
+
+在 Southampton 登船的生存率
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Survived'][train['Embarked'] == 'S'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[29]:
+#+BEGIN_EXAMPLE
+  0    0.660991
+  1    0.339009
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+在 Cherbourg 的生存率
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Survived'][train['Embarked'] == 'C'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[32]:
+#+BEGIN_EXAMPLE
+  1    0.553571
+  0    0.446429
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+在 Queenstown 的生存率
+
+#+begin_src ipython :session Titanic-2 :results raw drawer
+train['Survived'][train['Embarked'] == 'Q'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[31]:
+#+BEGIN_EXAMPLE
+  0    0.61039
+  1    0.38961
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+* Decision Trees
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+  import numpy as np
+  from sklearn import tree
+  import pandas as pd
+
+  train = pd.read_csv("train.csv")
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[3]:
+:end:
+
+** 清理
+
+分别用 0 和 1 表示男性和女性
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train['Sex'][train['Sex'] == 'male'] = 0
+train['Sex'][train['Sex'] == 'female'] = 1
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train['Sex'].describe()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[6]:
+#+BEGIN_EXAMPLE
+  count     891
+  unique      2
+  top         0
+  freq      577
+  Name: Sex, dtype: int64
+#+END_EXAMPLE
+:end:
+
+补齐 Age
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train["Age"] = train["Age"].fillna(train["Age"].median())
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[24]:
+:end:
+
+
+补齐 Embarked
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train['Embarked'] = train['Embarked'].fillna('S')
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+:end:
+
+用数字表示
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train["Embarked"][train["Embarked"] == "S"] = 0
+train["Embarked"][train["Embarked"] == "C"] = 1
+train["Embarked"][train["Embarked"] == "Q"] = 2
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+train["Embarked"].describe()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[9]:
+#+BEGIN_EXAMPLE
+  count     891
+  unique      3
+  top         0
+  freq      646
+  Name: Embarked, dtype: int64
+#+END_EXAMPLE
+:end:
+
+** 第一个 Decision Tree
+
+- target :: 结果数据，即生存一列 (numpy.ndarray)
+- features :: 影响结果的数据，即性别、年龄等列 (numpy.ndarry)
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+target = train['Survived'].values
+features_one = train[['Pclass', 'Sex', 'Age', 'Fare']].values
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[25]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+my_tree_one = tree.DecisionTreeClassifier()
+my_tree_one = my_tree_one.fit(features_one, target)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[27]:
+:end:
+
+观察各个因素的重要性：
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+my_tree_one.feature_importances_
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[28]:
+: array([0.12315342, 0.31274009, 0.24283935, 0.32126713])
+:end:
+
+观察这个预测对 train 自身的得分：
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+my_tree_one.score(features_one, target)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[30]:
+: 0.9775533108866442
+:end:
+
+** 执行预测
+
+*** 补齐
+
+Fare
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+test = pd.read_csv("test.csv")
+test.Fare[152]
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[52]:
+: nan
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+test.Fare[152] = test.Fare.median()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[53]:
+:end:
+
+Sex
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+test.Sex[test.Sex == 'male'] = 0
+test.Sex[test.Sex == 'female'] = 1
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[54]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+test["Age"] = test["Age"].fillna(test["Age"].median())
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[58]:
+:end:
+
+
+*** 预测
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+test_features = test[['Pclass', 'Sex', 'Age', 'Fare']].values
+my_prediction = my_tree_one.predict(test_features)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[59]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+PassengerId = np.array(test['PassengerId']).astype(int)
+my_solution = pd.DataFrame(my_prediction, PassengerId, columns = ['Survived'])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[60]:
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+my_solution.shape
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[66]:
+: (418, 1)
+:end:
+
+#+begin_src ipython :session Titanic-Decision-Tree :results raw drawer
+my_solution.to_csv('02-prediction-via-default-decision-tree.csv', index_label = ['PassengerId'])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[68]:
+:end:
