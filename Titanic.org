@@ -1,0 +1,189 @@
+#+TITLE: Kaggle's Titanic Completion
+#+DATE: <2018-04-03 Tue>
+
+#+PROPERTY: header-args :dir Titanic
+
+Kaggle 的新手入门题：
+
+- [[https://www.kaggle.com/c/titanic][Titanic: Machine Learning from Disaster | Kaggle]] :: 问题
+- [[https://www.datacamp.com/community/open-courses/kaggle-python-tutorial-on-machine-learning][Kaggle Python Tutorial on Machine Learning (practice) - DataCamp]] :: 一个教程
+
+* 下载数据
+
+#+begin_src sh
+kaggle competitions download --wp -c titanic
+#+end_src
+
+#+RESULTS:
+| train.csv:             | Downloaded | 60KB | of | 60KB |
+| test.csv:              | Downloaded | 28KB | of | 28KB |
+| gender_submission.csv: | Downloaded | 3KB  | of | 3KB  |
+
+* 第一个预测 - 只考虑性别
+
+** 读取数据
+
+#+begin_src ipython :session Titanic :results raw drawer
+  import pandas as pd
+
+  train = pd.read_csv("train.csv")
+  test = pd.read_csv("test.csv")
+
+  print(train.head())
+  print(test.head())
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+** 存活率和性别
+
+绝对数目：
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'].value_counts()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[2]:
+#+BEGIN_EXAMPLE
+  0    549
+  1    342
+  Name: Survived, dtype: int64
+#+END_EXAMPLE
+:end:
+
+比例：
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[3]:
+#+BEGIN_EXAMPLE
+  0    0.616162
+  1    0.383838
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+可见生存率为 0.38
+
+*** 男性的存活率
+
+男性的存活数目：
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'][train['Sex'] == 'male'].value_counts()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[4]:
+#+BEGIN_EXAMPLE
+  0    468
+  1    109
+  Name: Survived, dtype: int64
+#+END_EXAMPLE
+:end:
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'][train['Sex'] == 'male'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[5]:
+#+BEGIN_EXAMPLE
+  0    0.811092
+  1    0.188908
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+男性的存活率为 0.18，比总体存活率 0.38 小很多。
+
+*** 女性的存活率
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'][train['Sex'] == 'female'].value_counts()
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[6]:
+#+BEGIN_EXAMPLE
+  1    233
+  0     81
+  Name: Survived, dtype: int64
+#+END_EXAMPLE
+:end:
+
+#+begin_src ipython :session Titanic :results raw drawer
+train['Survived'][train['Sex'] == 'female'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[7]:
+#+BEGIN_EXAMPLE
+  1    0.742038
+  0    0.257962
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+女性的存活率为 0.74，比总体存活率 0.38 高。
+
+** 预测
+
+女性存活，男性未存活。
+
+#+begin_src ipython :session Titanic :results raw drawer
+test_one = test.copy()
+test_one['Survived'] = 0
+test_one['Survived'][test_one['Sex'] == 'female'] = 1
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[8]:
+:end:
+
+#+begin_src ipython :session Titanic :results raw drawer
+test_one['Survived'].value_counts(normalize = True)
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[11]:
+#+BEGIN_EXAMPLE
+  0    0.636364
+  1    0.363636
+  Name: Survived, dtype: float64
+#+END_EXAMPLE
+:end:
+
+test 的生存率为 0.36，接近于 train 的 0.38
+
+*** 提交 Kaggle
+
+保存结果到 CSV 文件：
+
+#+begin_src ipython :session Titanic :results raw drawer
+  test_one.to_csv('01-predication-by-sex.csv',
+                  index = False,
+                  columns = ['PassengerId', 'Survived'])
+#+end_src
+
+#+RESULTS:
+:results:
+# Out[27]:
+:end:
+
+得分 0.76555
