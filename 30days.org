@@ -23,3 +23,7 @@ https://www.kaggle.com/xuchunyang
 - [[https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/What%2520is%2520the%2520Jupyter%2520Notebook.html][What is the Jupyter Notebook? — Jupyter Notebook 5.4.1 documentation]]
 
 ** 学习 Python - [[https://www.datacamp.com/courses/intro-to-python-for-data-science][Learn Python for Data Science - Online Course | DataCamp]] (Numpy)
+
+* Day 3 <2018-04-03 Tue>
+
+** 了解 Kaggle - [[https://www.kaggle.com/c/titanic][Titanic: Machine Learning from Disaster | Kaggle]]
