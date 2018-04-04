@@ -1,0 +1,91 @@
+#+DATE: <2018-04-04 Wed>
+#+PROPERTY: header-args:python :results value pp
+
+* Chapter 1
+
+~__future__~
+
+#+begin_example
+  ~/src/30days/Beginning-Python $ python2.7
+  Python 2.7.14 (default, Mar  9 2018, 23:57:12)
+  [GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.39.2)] on darwin
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> 1 / 2
+  0
+  >>> from __future__ import division
+  >>> 1 / 2
+  0.5
+  >>>
+#+end_example
+
+decimal, hex, octal[fn:1], binary
+
+#+begin_src python :session
+12 == 0xc == 0o14 == 0b1100
+#+end_src
+
+#+RESULTS:
+: True
+
+one-line if
+
+#+begin_src python :session
+if True: 42
+#+end_src
+
+#+RESULTS:
+: 42
+
+* Chapter 2
+
+~None~
+
+#+begin_src python :session
+sequence = [None] * 10
+sequence
+#+end_src
+
+#+RESULTS:
+: [None, None, None, None, None, None, None, None, None, None]
+
+~in~
+
+#+begin_src python :session 
+  (
+      1 in [1,2,3],
+      4 in [1,2,3],
+      'a' in 'abc',
+      'ab' in 'abc'               # substring
+  )
+#+end_src
+
+#+RESULTS:
+: (True, False, True, True)
+
+Tuple
+
+#+begin_src python :session
+  [
+      (),                         # len = 0
+      (1,),                       # len = 1
+      (1,2)                       # len = 2
+  ]
+#+end_src
+
+#+RESULTS:
+: [(), (1,), (1, 2)]
+
+切片的切片是拷贝
+
+#+begin_src python :session
+lst = [1,2,3]
+lst[:][:] = []
+lst
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3]
+
+* Footnotes
+
+[fn:1] https://www.python.org/dev/peps/pep-3127/
