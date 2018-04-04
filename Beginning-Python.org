@@ -86,6 +86,79 @@ lst
 #+RESULTS:
 : [1, 2, 3]
 
+* Chapter 3
+
+[[https://www.python.org/dev/peps/pep-0498/][PEP 498 -- Literal String Interpolation | Python.org]]
+
+#+begin_src python :session
+name = 'Python'
+f'Hello, {name}'
+#+end_src
+
+#+RESULTS:
+: 'Hello, Python'
+
+#+begin_src python :session :results output
+    left = 20
+    right = 10
+    fmt = '{{:{}}}{{:>{}}}'.format(left, right)
+    print(fmt.format('Name 1', 'Tomo'))
+    print(fmt.format('Name 2', 'Jerry'))
+#+end_src
+
+#+RESULTS:
+: Name 1                    Tomo
+: Name 2                   Jerry
+
+~join~ & ~split~
+
+#+begin_src python :session
+chars = list("abc")
+', '.join(chars)
+#+end_src
+
+#+RESULTS:
+: 'a, b, c'
+
+#+begin_src python :session
+  (
+      'hello world'.split(),
+      '2018-04-05'.split(sep='-')
+  )
+#+end_src
+
+#+RESULTS:
+: (['hello', 'world'], ['2018', '04', '05'])
+
+
+~replace~
+
+#+begin_src python :session
+'foo bar foobar'.replace('foo', 'FOO')
+#+end_src
+
+#+RESULTS:
+: 'FOO bar FOObar'
+
+~strip~
+
+#+begin_src python :session
+'      hello world          \n '.strip()
+#+end_src
+
+#+RESULTS:
+: 'hello world'
+
+~translate~
+
+#+begin_src python :session
+table = str.maketrans('ab', 'AB')
+'abba'.translate(table)
+#+end_src
+
+#+RESULTS:
+: 'ABBA'
+
 * Footnotes
 
 [fn:1] https://www.python.org/dev/peps/pep-3127/
