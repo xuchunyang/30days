@@ -11,9 +11,9 @@ def seq(args):
     fixed_width = False
     beg = 1
     end = None
-    if args.count('-w') == 1:
+    if '-w' in args:
         fixed_width = True
-        args.pop(args.index('-w'))
+        args.remove('-w')
     if len(args) == 1:
         end = int(args[0])
     elif len(args) == 2:
@@ -23,7 +23,7 @@ def seq(args):
     for i in range(beg, end+1):
         if fixed_width:
             max_width = len(str(end))
-            print(("{0:0" + str(max_width) + "d}").format(i))
+            print(str(i).zfill(max_width))
         else:
             print(i)
 
