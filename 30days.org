@@ -27,3 +27,7 @@ https://www.kaggle.com/xuchunyang
 * Day 3 <2018-04-03 Tue>
 
 ** 了解 Kaggle - [[https://www.kaggle.com/c/titanic][Titanic: Machine Learning from Disaster | Kaggle]]
+
+* Day 5 <2018-04-05 Thu>
+
+** 了解 Titanic
