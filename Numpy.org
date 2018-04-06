@@ -1,0 +1,245 @@
+* Create Arrary
+
+- np.array
+- np.ones
+- np.zeros
+- np.empty
+
+#+BEGIN_SRC ipython :session :results value pp
+  import numpy as np
+  numbers = np.array(range(1, 11))
+  numbers
+#+END_SRC
+
+#+RESULTS:
+: # Out[7]:
+: : array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10])
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  ones = np.ones((2,4)); ones
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[30]:
+#+BEGIN_EXAMPLE
+  array([[1., 1., 1., 1.],
+  [1., 1., 1., 1.]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  zeros = np.zeros((2,4)); zeros
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[31]:
+#+BEGIN_EXAMPLE
+  array([[0., 0., 0., 0.],
+  [0., 0., 0., 0.]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  empty = np.empty((2,4)); empty
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[32]:
+#+BEGIN_EXAMPLE
+  array([[0., 0., 0., 0.],
+  [0., 0., 0., 0.]])
+#+END_EXAMPLE
+:end:
+
+- eyes
+
+#+BEGIN_SRC ipython :session :results raw drawer
+np.eye(3)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[55]:
+#+BEGIN_EXAMPLE
+  array([[1., 0., 0.],
+         [0., 1., 0.],
+         [0., 0., 1.]])
+#+END_EXAMPLE
+:end:
+
+- arange
+
+#+BEGIN_SRC ipython :session :results raw drawer
+np_numbers = np.arange(2, 4, 0.5); np_numbers
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[59]:
+: array([2. , 2.5, 3. , 3.5])
+:end:
+
+- astype
+
+#+BEGIN_SRC ipython :session :results raw drawer
+x = np.array([1,2,2.5])
+x.astype(int)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[61]:
+: array([1, 2, 2])
+:end:
+
+** metadata
+
+- ndim :: The number of dimensions of an array
+- shape
+- dtype
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  def inspect(arr): 
+      return {"ndim": arr.ndim, "shape": arr.shape, "dtype": arr.dtype}
+
+  inspect(numbers)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[50]:
+: {'dtype': dtype('int64'), 'ndim': 1, 'shape': (10,)}
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+inspect(ones)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[51]:
+: {'dtype': dtype('float64'), 'ndim': 2, 'shape': (2, 4)}
+:end:
+
+** reshape
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a = np.array([[1,2,3], [4,5,6]])
+np.reshape(a, 6)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[85]:
+: array([1, 2, 3, 4, 5, 6])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b = np.arange(1,9,1)
+np.reshape(b, (2,4))
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[82]:
+#+BEGIN_EXAMPLE
+  array([[1, 2, 3, 4],
+  [5, 6, 7, 8]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b3d = b.reshape(2,2,2)
+b3d
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[84]:
+#+BEGIN_EXAMPLE
+  array([[[1, 2],
+  [3, 4]],
+  
+  [[5, 6],
+  [7, 8]]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b3d.swapaxes(1,2)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[87]:
+#+BEGIN_EXAMPLE
+  array([[[1, 3],
+  [2, 4]],
+  
+  [[5, 7],
+  [6, 8]]])
+#+END_EXAMPLE
+:end:
+
+* Index
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a = np.array([[1,2,3], [4,5,6]]); a
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[94]:
+#+BEGIN_EXAMPLE
+  array([[1, 2, 3],
+  [4, 5, 6]])
+#+END_EXAMPLE
+:end:
+
+- [i,j] or [i][j] :: single element (i,j)
+- [i] or [i,:] :: i-th row (1 dim)
+- [:,j] :: j-th column (1 dim)
+- [[i], [j]] (number of j dim)
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  a[1][2]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[101]:
+: 6
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a[0]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[108]:
+: array([1, 2, 3])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a[:,2]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[114]:
+: array([3, 6])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a[[0,1], 2]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[106]:
+: array([3, 6])
+:end:
