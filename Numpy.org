@@ -489,3 +489,139 @@ a_copy
   [ 91.,  92.,  93.,  94.,  95.,  96.,  97.,  98.,  99., 100.]])
 #+END_EXAMPLE
 :end:
+
+* axis
+
+(3,4) 指两维数组，第一维长度 3，第二维长度 4。
+
+- shape :: 形状
+- ndim :: shape 个数
+- axis :: 有 ndim 个
+- row 两维数组中的「行」，对于 axis = 0
+- column 两维数组中的「列」，对于 axis = 1
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  a = np.arange(6)                #  1D array
+  a.ndim
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[11]:
+: 1
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  b = np.arange(12).reshape(3,4)  #  2D array
+  b.ndim
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[16]:
+: 2
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  c = np.arange(24).reshape(2,3,4) # 3D array
+  c.ndim
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[18]:
+: 3
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  a = [1,2,3]
+
+  b = [[1,2,3], 
+       [4,5,6]]
+
+  c = [[[1],
+        [2]], 
+       [[3], [4]]]
+  [np.array(x).ndim for x in [a, b, c]]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[30]:
+: [1, 2, 3]
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+def f(x,y): return 10*x+y
+b = np.fromfunction(f,(5,4), dtype=int)
+b
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[34]:
+#+BEGIN_EXAMPLE
+  array([[ 0,  1,  2,  3],
+  [10, 11, 12, 13],
+  [20, 21, 22, 23],
+  [30, 31, 32, 33],
+  [40, 41, 42, 43]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b[0:5, 1]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[38]:
+: array([ 1, 11, 21, 31, 41])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b[:, 1]
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[39]:
+: array([ 1, 11, 21, 31, 41])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a = np.arange(12).reshape(3,4)
+a
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[45]:
+#+BEGIN_EXAMPLE
+  array([[ 0,  1,  2,  3],
+  [ 4,  5,  6,  7],
+  [ 8,  9, 10, 11]])
+#+END_EXAMPLE
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  a.sum(axis = 0)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[46]:
+: array([12, 15, 18, 21])
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+a.sum(axis = 1)
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[47]:
+: array([ 6, 22, 38])
+:end:
+
+* View or Shallow Copy V.S. Deep Copy
