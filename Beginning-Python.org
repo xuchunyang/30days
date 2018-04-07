@@ -542,6 +542,39 @@ r.width, r.height
 : [1, 2, 3, 4, 5]
 :end:
 
+* Chapter 10
+
+Realod module
+
+#+BEGIN_SRC ipython :session :results raw drawer
+import this
+from importlib import reload
+reload(this)
+#+END_SRC 
+
+#+RESULTS:
+:results:
+: <module 'this' from '/usr/local/Cellar/python/3.6.5/Frameworks/Python.framework/Versions/3.6/lib/python3.6/this.py'>
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+import sys
+sys.path
+#+END_SRC
+
+#+RESULTS:
+:results:
+#+BEGIN_EXAMPLE
+  ['',
+  '/usr/local/Cellar/python/3.6.5/Frameworks/Python.framework/Versions/3.6/lib/python36.zip',
+  '/usr/local/Cellar/python/3.6.5/Frameworks/Python.framework/Versions/3.6/lib/python3.6',
+  '/usr/local/Cellar/python/3.6.5/Frameworks/Python.framework/Versions/3.6/lib/python3.6/lib-dynload',
+  '/usr/local/lib/python3.6/site-packages',
+  '/usr/local/lib/python3.6/site-packages/IPython/extensions',
+  '/Users/xcy/.ipython']
+#+END_EXAMPLE
+:end:
+
 
 * Footnotes
 
