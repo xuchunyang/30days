@@ -461,6 +461,88 @@ b.counter, MyClass.counter
 : ['eggs', 'beacon']
 :end:
 
+* Chapter 8
+
+自定义异常类
+
+#+BEGIN_SRC python :session :results value pp
+  class SomeCustomException(Exception): pass
+#+END_SRC
+
+#+RESULTS:
+: 'ell'
+
+更多地使用 try/except 而不是 if/else
+
+#+BEGIN_SRC ipython :session
+  def describe_person(person):
+      try:
+          print(f"Hello, {person['name']}")
+      except KeyError: pass
+
+  describe_person({"name": "Xu Chunyang"})
+  describe_person({"name223": "Xu Chunyang"})
+#+END_SRC
+
+* Chapter 9
+
+- ~__init__~
+- super
+
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  class Rectangle:
+      def __init__(self):
+          self.width = 0
+          self.height = 0
+
+      def set_size(self, size):
+          self.width, self.height = size
+
+      def get_size(self):
+          return self.width, self.height
+
+      size = property(get_size, set_size)
+
+
+  r = Rectangle()
+  r.width = 10
+  r.width = 20
+  r.size
+#+END_SRC
+
+#+RESULTS:
+:results:
+: (20, 0)
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+r.size = 100, 200
+r.width, r.height
+#+END_SRC
+
+#+RESULTS:
+:results:
+: (100, 200)
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  def flatten(nested):
+      for sublist in nested:
+          for element in sublist:
+              # print(element)
+              yield element
+
+  nested = [[1,2], [3,4], [5]]
+  list(flatten(nested))
+#+END_SRC
+
+#+RESULTS:
+:results:
+: [1, 2, 3, 4, 5]
+:end:
+
+
 * Footnotes
 
 [fn:1] https://www.python.org/dev/peps/pep-3127/
