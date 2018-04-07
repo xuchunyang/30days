@@ -159,6 +159,194 @@ table = str.maketrans('ab', 'AB')
 #+RESULTS:
 : 'ABBA'
 
+* Chapter 4
+
+dict view
+
+#+BEGIN_SRC python :session :results value pp
+d = {"one": 1, "two": 2}; d
+#+END_SRC
+
+#+RESULTS:
+: {'one': 1, 'two': 2}
+
+#+BEGIN_SRC python :session :results value pp
+it = d.items(); it
+#+END_SRC
+
+#+RESULTS:
+: dict_items([('one', 1), ('two', 2)])
+
+#+BEGIN_SRC python :session :results value pp
+('one', 1) in it
+#+END_SRC
+
+#+RESULTS:
+: True
+
+format_map
+
+#+BEGIN_SRC python :session :results value pp
+"one is {one}, two is {two}".format_map(d)
+#+END_SRC
+
+#+RESULTS:
+: 'one is 1, two is 2'
+
+* Chapter 5
+
+假
+
+#+BEGIN_SRC python :session :results value pp
+[bool(x) for x in [False, None, 0, '', (), {}, []]]
+#+END_SRC
+
+#+RESULTS:
+: [False, False, False, False, False, False, False]
+
+== V.S. is
+
+#+BEGIN_SRC python :session :results value pp
+a, b = 100, 100
+a == b, a is b
+#+END_SRC
+
+#+RESULTS:
+: (True, True)
+
+#+BEGIN_SRC python :session :results value pp
+id(a), id(b)
+#+END_SRC
+
+#+RESULTS:
+: (4484073184, 4484073184)
+
+#+BEGIN_SRC python :session :results value pp
+x, y = [1, 2, 3], [1, 2, 3]
+x == y, x is y
+#+END_SRC
+
+#+RESULTS:
+: (True, False)
+
+assert
+
+#+BEGIN_SRC python :session :results value pp
+assert int(input('> ')) == 42
+#+END_SRC
+
+loop dict
+
+#+BEGIN_SRC python :session :results output
+  table = {"one": 1, "two": 2}
+  for i in table:
+    print("The value of '{}' in table is {}".format(i, table[i]))
+#+END_SRC
+
+#+RESULTS:
+: The value of 'one' in table is 1
+: The value of 'two' in table is 2
+
+同时 loop 两个列表
+
+#+BEGIN_SRC python :session :results value pp
+keys = ['one', 'two', 'three']
+values = [1, 2, 3]
+list(zip(keys, values))
+#+END_SRC
+
+#+RESULTS:
+: [('one', 1), ('two', 2), ('three', 3)]
+
+#+BEGIN_SRC python :session :results value pp
+  d = {}
+  for k, v in zip(keys, values):
+    d[k] = v
+  d
+#+END_SRC
+
+#+RESULTS:
+: {'one': 1, 'three': 3, 'two': 2}
+
+loop 时带索引
+
+#+BEGIN_SRC python :session :results output
+  numbers = list(range(10))
+  index = 0
+  while index < len(numbers):
+    print(f"numbers[{index}] = {numbers[index]}")
+    index += 1
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+numbers[0] = 0
+numbers[1] = 1
+numbers[2] = 2
+numbers[3] = 3
+numbers[4] = 4
+numbers[5] = 5
+numbers[6] = 6
+numbers[7] = 7
+numbers[8] = 8
+numbers[9] = 9
+#+END_EXAMPLE
+
+enumerate
+
+#+BEGIN_SRC python :session :results output
+  for index, char in enumerate('hello'):
+    print(index, char)
+#+END_SRC
+
+#+RESULTS:
+: 0 h
+: 1 e
+: 2 l
+: 3 l
+: 4 o
+
+* Chapter 6
+
+长度可变的参数
+
+#+BEGIN_SRC python :session :results value pp
+  def foo(*args): 
+      return sum(list(args))
+
+  foo(1, 2, 3)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+#+BEGIN_SRC python :session :results value pp
+args = (1,2,3)foo(*args)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+#+BEGIN_SRC python :session :results output
+  def bar(**args):
+      for k, v in args.items():
+          print(f'args[{k}] = {v}')
+
+  bar(x=1, y=2, z=3)
+  print()
+  d = {'x': 1, 'y': 2, 'z': 3}
+  bar(**d)
+#+END_SRC
+
+#+RESULTS:
+: args[x] = 1
+: args[y] = 2
+: args[z] = 3
+: 
+: args[x] = 1
+: args[y] = 2
+: args[z] = 3
+
 * Footnotes
 
 [fn:1] https://www.python.org/dev/peps/pep-3127/
