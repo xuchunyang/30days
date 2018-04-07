@@ -347,6 +347,120 @@ args = (1,2,3)foo(*args)
 : args[y] = 2
 : args[z] = 3
 
+* Chapter 7
+
+最简单的 Class
+
+#+BEGIN_SRC python :session :results value pp
+  class MyClass:
+    pass
+
+  x = MyClass()
+  type(x)
+#+END_SRC
+
+#+RESULTS:
+: <class '__main__.MyClass'>
+
+第一个 Class
+
+#+BEGIN_SRC ipython :session :results raw drawer
+class Person:
+    def set_name(self, name):
+        self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def greeting(self):
+        return 'Hello, I am ' + self.name
+
+p = Person()
+p.set_name("Chunyang")
+p.get_name(), p.greeting()
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[1]:
+: ('Chunyang', 'Hello, I am Chunyang')
+:end:
+
+「私有」方法
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  class MyClass:
+      def __foo(self):
+          return "__foo"
+
+      def foo(self):
+          return "foo"
+
+  c = MyClass()
+  c.foo(), c__foo()
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[8]:
+: 'foo'
+:end:
+
+类作用域中的变量
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  class MyClass:
+      counter = 0
+
+      def __init__(self):
+          MyClass.counter += 1
+
+  a = MyClass()
+  a.counter
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[11]:
+: 1
+:end:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+b = MyClass()
+b.counter, MyClass.counter
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[16]:
+: (6, 6)
+:end:
+
+继承
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  class Filter:
+      def __init__(self):
+          self.blocked = []
+
+      def filter(self, seq):
+          return [x for x in seq if x not in self.blocked]
+
+  class SPAMFilter(Filter):
+      def __init__(self):
+          self.blocked = ['SPAM']
+
+  s = SPAMFilter()
+
+  s.filter(['SPAM', 'SPAM', 'eggs', 'beacon'])
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[22]:
+: ['eggs', 'beacon']
+:end:
+
 * Footnotes
 
 [fn:1] https://www.python.org/dev/peps/pep-3127/
