@@ -31,3 +31,7 @@ https://www.kaggle.com/xuchunyang
 * Day 5 <2018-04-05 Thu>
 
 ** 了解 Titanic
+
+* Day 9 <2018-04-09 Mon>
+
+** 学习 Python
