@@ -5,12 +5,10 @@
 
 import fileinput
 
-lineno = 1
+lineno = 0
 for line in fileinput.input():
     line = line.rstrip()
-    if fileinput.isfirstline():
-        lineno = 1
-    elif line:
+    if line:
         lineno += 1
     else:
         print("{:>6} ".format(" "))
