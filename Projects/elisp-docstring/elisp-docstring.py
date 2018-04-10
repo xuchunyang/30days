@@ -14,3 +14,17 @@ with open('DOC') as f:
     x = f.read()
     l = x.split(sep="\u001F")
     d = dict([split(i) for i in l if i])
+
+from flask import Flask, url_for, request, abort
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return "Emacs Lisp Docstring"
+
+@app.route('/<name>')
+def lookup(name):
+    if name in d:
+        return d[name][1]
+    else:
+        abort(404)
