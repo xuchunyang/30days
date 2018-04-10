@@ -15,7 +15,7 @@ with open('DOC') as f:
     l = x.split(sep="\u001F")
     d = dict([split(i) for i in l if i])
 
-from flask import Flask, url_for, request, abort
+from flask import Flask, url_for, request, abort, render_template
 app = Flask(__name__)
 
 @app.route("/")
@@ -25,6 +25,9 @@ def index():
 @app.route('/<name>')
 def lookup(name):
     if name in d:
-        return d[name][1]
+        sym = name
+        typ, doc = d[name]
+        app.logger.debug(repr(doc))
+        return render_template('show_entry.html', sym=name, typ=typ, doc=doc)
     else:
         abort(404)
