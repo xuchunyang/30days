@@ -28,6 +28,11 @@ def lookup(name):
         sym = name
         typ, doc = d[name]
         app.logger.debug(repr(doc))
-        return render_template('show_entry.html', sym=name, typ=typ, doc=doc)
+        app.logger.debug(repr(request))
+        app.logger.debug(request.headers.get('User-Agent'))
+        if "curl" in request.headers.get('User-Agent'):
+            return doc
+        else:
+            return render_template('show_entry.html', sym=name, typ=typ, doc=doc)
     else:
         abort(404)
