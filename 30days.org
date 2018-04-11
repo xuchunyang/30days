@@ -41,3 +41,7 @@ https://www.kaggle.com/xuchunyang
 ** 学习 Python | Flask
 
 https://github.com/xuchunyang/docstring
+
+* Day 11 <2018-04-11 Wed>
+
+** 学习 Numpy | [[http://www.scipy-lectures.org/][Scipy Lecture Notes — Scipy lecture notes]]
