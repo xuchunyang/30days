@@ -1,0 +1,4 @@
+#+TITLE: My reading notes for [[http://www.scipy-lectures.org/][Scipy Lecture Notes]]
+#+DATE: <2018-04-11 Wed>
+
+* [[http://www.scipy-lectures.org/intro/index.html][1. Getting started with Python for science — Scipy lecture notes]]
