@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+# Open repo/file/commit/issue/etc in Github
+
+import subprocess
+import re
+import webbrowser
+
+# $(git config --get remote.origin.url)
+# git@github.com:xuchunyang/emacs.d.git
+# https://github.com/Wilfred/remacs.git
+
+def get_user_repo():
+    cmdline = "git config --get remote.origin.url"
+    proc = subprocess.run(cmdline.split(), stdout=subprocess.PIPE)
+    if proc.returncode:
+        raise Exception(f"{cmdline} exited with code {proc.returncode}")
+    url = proc.stdout.decode().strip()
+    # https://github.com/xuchunyang/30days.git
+    r1 = "https://github.com/(.+)/(.+)\.git"
+    # git@github.com:xuchunyang/emacs.d.git
+    r2 = "git@github.com:(.+)/(.+)\.git"
+    m = re.match(r1, url) or re.match(r2, url)
+    if not m:
+        raise Exception("Can't match {url}, it probably isn't hosted on github")
+    user, repo = m.groups()
+    return [user, repo]
+
+# TODO Add output mode only via -o/--output
+def main(args):
+    user, repo = get_user_repo()
+    webbrowser.open(f"https://github.com/{user}/{repo}")
+
+if __name__ == "__main__":
+    import sys
+    main(sys.argv)
