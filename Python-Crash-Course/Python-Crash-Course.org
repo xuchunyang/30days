@@ -2450,3 +2450,204 @@ if age<4:好。
 - 贪吃蛇游戏
 - 扫雷游戏
 - 转换 Org Mode 成 HTML
+
+** Chapter 6
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green', 'points': 5}
+
+  print(alien_0['color'])
+  print(alien_0['points'])
+#+END_SRC
+
+#+RESULTS:
+: green
+: 5
+
+访问字典元素
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green', 'points': 5}
+
+  new_points = alien_0['points']
+  print("You just enarned " + str(new_points) + " points!")
+#+END_SRC
+
+#+RESULTS:
+: You just enarned 5 points!
+
+
+添加键值对
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green', 'points': 5}
+
+  print(alien_0)
+
+  alien_0['x_position'] = 0
+  alien_0['y_position'] = 25
+  print(alien_0)
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'green', 'points': 5}
+: {'color': 'green', 'points': 5, 'x_position': 0, 'y_position': 25}
+
+空字典
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {}
+
+  alien_0['color'] = 'green'
+  alien_0['points'] = 5
+
+  print(alien_0)
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'green', 'points': 5}
+
+修改字典中的值
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green'}
+  print("The alien is " + alien_0['color'] + '.')
+
+  alien_0['color'] = 'yellow'
+  print("The alien is now " + alien_0['color'] + '.')
+#+END_SRC
+
+#+RESULTS:
+: The alien is green.
+: The alien is now yellow.
+
+更有趣的例子
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'medium'}
+  print("Original x-position: " + str(alien_0['x_position']))
+
+  if alien_0['speed'] == 'slow':
+      x_increment = 1
+  elif alien_0['speed'] == 'medium':
+      x_increment = 2
+  else:
+      x_increment = 3
+
+
+  alien_0['x_position'] = alien_0['x_position'] + x_increment
+  print("New x-position: " + str(alien_0['x_position']))
+#+END_SRC
+
+#+RESULTS:
+: Original x-position: 0
+: New x-position: 2
+
+删除键值对
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green', 'points': 5}
+  print(alien_0)
+
+  del alien_0['points']
+  print(alien_0)
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'green', 'points': 5}
+: {'color': 'green'}
+
+用对象表示一系列同类信息，比如一群人各自喜欢的编程语言
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  print("Sarah's favorite language is "
+        + favorite_languages['sarah'].title()
+        + ".")
+#+END_SRC
+
+#+RESULTS:
+: Sarah's favorite language is C.
+
+*** Exercises
+
+**** 6-1 人
+
+#+BEGIN_SRC python :session :results output
+  # http://bojackhorseman.wikia.com/wiki/BoJack
+  bojack = {
+      'first_name': 'boJack',
+      'last_name': 'horseman',
+      'age': 54,
+      'city': 'hollywoo'
+  }
+
+  print(bojack['first_name'].title() + ' ' + bojack['last_name'].title()
+        + " is " + str(bojack['age']) + " years old, and live in "
+        + bojack['city'].title())
+#+END_SRC
+
+#+RESULTS:
+: Bojack Horseman is 54 years old, and live in Hollywoo
+
+**** 6-2 喜欢的数字
+
+#+BEGIN_SRC python :session :results output
+  favorite_numbers = {
+      'alice': 8,
+      'bob': 12,
+      'carolina': 42,
+      'david': 2,
+      'eli': 6
+  }
+
+  print("Alice's favorite number is " + str(favorite_numbers['alice']))
+  print("Bob's favorite number is " + str(favorite_numbers['bob']))
+  print("Carolina's favorite number is " + str(favorite_numbers['carolina']))
+  print("David's favorite number is " + str(favorite_numbers['david']))
+  print("Eli's favorite number is " + str(favorite_numbers['eli']))
+#+END_SRC
+
+#+RESULTS:
+: Alice's favorite number is 8
+: Bob's favorite number is 12
+: Carolina's favorite number is 42
+: David's favorite number is 2
+: Eli's favorite number is 6
+
+**** 6-3 词汇表
+
+#+BEGIN_SRC python :session :results output
+  programming_terms = {
+      'print': 'Print python object to screen',
+      'if': 'Run code base on condition',
+      'list': 'collections of items',
+      'dict': 'collections of key-value pairs',
+      'str': 'Convert number to string',
+  }
+
+  print('print: ' + programming_terms['print'] + "\n")
+  print('if: ' + programming_terms['if'] + "\n")
+  print('list: ' + programming_terms['list'] + "\n")
+  print('dict: ' + programming_terms['dict'] + "\n")
+  print('str: ' + programming_terms['str'] + "\n")
+#+END_SRC
+
+#+RESULTS:
+: print: Print python object to screen
+: 
+: if: Run code base on condition
+: 
+: list: collections of items
+: 
+: dict: collections of key-value pairs
+: 
+: str: Convert number to string
+
+*** 遍历字典
