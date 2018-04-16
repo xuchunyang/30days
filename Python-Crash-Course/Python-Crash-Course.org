@@ -1104,3 +1104,135 @@ print(empty_list[0])
 names = ["Tom"]
 print(names[1])
 #+END_SRC
+
+** Chapter 4
+
+遍历列表
+
+#+BEGIN_SRC python :session :results output
+  magicians = ["alice", "david", "carolina"]
+  for magician in magicians:
+      print(magician)
+#+END_SRC
+
+#+RESULTS:
+: alice
+: david
+: carolina
+
+复杂一点的操作
+
+#+BEGIN_SRC python :session :results output
+  magicians = ["alice", "david", "carolina"]
+  for magician in magicians:
+      print(magician.title() + ", that was a great trick!")
+#+END_SRC
+
+#+RESULTS:
+: Alice, that was a great trick!
+: David, that was a great trick!
+: Carolina, that was a great trick!
+
+更复杂一点
+
+#+BEGIN_SRC python :session :results output
+  magicians = ['alice', 'david', 'carolina']
+  for magician in magicians:
+      print(magician.title() + ", that was a great trick!")
+      print("I can't wait to see your next trick, " + magician.title() + ".\n")
+#+END_SRC
+
+#+RESULTS:
+: Alice, that was a great trick!
+: I can't wait to see your next trick, Alice.
+: 
+: David, that was a great trick!
+: I can't wait to see your next trick, David.
+: 
+: Carolina, that was a great trick!
+: I can't wait to see your next trick, Carolina.
+
+结束语
+
+#+begin_src python :session :results output
+  magicians = ['alice', 'david', 'carolina']
+  for magician in magicians:
+      print(magician.title() + ", that was a great trick!")
+      print("I can't wait to see your next trick, " + magician.title() + ".\n")
+
+  print("Thank you, everyone. That was a great magic show!")
+#+end_src
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Alice, that was a great trick!
+I can't wait to see your next trick, Alice.
+
+David, that was a great trick!
+I can't wait to see your next trick, David.
+
+Carolina, that was a great trick!
+I can't wait to see your next trick, Carolina.
+
+Thank you, everyone. That was a great magic show!
+#+END_EXAMPLE
+
+*** 缩进
+
+- 缺少缩进
+- 不必的缩进
+- 忘记 for 后面的冒号
+
+#+BEGIN_SRC python :session :results value pp :tangle missing_colon.py
+magicians = ['alice', 'dvaid', 'carolina']
+for magician in magicians
+   print(magician)
+#+END_SRC
+
+*** Exercises
+
+**** 4-1 比萨
+
+#+BEGIN_SRC python :session :results output
+  pizzas = ['土豆', '水果', '芝士']
+
+  for pizza in pizzas:
+      print(pizza)
+
+  for pizza in pizzas:
+      print("I like " + pizza + " pizza")
+
+  print("I don't know if I like pizza.")
+#+END_SRC
+
+#+RESULTS:
+: 土豆
+: 水果
+: 芝士
+: I like 土豆 pizza
+: I like 水果 pizza
+: I like 芝士 pizza
+: I don't know if I like pizza.
+
+**** 4-1 动物
+
+#+BEGIN_SRC python :session :results output
+  cats = ['cat', 'tiger', 'lion']
+
+  for cat in cats:
+      print(cat)
+
+  for cat in cats:
+      print(cat + " is very dangerous!")
+
+  print("Any of these animals is very dangerous.")
+#+END_SRC
+
+#+RESULTS:
+: cat
+: tiger
+: lion
+: cat is very dangerous!
+: tiger is very dangerous!
+: lion is very dangerous!
+: Any of these animals is very dangerous
