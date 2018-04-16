@@ -1,0 +1,77 @@
+#+TITLE: Notes for Python Crash Course
+#+DATE: <2018-04-16 Mon>
+
+* Part one
+
+** Chapter 1
+
+#+BEGIN_SRC python :session :results output
+print("Hello Python world!")
+#+END_SRC
+
+#+RESULTS:
+: Hello Python world!
+
+#+begin_quote
+在文件名和文件夹名中，最好使用小写字母，并使用下划线来表示空格，因为这
+是Python采用的命名约定
+#+end_quote
+
+可能是因为 Python 标识符中不能用 dash
+
+*** Exercises
+
+**** 1-1 浏览 https://www.python.org
+
+Python 水平越高，这个网址越有用
+
+**** 1-1 输入错误
+
+我能理解函数未定义、括号引号不匹配这样的语法错误，并且能看懂报错信息。
+
+#+begin_src sh :results output
+python -c 'printf("Hello Python world!")' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: Traceback (most recent call last):
+:   File "<string>", line 1, in <module>
+: NameError: name 'printf' is not defined
+
+#+begin_src sh :results output
+python -c 'print(x"Hello Python world!")' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+:   File "<string>", line 1
+:     print(x"Hello Python world!")
+:                                ^
+: SyntaxError: invalid syntax
+
+#+begin_src sh :results output
+python -c 'print("Hello)' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+:   File "<string>", line 1
+:     print("Hello)
+:                 ^
+: SyntaxError: EOL while scanning string literal
+
+#+begin_src sh :results output
+python -c 'print("Hello"' 2>&1 || true
+#+end_src
+
+#+RESULTS:
+:   File "<string>", line 1
+:     print("Hello"
+:                 ^
+: SyntaxError: unexpected EOF while parsing
+
+**** 1-3 无穷的技艺
+
+三个我想创建的程序：
+
+1. 朗文词典第五版的 Emacs 浏览器（主要用 Python 实现，参考用 PyQt 写的 LDOCE5 Viewer）
+2. 个人网站或者博客（用 Flask 之类的实现）
+3. 写一个类似 Spotlight 之类的切换器，除了打开应用，还能切换 Chrome 标签和 Emacs Buffer
