@@ -522,3 +522,585 @@ If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 #+END_EXAMPLE
 
+** Chapter 3
+
+列表的写法
+
+#+BEGIN_SRC python :session :results output
+bicycles = ['trek', 'cannondale', 'redline', 'specialized']
+print(bicycles)
+#+END_SRC
+
+#+RESULTS:
+: ['trek', 'cannondale', 'redline', 'specialized']
+
+访问列表元素
+
+#+BEGIN_SRC python :session :results output
+print(bicycles[0])
+print(bicycles[0].title())
+#+END_SRC
+
+#+RESULTS:
+: trek
+: Trek
+
+列表的索引从 0 算起
+
+#+BEGIN_SRC python :session :results output
+bicycles = ['trek', 'cannondale', 'redline', 'specialized']
+print(bicycles[0])
+print(bicycles[1])
+print(bicycles[2])
+print(bicycles[3])
+#+END_SRC
+
+#+RESULTS:
+: trek
+: cannondale
+: redline
+: specialized
+
+从后向前索引
+
+#+BEGIN_SRC python :session :results value pp
+bicycles[-1], bicycles[-2], bicycles[-3], bicycles[-4]
+#+END_SRC
+
+#+RESULTS:
+: ('specialized', 'redline', 'cannondale', 'trek')
+
+*** Exercises
+
+**** 3-1 姓名
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Charlie"]
+  print(names[0])
+  print(names[1])
+  print(names[2])
+  print(names[3])
+#+END_SRC
+
+#+RESULTS:
+: Tom
+: Jerry
+: Snoopy
+: Charlie
+
+**** 3-2 问候语
+
+#+BEGIN_SRC python :session :results output
+names = ["Tom", "Jerry", "Snoopy", "Charlie"]
+print("Hello, " + names[0] + "!")
+print("Hello, " + names[1] + "!")
+print("Hello, " + names[2] + "!")
+print("Hello, " + names[3] + "!")
+#+END_SRC
+
+#+RESULTS:
+: Hello, Tom!
+: Hello, Jerry!
+: Hello, Snoopy!
+: Hello, Charlie!
+
+**** 3-3 自己的列表
+
+#+BEGIN_SRC python :session :results output
+  commuting_methods = ["walk", "swim", "bike", "bus", "subway", "fly"]
+
+  print("I would like to " + commuting_methods[0] + " to work.")
+  print("I would like to learn " + commuting_methods[1] + "ing.")
+  print("I also would like to go to walk by " + commuting_methods[-2] + ", because I like subway.")
+  print("I don't like to take a " + commuting_methods[3] + ", because I don't know when to get out")
+#+END_SRC
+
+#+RESULTS:
+: I would like to walk to work.
+: I would like to learn swiming.
+: I also would like to go to walk by subway, because I like subway.
+: I don't like to take a bus, because I don't know when to get out
+
+*** 修改、添加和删除元素
+
+用 append() 添加一个元素到末尾
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['honda', 'yamaha', 'suzuki']
+  print(motorcycles)
+
+  motorcycles.append('ducati')
+  print(motorcycles)
+#+END_SRC
+
+#+RESULTS:
+: ['honda', 'yamaha', 'suzuki']
+: ['honda', 'yamaha', 'suzuki', 'ducati']
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = []
+
+  motorcycles.append('honda')
+  motorcycles.append('yamaha')
+  motorcycles.append('suzuki')
+
+  print(motorcycles)
+#+END_SRC
+
+#+RESULTS:
+: ['honda', 'yamaha', 'suzuki']
+
+用 insert() 在任意位置加入新元素
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['本田', '雅马哈', '铃木']
+
+  motorcycles.insert(0, '杜卡迪')
+  print(motorcycles)
+#+END_SRC
+
+#+RESULTS:
+: ['杜卡迪', '本田', '雅马哈', '铃木']
+
+用 del 根据位置（索引）删除元素
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['本田', '雅马哈', '铃木']
+  print(motorcycles)
+
+  del motorcycles[0]
+  print(motorcycles)
+#+END_SRC
+
+#+RESULTS:
+: ['本田', '雅马哈', '铃木']
+: ['雅马哈', '铃木']
+
+用 pop() 方法删除最后一个元素，并且返回这个元素的值
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['本田', '雅马哈', '铃木']
+  print(motorcycles)
+
+  popped_motorcycle = motorcycles.pop()
+  print(motorcycles)
+  print(popped_motorcycle)
+#+END_SRC
+
+#+RESULTS:
+: ['本田', '雅马哈', '铃木']
+: ['本田', '雅马哈']
+: 铃木
+
+pop() 方法能删除任意位置的元素
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['本田', '雅马哈', '铃木']
+
+  first_owned = motorcycles.pop(0)
+  print("The first motorcycle I own was a " + first_owned.title() + ".")
+#+END_SRC
+
+#+RESULTS:
+: The first motorcycle I own was a 本田.
+
+del 语句 V.S. pop() 方法
+
+#+begin_quote
+如果你要从列表中删除一个元素，且不再以任何方式使用它，就使用del语句；
+如果你要在删除元素后还能继续使用它，就使用方法pop()。
+#+end_quote
+
+
+用 remove() 根据值删除元素
+
+#+BEGIN_SRC python :session :results output
+  motorcycles = ['本田', '雅马哈', '铃木', '杜卡迪']
+  print(motorcycles)
+
+  motorcycles.remove('杜卡迪')
+  print(motorcycles)
+#+END_SRC
+
+#+RESULTS:
+: ['本田', '雅马哈', '铃木', '杜卡迪']
+: ['本田', '雅马哈', '铃木']
+
+#+begin_quote
+注意　方法remove()只删除第一个指定的值。如果要删除的值可能在列表中出现
+多次，就需要使用循环来判断是否删除了所有这样的值。
+#+end_quote
+
+*** Exercises
+
+**** 3-4 嘉宾名单
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Racket"]
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+#+END_SRC
+
+#+RESULTS:
+: Tom, would you like to have dinner with me?
+: Jerry, would you like to have dinner with me?
+: Snoopy, would you like to have dinner with me?
+: Racket, would you like to have dinner with me?
+
+**** 3-5 修改嘉宾名单
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Racket"]
+  print(names[0] + ", would you like to have dinner with me?")
+  print(names[1] + ", would you like to have dinner with me?")
+  print(names[2] + ", would you like to have dinner with me?")
+  print(names[3] + ", would you like to have dinner with me?")
+
+  nope = "Snoopy"
+  names.remove(nope)
+  names.append("Gammy")
+  print(names[0] + ", would you like to have dinner with me?")
+  print(names[1] + ", would you like to have dinner with me?")
+  print(names[2] + ", would you like to have dinner with me?")
+  print(names[3] + ", would you like to have dinner with me?")
+
+  print(nope + " said he don't have time thus can't accept my invitation.")
+#+END_SRC
+
+#+RESULTS:
+: Tom, would you like to have dinner with me?
+: Jerry, would you like to have dinner with me?
+: Snoopy, would you like to have dinner with me?
+: Racket, would you like to have dinner with me?
+: Tom, would you like to have dinner with me?
+: Jerry, would you like to have dinner with me?
+: Racket, would you like to have dinner with me?
+: Gammy, would you like to have dinner with me?
+: Snoopy said he don't have time thus can't accept my invitation.
+
+**** 3-6 添加嘉宾
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Racket"]
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+
+  print()
+  print("I have found a bigger dinner table for more people")
+  print()
+  names.insert(0, "Lisa")
+  names.insert(3, "Homer")
+  names.append("Bart")
+
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+  print(names[4].title() + ", would you like to have dinner with me?")
+  print(names[5].title() + ", would you like to have dinner with me?")
+  print(names[6].title() + ", would you like to have dinner with me?")
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Tom, would you like to have dinner with me?
+Jerry, would you like to have dinner with me?
+Snoopy, would you like to have dinner with me?
+Racket, would you like to have dinner with me?
+
+I have found a bigger dinner table for more people
+
+Lisa, would you like to have dinner with me?
+Tom, would you like to have dinner with me?
+Jerry, would you like to have dinner with me?
+Homer, would you like to have dinner with me?
+Snoopy, would you like to have dinner with me?
+Racket, would you like to have dinner with me?
+Bart, would you like to have dinner with me?
+#+END_EXAMPLE
+
+**** 3-7 缩减名单
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Racket"]
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+
+  print()
+  print("I have found a bigger dinner table for more people")
+  print()
+  names.insert(0, "Lisa")
+  names.insert(3, "Homer")
+  names.append("Bart")
+
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+  print(names[4].title() + ", would you like to have dinner with me?")
+  print(names[5].title() + ", would you like to have dinner with me?")
+  print(names[6].title() + ", would you like to have dinner with me?")
+
+  print()
+  print("Oops, I can invite just two")
+  print()
+
+  print(names.pop() + ", I am sorry")
+  print(names.pop() + ", I am sorry")
+  print(names.pop() + ", I am sorry")
+  print(names.pop() + ", I am sorry")
+  print(names.pop() + ", I am sorry")
+
+  print(names[0] + ", you are still invited.")
+  print(names[1] + ", you are still invited.")
+
+  del names[0]
+  del names[0]
+  print(names)
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Tom, would you like to have dinner with me?
+Jerry, would you like to have dinner with me?
+Snoopy, would you like to have dinner with me?
+Racket, would you like to have dinner with me?
+
+I have found a bigger dinner table for more people
+
+Lisa, would you like to have dinner with me?
+Tom, would you like to have dinner with me?
+Jerry, would you like to have dinner with me?
+Homer, would you like to have dinner with me?
+Snoopy, would you like to have dinner with me?
+Racket, would you like to have dinner with me?
+Bart, would you like to have dinner with me?
+
+Oops, I can invite just two
+
+Bart, I am sorry
+Racket, I am sorry
+Snoopy, I am sorry
+Homer, I am sorry
+Jerry, I am sorry
+Lisa, you are still invited.
+Tom, you are still invited.
+[]
+#+END_EXAMPLE
+
+*** 组织列表
+
+用 sort() 就地排序
+
+#+BEGIN_SRC python :session :results value pp
+  cars = ['bwm', 'audi', 'toyota', 'subaru']
+  cars.sort()
+  cars
+#+END_SRC
+
+#+RESULTS:
+: ['audi', 'bwm', 'subaru', 'toyota']
+
+
+#+BEGIN_SRC python :session :results value pp
+  cars = ['bwm', 'audi', 'toyota', 'subaru']
+  cars.sort(reverse=True)
+  cars
+#+END_SRC
+
+#+RESULTS:
+: ['toyota', 'subaru', 'bwm', 'audi']
+
+用函数 sorted() 临时排序
+
+#+BEGIN_SRC python :session :results output
+  cars = ['bmw', 'audi', 'toyota', 'subaru']
+
+  print("Here is the original list")
+  print(cars)
+
+  print("\nHere is the sorted list")
+  print(sorted(cars))
+
+  print("\nHere is the original list again")
+  print(cars)
+#+END_SRC
+
+#+RESULTS:
+: Here is the original list
+: ['bmw', 'audi', 'toyota', 'subaru']
+: 
+: Here is the sorted list
+: ['audi', 'bmw', 'subaru', 'toyota']
+: 
+: Here is the original list again
+: ['bmw', 'audi', 'toyota', 'subaru']
+
+用方法 reverse() 就绪的倒序排列
+
+#+BEGIN_SRC python :session :results output
+  cars = ['bmw', 'audi', 'toyota', 'subaru']
+  print(cars)
+
+  cars.reverse()
+  print(cars)
+#+END_SRC
+
+#+RESULTS:
+: ['bmw', 'audi', 'toyota', 'subaru']
+: ['subaru', 'toyota', 'audi', 'bmw']
+
+用函数 len() 获得列表的长度
+
+#+BEGIN_SRC python :session :results value pp
+  cars = ['bwm', 'audi', 'toyota', 'subaru']
+  len(cars)
+#+END_SRC
+
+#+RESULTS:
+: 4
+
+**** Exercises
+
+***** 3-8 放眼世界
+
+#+BEGIN_SRC python :session :results output
+places = ['Tokyo', 'Busan', 'Xiamen', 'Beijing', 'Praha', 'İstanbul']
+print(places)
+
+print(sorted(places))
+print(places)
+
+print(sorted(places, reverse=True))
+print(places)
+
+places.reverse()
+print(places)
+places.reverse()
+print(places)
+
+places.sort()
+print(places)
+
+places.sort(reverse=True)
+print(places)
+#+END_SRC
+
+#+RESULTS:
+: ['Tokyo', 'Busan', 'Xiamen', 'Beijing', 'Praha', 'İstanbul']
+: ['Beijing', 'Busan', 'Praha', 'Tokyo', 'Xiamen', 'İstanbul']
+: ['Tokyo', 'Busan', 'Xiamen', 'Beijing', 'Praha', 'İstanbul']
+: ['İstanbul', 'Xiamen', 'Tokyo', 'Praha', 'Busan', 'Beijing']
+: ['Tokyo', 'Busan', 'Xiamen', 'Beijing', 'Praha', 'İstanbul']
+: ['İstanbul', 'Praha', 'Beijing', 'Xiamen', 'Busan', 'Tokyo']
+: ['Tokyo', 'Busan', 'Xiamen', 'Beijing', 'Praha', 'İstanbul']
+: ['Beijing', 'Busan', 'Praha', 'Tokyo', 'Xiamen', 'İstanbul']
+: ['İstanbul', 'Xiamen', 'Tokyo', 'Praha', 'Busan', 'Beijing']
+
+***** 3-9 晚餐嘉宾
+
+#+BEGIN_SRC python :session :results output
+  names = ["Tom", "Jerry", "Snoopy", "Racket"]
+  print(names[0].title() + ", would you like to have dinner with me?")
+  print(names[1].title() + ", would you like to have dinner with me?")
+  print(names[2].title() + ", would you like to have dinner with me?")
+  print(names[3].title() + ", would you like to have dinner with me?")
+
+  print("I have invitated " + str(len(names)) + " guests.")
+#+END_SRC
+
+#+RESULTS:
+: Tom, would you like to have dinner with me?
+: Jerry, would you like to have dinner with me?
+: Snoopy, would you like to have dinner with me?
+: Racket, would you like to have dinner with me?
+: I have invitated 4 guests.
+
+***** 3-10 尝试使用各个函数
+
+- 方法 append(elt)
+- 方法 insert(idx, elt)
+- 语句 del lst[idx]
+- 方法 pop(idx)
+- 方法 remove(elt)
+- 方法 sort()
+- 函数 sorted()
+- 方法 reverse()
+- 函数 len()
+
+#+BEGIN_SRC python :session :results output
+  characters = []
+
+  characters.append("Tom")
+  characters.append("Jerry")
+  characters.append("Lisa")
+  characters.append("Racket")
+  characters.append("Snoopy")
+  # http://kungfupanda.wikia.com/wiki/Fung
+  characters.append("Fung")
+
+  print(characters)
+
+  first = characters[0]
+  del characters[0]
+  print(characters)
+  characters.insert(0, first)
+  print(characters)
+  
+  last = characters.pop()
+  print(characters)
+  characters.append(last)
+  print(characters)
+
+  fung = "Fung"
+  characters.remove(fung)
+  print(characters)
+  characters.append(fung)
+  print(characters)
+
+  print(sorted(characters))
+  print(characters)
+
+  characters.sort()
+  print(characters)
+  characters.reverse()
+  print(characters)
+
+  print("I have " + str(len(characters)) + " favorite characters.")
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Fung', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Tom']
+['Tom', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Fung']
+['Fung', 'Jerry', 'Lisa', 'Racket', 'Snoopy', 'Tom']
+['Tom', 'Snoopy', 'Racket', 'Lisa', 'Jerry', 'Fung']
+I have 6 favorite characters.
+#+END_EXAMPLE
+
+****** Exercises
+
+******* 3-11 有意引发错误
+
+索引超出范围时 Python 会报错
+
+#+BEGIN_SRC python :session :results value pp
+empty_list = []
+print(empty_list[0])
+
+names = ["Tom"]
+print(names[1])
+#+END_SRC
