@@ -75,3 +75,450 @@ python -c 'print("Hello"' 2>&1 || true
 1. 朗文词典第五版的 Emacs 浏览器（主要用 Python 实现，参考用 PyQt 写的 LDOCE5 Viewer）
 2. 个人网站或者博客（用 Flask 之类的实现）
 3. 写一个类似 Spotlight 之类的切换器，除了打开应用，还能切换 Chrome 标签和 Emacs Buffer
+
+** Chapter 2
+
+#+begin_src python :session :results output
+  message = "Hello Python world!"
+  print(message)
+
+  message = "Hello Python Crash Course world!"
+  print(message)
+#+end_src
+
+#+RESULTS:
+: Hello Python world!
+: Hello Python Crash Course world!
+
+命名规则：[a-zA-Z0-9_]+ and not [0-9]+.+ and not 内置关键词和函数名
+
+#+begin_src python :session :results output
+  def check_name(name):
+      import re
+      import keyword
+      import builtins
+      if not re.fullmatch(r"[a-zA-Z0-9_]+", name):
+          print("Error: {} contains invalid character".format(name))
+      elif re.match(r"[0-0]", name):
+          print("Error: {} starts with number".format(name))
+      elif name in keyword.kwlist:
+          # https://docs.python.org/3/library/stdtypes.html
+          print("Error: {} is keyword name".format(name))
+      elif name in dir(builtins):
+          print("Error: {} is builtins function name".format(name))
+      else:
+          print("OK: {} is vaild variable name".format(name))
+
+  for name in ["my-name", "my_name", "1name", "name1", "ABC123", "_______", "print", "import"]:
+      check_name(name)
+#+end_src
+
+#+RESULTS:
+: Error: my-name contains invalid character
+: OK: my_name is vaild variable name
+: OK: 1name is vaild variable name
+: OK: name1 is vaild variable name
+: OK: ABC123 is vaild variable name
+: OK: _______ is vaild variable name
+: Error: print is builtins function name
+: Error: import is keyword name
+
+*** Exercises
+
+**** 2-1 简单消息
+
+#+BEGIN_SRC python :session :results output
+  message = "世界，你好！"
+  print(message)
+#+END_SRC
+
+#+RESULTS:
+: 世界，你好！
+
+**** 2-2 多条简单消息
+
+#+BEGIN_SRC python :session :results output
+  message = "世界，你好！"
+  print(message)
+
+  message = "Python，你好！"
+  print(message)
+#+END_SRC
+
+#+RESULTS:
+: 世界，你好！
+: Python，你好！
+
+*** 2.3 字符串
+
+**** 方法
+
+「方法」或 Method 指：
+
+#+begin_quote
+方法title()出现在这个变量的后面。方法是Python可对数据执行的操作
+#+end_quote
+
+比如，title() 是 name 的方法
+
+#+BEGIN_SRC python :session :results output
+name = "xu chunyang"
+print(name.title())
+#+END_SRC
+
+#+RESULTS:
+: Xu Chunyang
+
+#+BEGIN_SRC python :session :results output
+  my_name = "Xu Chunyang"
+  print(my_name.upper())
+  print(my_name.lower())
+#+END_SRC
+
+#+RESULTS:
+: XU CHUNYANG
+: xu chunyang
+
+**** 合并、拼接字符串
+
+用 + 拼接多个字符串
+
+#+BEGIN_SRC python :session :results output
+  first_name = "chunyang"
+  last_name = "xu"
+  full_name = first_name + " " + last_name
+
+  print(full_name)
+#+END_SRC
+
+#+RESULTS:
+: Chunyang Xu
+
+举例
+
+#+BEGIN_SRC python :session :results output
+  first_name = "chunyang"
+  last_name = "xu"
+  full_name = first_name + " " + last_name
+
+  print("Hello, " + full_name.title() + "!")
+#+END_SRC
+
+#+RESULTS:
+: Hello, Chunyang Xu!
+
+再简化
+
+#+BEGIN_SRC python :session :results output
+  first_name = "chunyang"
+  last_name = "xu"
+  full_name = first_name + " " + last_name
+
+  message = "Hello, " + full_name.title() + "!"
+  print(message)
+#+END_SRC
+
+#+RESULTS:
+: Hello, Chunyang Xu!
+
+**** 用空格、制表符和换行添加空白
+
+「空白」不仅仅指空格，而表示的包括 space、tab 和 newline 在内的一类字符。
+
+#+begin_quote
+在编程中，空白泛指任何非打印字符，如空格、制表符和换行符
+#+end_quote
+
+#+BEGIN_SRC python :session :results output
+print("Python")
+print("\tPython")
+print("Language:\nPython\nC\nJava\nJavaScript")
+#+END_SRC
+
+#+RESULTS:
+: Python
+: 	Python
+: Language:
+: Python
+: C
+: Java
+: JavaScript
+
+#+BEGIN_SRC python :session :results output
+print("Language:\n\tPython\n\tC\n\tJava\n\tJavaScript")
+#+END_SRC
+
+#+RESULTS:
+: Language:
+: 	Python
+: 	C
+: 	Java
+: 	JavaScript
+
+**** 删除空白
+
+空白字符（Whitespace）具体指哪些字符？
+
+[[https://en.wikipedia.org/wiki/Whitespace_character][Whitespace character - Wikipedia]]
+
+#+BEGIN_SRC python :session :results value pp
+  favorite_language = "python "
+  favorite_language
+#+END_SRC
+
+#+RESULTS:
+: 'python '
+
+#+BEGIN_SRC python :session :results value pp
+  favorite_language.rstrip()
+#+END_SRC
+
+#+RESULTS:
+: 'python'
+
+#+BEGIN_SRC python :session :results value pp
+favorite_language
+#+END_SRC
+
+#+RESULTS:
+: 'python '
+
+~rstrip()~ 不会就地修改变量，而是返回一个新值
+
+#+BEGIN_SRC python :session :results value pp
+  favorite_language = "python "
+  favorite_language = favorite_language.rstrip()
+  favorite_language
+#+END_SRC
+
+#+RESULTS:
+: 'python'
+
+lstrip strip rstrip
+
+#+BEGIN_SRC python :session :results value pp
+  favorite_language = " python "
+  favorite_language.rstrip(), \
+      favorite_language.lstrip(), \
+      favorite_language.strip()
+#+END_SRC
+
+#+RESULTS:
+: (' python', 'python ', 'python')
+
+避免 String 引号不匹配的语法错误
+
+#+BEGIN_SRC python :session :results output
+message = "one of Python's strengths is its diverse community."
+print(message)
+#+END_SRC
+
+#+RESULTS:
+: one of Python's strengths is its diverse community.
+
+错误写法
+
+#+BEGIN_SRC python :session :results value pp
+message = 'one of Python's strengths is its diverse community.'
+print(message)
+#+END_SRC
+
+*** Exercises
+
+**** 2-3 个性化消息
+
+#+BEGIN_SRC python :session :results output :tangle ask_name.py
+name = "Eric"
+message = "Hello " + name + ", would you like to learn some Python today?"
+
+print(message)
+#+END_SRC
+
+#+RESULTS:
+: Hello Eric, would you like to learn some Python today?
+
+**** 2-4 调整名字的大小写
+
+#+BEGIN_SRC python :session :results output :tangle name_cases.py
+  name = "Jerry"
+  print(name.lower())
+  print(name.upper())
+  print(name.capitalize())
+#+END_SRC
+
+#+RESULTS:
+: jerry
+: JERRY
+: Jerry
+
+**** 2-5 名言
+
+#+BEGIN_SRC python :session :results output :tangle quote.py
+print('鲁迅曾经说过, "躲进小楼成一统，管他冬夏与春秋。"')
+#+END_SRC
+
+#+RESULTS:
+: 鲁迅曾经说过, "躲进小楼成一统，管他冬夏与春秋。"
+
+**** 2-6 名言2
+
+#+BEGIN_SRC python :session :results output :tangle quote2.py
+name = "鲁迅"
+quote = "躲进小楼成一统，管他冬夏与春秋。"
+
+message = name + '曾经说过, "' + quote + '"'
+print(message)
+#+END_SRC
+
+#+RESULTS:
+: 鲁迅曾经说过, "躲进小楼成一统，管他冬夏与春秋。"
+
+**** 2-7 剔除人名中的空白
+
+#+BEGIN_SRC python :session :results output :tangle name_strip.py
+name = "\t\nXu Chunyang\n"
+print(name)
+print(name.lstrip())
+print(name.rstrip())
+print(name.strip())
+#+END_SRC
+
+#+RESULTS:
+: Xu Chunyang
+
+*** 数字
+
++ - * / ** (次方)
+
+#+BEGIN_SRC python :session :results value pp
+1+2, 3 - 1, 2 * 3, 1/2, 2**10
+#+END_SRC
+
+#+RESULTS:
+: (3, 2, 6, 0.5, 1024)
+
+带小数的数字称为「浮点数」
+
+浮点数运算结果不确定
+
+#+BEGIN_SRC python :session :results value pp
+0.2 + 0.1, 3 * 0.1
+#+END_SRC
+
+#+RESULTS:
+: (0.30000000000000004, 0.30000000000000004)
+
+用 ~str()~ 把数字转换成字符串
+
+#+BEGIN_SRC python :session :results output
+age = 23
+message = "Happy " + str(age) + "rd Birthday!"
+
+print(message)
+#+END_SRC
+
+#+RESULTS:
+: Happy 23rd Birthday!
+
+*** Exercises
+
+**** 2-8 数字8
+
+#+BEGIN_SRC python :session :results output
+print(5 + 3)
+print(10 - 2)
+print(2 * 4)
+print(16 / 2)
+#+END_SRC
+
+#+RESULTS:
+: 8
+: 8
+: 8
+: 8.0
+
+**** 2-19 最喜欢的数字
+
+#+BEGIN_SRC python :session :results output
+  favorite_number = 0
+  message = "My favorite number is " + str(favorite_number)
+
+  print(message)
+#+END_SRC
+
+#+RESULTS:
+: My favorite number is 0
+
+*** 注释
+
+#+BEGIN_SRC python :session :results output
+  # 向大家问好
+  print("Hello Python people!")
+#+END_SRC
+
+#+RESULTS:
+: Hello Python people!
+
+**** Exercises
+
+***** 2-10 添加注释
+
+一
+
+#+BEGIN_SRC python :session :results output
+  # Author: xuchunyang
+  # Date: 2018-04-16
+
+  # Print "Hello World!"
+  print("Hello World!")
+#+END_SRC
+
+#+RESULTS:
+: Hello World!
+
+二
+
+#+BEGIN_SRC python :session :results output
+  # Authro: xuchunyang
+  # Date: 2018-04-16
+  # 打印一条消息
+
+  message = "one of Python's strengths is its diverse community."
+  print(message)
+#+END_SRC
+
+#+RESULTS:
+: one of Python's strengths is its diverse community.
+
+
+***** 2-11 Python 之禅
+
+#+BEGIN_SRC python :session :results output
+import this
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+#+END_EXAMPLE
+
