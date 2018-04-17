@@ -2651,3 +2651,278 @@ if age<4:好。
 : str: Convert number to string
 
 *** 遍历字典
+
+遍历键值对
+
+#+BEGIN_SRC python :session :results output
+  user_0 = {
+      'username': 'efermi',
+      'first': 'enrico',
+      'last': 'fermi',
+  }
+
+  for key, value in user_0.items():
+      print("\nKey: " + key)
+      print("Value: " + value)
+#+END_SRC
+
+#+RESULTS:
+: Key: username
+: Value: efermi
+: 
+: Key: first
+: Value: enrico
+: 
+: Key: last
+: Value: fermi
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  for name, language in favorite_languages.items():
+      print(name.title () + "'s favorite language is " +
+            language.title())
+#+END_SRC
+
+#+RESULTS:
+: Jen's favorite language is Python
+: Sarah's favorite language is C
+: Edward's favorite language is Ruby
+: Phil's favorite language is Python
+
+遍历键
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  for name in favorite_languages.keys():
+      print(name.title())
+#+END_SRC
+
+#+RESULTS:
+: Jen
+: Sarah
+: Edward
+: Phil
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  friends = ['phil', 'sarah']
+
+  for name in favorite_languages.keys():
+      print(name.title())
+
+      if name in friends:
+          print("  Hi " + name.title() +
+                ", I see your favorite language is " +
+                favorite_languages[name].title() + "!")
+#+END_SRC
+
+#+RESULTS:
+: Jen
+: Sarah
+:   Hi Sarah, I see your favorite language is C!
+: Edward
+: Phil
+:   Hi Phil, I see your favorite language is Python!
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  if 'erin' not in favorite_languages.keys():
+      print("Erin, please take our poll!")
+#+END_SRC
+
+#+RESULTS:
+: Erin, please take our poll!
+
+用函数 sorted() 按顺序遍历字典的所有键
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  for name in sorted(favorite_languages.keys()):
+      print(name.title() + ", thank you for taking the poll.")
+#+END_SRC
+
+#+RESULTS:
+: Edward, thank you for taking the poll.
+: Jen, thank you for taking the poll.
+: Phil, thank you for taking the poll.
+: Sarah, thank you for taking the poll.
+
+遍历所有值
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  print("The following languages have been mentioned:")
+  for language in favorite_languages.values():
+      print(language.title())
+#+END_SRC
+
+#+RESULTS:
+: The following languages have been mentioned:
+: Python
+: C
+: Ruby
+: Python
+
+用方法 set() 删除重复项
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  print("The following languages have been mentioned:")
+  for language in set(favorite_languages.values()):
+      print(language.title())
+#+END_SRC
+
+#+RESULTS:
+: The following languages have been mentioned:
+: Python
+: Ruby
+: C
+
+*** Exercises
+
+**** 6-4 词汇表2
+#+BEGIN_SRC python :session :results output
+  programming_terms = {
+      'print': 'Print python object to screen',
+      'if': 'Run code base on condition',
+      'list': 'collections of items',
+      'dict': 'collections of key-value pairs',
+      'str': 'Convert number to string',
+  }
+
+  for term, meaning in programming_terms.items():
+      print(term + ": " + meaning)
+
+  programming_terms['sorted'] = 'Return a sorted copy of list'
+  programming_terms['set'] = 'Remove dup from list'
+  programming_terms['for'] = 'Loop list'
+  programming_terms['del'] = 'remove element from list, dict'
+
+  print()
+  for term, meaning in programming_terms.items():
+      print(term + ": " + meaning)
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+print: Print python object to screen
+if: Run code base on condition
+list: collections of items
+dict: collections of key-value pairs
+str: Convert number to string
+
+print: Print python object to screen
+if: Run code base on condition
+list: collections of items
+dict: collections of key-value pairs
+str: Convert number to string
+sorted: Return a sorted copy of list
+set: Remove dup from list
+for: Loop list
+del: remove element from list, dict
+#+END_EXAMPLE
+
+**** 6-5 河流
+
+#+BEGIN_SRC python :session :results output
+  rivers = {
+      'nile': 'egypt',
+      'amazon': 'brazil',
+      'Yangtze': 'china',
+  }
+
+  for river, country in rivers.items():
+      print("The " + river.title() + " runs through " +
+            country.title())
+
+  print("\n世界三大河流:")
+  for river in rivers.keys():
+      print(river.title())
+
+  print("\n它们流经的国家:")
+  for country in rivers.values():
+      print(country.title())
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+The Nile runs through Egypt
+The Amazon runs through Brazil
+The Yangtze runs through China
+
+世界三大河流:
+Nile
+Amazon
+Yangtze
+
+它们流经的国家:
+Egypt
+Brazil
+China
+#+END_EXAMPLE
+
+**** 6-6 调查
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': 'python',
+      'sarah': 'c',
+      'edward': 'ruby',
+      'phil': 'python',
+  }
+
+  supposed_names = ['sarah', 'phil', 'tom', 'jack']
+  for name in supposed_names:
+      if name in favorite_languages.keys():
+          print(name.title() + ", thank you for taking the poll.")
+      else:
+          print(name.title() + ", please take out poll.")
+#+END_SRC
+
+#+RESULTS:
+: Sarah, thank you for taking the poll.
+: Phil, thank you for taking the poll.
+: Tom, please take out poll.
+: Jack, please take out poll.
