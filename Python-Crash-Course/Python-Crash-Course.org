@@ -2926,3 +2926,392 @@ China
 : Phil, thank you for taking the poll.
 : Tom, please take out poll.
 : Jack, please take out poll.
+
+*** 嵌套
+
+**** 用列表保存字典
+
+#+BEGIN_SRC python :session :results output
+  alien_0 = {'color': 'green', 'points': 5}
+  alien_1 = {'color': 'yellow', 'points': 10}
+  alien_2 = {'color': 'red', 'points': 15}
+
+  aliens = [alien_0, alien_1, alien_2]
+
+  for alien in aliens:
+      print(alien)
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'green', 'points': 5}
+: {'color': 'yellow', 'points': 10}
+: {'color': 'red', 'points': 15}
+
+自动生成更多的外星人
+
+#+BEGIN_SRC python :session :results output
+  aliens = []
+
+  for alien_number in range(30):
+      new_alien = {'color': 'green', 'points': 5, 'speed': "slow"}
+      aliens.append(new_alien)
+
+  for alien in aliens[:5]:
+      print(alien)
+  print("...")
+
+  print("Total number of aliens: " + str(len(aliens)))
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: ...
+: Total number of aliens: 30
+
+#+BEGIN_SRC python :session :results output
+  aliens = []
+
+  for alien_number in range(30):
+      new_alien = {'color': 'green', 'points': 5, 'speed': 'slow'}
+      aliens.append(new_alien)
+
+  for alien in aliens[0:3]:
+      if alien['color'] == 'green':
+          alien['color'] = 'yellow'
+          alien['speed'] = 'medium'
+          alien['points'] = 10
+
+  for alien in aliens[0:5]:
+      print(alien)
+  print("...")
+#+END_SRC
+
+#+RESULTS:
+: {'color': 'yellow', 'points': 10, 'speed': 'medium'}
+: {'color': 'yellow', 'points': 10, 'speed': 'medium'}
+: {'color': 'yellow', 'points': 10, 'speed': 'medium'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: {'color': 'green', 'points': 5, 'speed': 'slow'}
+: ...
+
+**** 用字典保存列表
+
+#+BEGIN_SRC python :session :results output
+  pizza = {
+      'curst': 'thick',
+      'toppings': ['mushrooms', 'extra cheese'],
+  }
+
+  print("You ordered a " + pizza['curst'] + "-curst pizza " +
+        "with the following toppings: ")
+
+  for toppings in pizza['toppings']:
+      print("\t" + toppings)
+#+END_SRC
+
+#+RESULTS:
+: You ordered a thick-curst pizza with the following toppings: 
+: 	mushrooms
+: 	extra cheese
+
+#+BEGIN_SRC python :session :results output
+  favorite_languages = {
+      'jen': ['python', 'ruby'],
+      'sarah': ['c'],
+      'edward': ['ruby', 'go'],
+      'phil': ['python', 'haskell'],
+  }
+
+  for name, languages in favorite_languages.items():
+      print("\n" + name.title() + "'s favorite languages are: ")
+      for language in languages:
+          print("\t" + language.title())
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Jen's favorite languages are: 
+	Python
+	Ruby
+
+Sarah's favorite languages are: 
+	C
+
+Edward's favorite languages are: 
+	Ruby
+	Go
+
+Phil's favorite languages are: 
+	Python
+	Haskell
+#+END_EXAMPLE
+
+**** 用字典保存字典
+
+#+NAME: many_users.py
+#+BEGIN_SRC python :session :results output
+  users = {
+      'aeinstein': {
+          'first': 'albert',
+          'last': 'einstain',
+          'location': 'princeton',
+      },
+
+      'mourie': {
+          'first': 'marie',
+          'last': 'curie',
+          'location': 'paris',
+      },
+    
+  }
+
+  for username, user_info in users.items():
+      print("\nUsername: " + username)
+      full_name = user_info['first'] + " " + user_info['last']
+      location = user_info['location']
+
+      print("\tFull name: " + full_name.title())
+      print("\tLocation: " + location.title())
+#+END_SRC
+
+#+RESULTS: many_users.py
+: Username: aeinstein
+: 	Full name: Albert Einstain
+: 	Location: Princeton
+: 
+: Username: mourie
+: 	Full name: Marie Curie
+: 	Location: Paris
+
+**** Exercises
+
+***** 6-7 人
+
+#+BEGIN_SRC python :session :results output
+  # http://bojackhorseman.wikia.com/wiki/BoJack
+  bojack = {
+      'first_name': 'boJack',
+      'last_name': 'horseman',
+      'age': 54,
+      'city': 'Los Angeles'
+  }
+
+  todd = {
+      'first_name': 'todd',
+      'last_name': 'chavez',
+      'age': 26,
+      'city': "Princess Carolyn's apartment"
+  }
+
+  diane = {
+      'first_name': 'diane',
+      'last_name': 'nguyen',
+      'age': 37,
+      'city': 'Los Angeles'
+  }
+
+
+  people = [bojack, todd, diane]
+
+  for person in people:
+      full_name = person['first_name'].title() + ' ' + person['last_name'].title()
+      print(full_name + " is " + str(person['age']) + " years old, and live in "
+            + person['city'].title())
+#+END_SRC
+
+#+RESULTS:
+: Bojack Horseman is 54 years old, and live in Los Angeles
+: Todd Chavez is 26 years old, and live in Princess Carolyn'S Apartment
+: Diane Nguyen is 37 years old, and live in Los Angeles
+
+***** 6-8 宠物
+
+#+BEGIN_SRC python :session :results output
+  tom = {
+      'species': 'cat',
+      'owner': 'unknown',
+  }
+
+  jerry = {
+      'species': 'mouse',
+      'owner': 'nobody',
+  }
+
+  spike = {
+      'species': 'dog',
+      'owner': 'unknown',
+  }
+
+  pets = [tom, jerry, spike]
+
+  for pet in pets:
+      print('\nSpecies: ' + pet['species'].title())
+      print("Owner: " + pet['owner'].title())
+#+END_SRC
+
+#+RESULTS:
+: Species: Cat
+: Owner: Unknown
+: 
+: Species: Mouse
+: Owner: Nobody
+: 
+: Species: Dog
+: Owner: Unknown
+
+***** 6-9 喜欢的地方
+
+#+BEGIN_SRC python :session :results output
+  favorite_places = {
+      'alice': ['beijing', 'hongkong', 'guangzhou'],
+      'bob': ['boston'],
+      'carolina': ['tokyo', 'seoul'],
+  }
+
+  for person, places in favorite_places.items():
+      if len(places) == 1:
+          print("\n" + person + "'s favorite place is " + places[0].title())
+      elif len(places) > 1:
+          print("\n" + person + "'s favorite places are: ")
+          for place in places:
+              print("\t" + place.title())
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+alice's favorite places are: 
+	Beijing
+	Hongkong
+	Guangzhou
+
+bob's favorite place is Boston
+
+carolina's favorite places are: 
+	Tokyo
+	Seoul
+#+END_EXAMPLE
+
+***** 6-10 最喜欢的数字
+
+#+BEGIN_SRC python :session :results output
+  favorite_numbers = {
+      'alice': [8, 10],
+      'bob': [12],
+      'carolina': [42, 99, 1000],
+      'david': [2, 8],
+      'eli': [6, 12],
+  }
+
+  for name, numbers in favorite_numbers.items():
+      if len(numbers) == 1:
+          print(name.title() + "'s favorite number is " + str(numbers[0]) + ".\n")
+      elif len(numbers) >= 2:
+          print(name.title() + "'s favorite numbers are:")
+          for number in numbers:
+              print("\t" + str(number))
+          print()
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Alice's favorite numbers are:
+	8
+	10
+
+Bob's favorite number is 12.
+
+Carolina's favorite numbers are:
+	42
+	99
+	1000
+
+David's favorite numbers are:
+	2
+	8
+
+Eli's favorite numbers are:
+	6
+	12
+#+END_EXAMPLE
+
+
+***** 6-11 城市
+
+#+BEGIN_SRC python :session :results output
+  cities = {
+      'beijing': {
+          'country': 'china',
+          'population': 2171_0000,
+          'fact': 'beijing is the capital of China',
+      },
+
+      'istanbul': {
+          'country': 'turkey',
+          'population': 1503_0000,
+          'fact': 'istanbul is the largest city of Turkey'
+      },
+
+      'tokyo': {
+          'country': 'japan',
+          'population': 1374_0000,
+          'fact': "Tokyo has 23 special wards",
+      },
+  }
+
+  for city_name, city_info in cities.items():
+      print("\n" + city_name.title())
+      for info_key, info_value in city_info.items():
+          print("\t" + info_key + ": " + str(info_value))
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Beijing
+	country: china
+	population: 21710000
+	fact: beijing is the capital of China
+
+Istanbul
+	country: turkey
+	population: 15030000
+	fact: istanbul is the largest city of Turkey
+
+Tokyo
+	country: japan
+	population: 13740000
+	fact: Tokyo has 23 special wards
+#+END_EXAMPLE
+
+***** 6-12 扩展
+
+#+BEGIN_SRC python :session :results output
+  favorite_numbers = {
+      'alice': [8, 10],
+      'bob': [12],
+      'carolina': [42, 99, 1000],
+      'david': [2, 8],
+      'eli': [6, 12],
+  }
+
+  favorite_numbers['jack'] = []
+
+  for name, numbers in favorite_numbers.items():
+      if not numbers:
+          print(name.title() + " doesn't have any favorite numbers.")
+      elif len(numbers) == 1:
+          print(name.title() + " has only one favorite numbers.")
+      elif len(numbers) > 1:
+          print(name.title() + " has multiple favorite numbers")
+#+END_SRC
+
+#+RESULTS:
+: Alice has multiple favorite numbers
+: Bob has only one favorite numbers.
+: Carolina has multiple favorite numbers
+: David has multiple favorite numbers
+: Eli has multiple favorite numbers
+: Jack doesn't have any favorite numbers.
