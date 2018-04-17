@@ -3315,3 +3315,76 @@ Tokyo
 : David has multiple favorite numbers
 : Eli has multiple favorite numbers
 : Jack doesn't have any favorite numbers.
+
+** Chapter 7
+
+用函数 input() 获得输入
+
+#+NAME: parrot.py
+#+BEGIN_SRC python :session :results output
+message = input("Tell me something, and I will repeat it back to you: ")
+print(message)
+#+END_SRC
+
+#+BEGIN_SRC python :session :results value pp
+  name = input("Please enter your name: ")
+  print("Hello, " + name + "!")
+#+END_SRC
+
+用函数 int() 获得数值输入
+
+#+BEGIN_SRC python :session :results value pp
+  height = input("How tall are you? ")
+  height = int(height)
+
+  if height >= 36:
+      print("\nYou're tall enough to ride!")
+  else:
+      print("\nYou'll be able to ride when you're a little older.")
+#+END_SRC
+
+求模运算（两数相除取余数）
+
+#+BEGIN_SRC python :session :results value pp
+  number = input("Enter a number, and I'll tell you if it's a even or odd: ")
+  number = int(number)
+
+  if number % 2 == 0:
+      print("\nThe number " + str(number) + " is a even.")
+  else:
+      print("\nThe number " + str(number) + " is a odd.")
+#+END_SRC
+
+*** Exercises
+
+**** 7-1 汽车租赁
+
+#+BEGIN_SRC python :session :results value pp
+  car = input("What kind of car do you want to borrow? ")
+  print("\nLet me see if I can find you a " + car.title() + ".")
+#+END_SRC
+
+**** 7-2 餐馆订位
+
+#+BEGIN_SRC python :session :results value pp
+  how_many_people = input("How many people eat? ")
+  how_many_people = int(how_many_people)
+
+  if how_many_people > 8:
+      print("Sorry, there is not empty seat.")
+  else:
+      print("OK, there are empty seat.")
+#+END_SRC
+
+**** 7-3 10 的整数倍
+
+#+BEGIN_SRC python :session :results value pp
+  number = input("Enter a number," +
+                 "and I'll tell you if it's an integer multiple of 10: ")
+  number = int(number)
+
+  if number % 10 == 0:
+      print("\nThe number " + str(number) + " is multiple of 10.")
+  else:
+      print("\nThe number " + str(number) + " is NOT multiple of 10.")
+#+END_SRC
