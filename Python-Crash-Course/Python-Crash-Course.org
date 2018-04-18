@@ -4041,3 +4041,311 @@ while
       album = make_album(artist, title)
       print(album)
 #+END_SRC
+
+*** 传递列表
+
+#+BEGIN_SRC python :session :results output
+  def greet_users(names):
+      """向列表中的每位用户都发送简单的问候"""
+      for name in names:
+          msg = "Hello, " + name.title() + "!"
+          print(msg)
+
+  usernames = ['alice', 'bob', 'carolina']
+  greet_users(usernames)
+#+END_SRC
+
+#+RESULTS:
+: Hello, Alice!
+: Hello, Bob!
+: Hello, Carolina!
+
+修改列表
+
+#+BEGIN_SRC python :session :results output
+  unprinted_designs = ['iphone case', 'robot pendant', 'dodecahedron']
+  completed_models = []
+
+  while unprinted_designs:
+      current_design = unprinted_designs.pop()
+
+      print("Printing model: " + current_design)
+      completed_models.append(current_design)
+
+  print("\nThe following models have been printed:")
+  for completed_model in completed_models:
+      print(completed_model)
+#+END_SRC
+
+#+RESULTS:
+: Printing model: dodecahedron
+: Printing model: robot pendant
+: Printing model: iphone case
+:
+: The following models have been printed:
+: dodecahedron
+: robot pendant
+: iphone case
+
+#+BEGIN_SRC python :session :results output
+  def print_modules(unprinted_designs, completed_models):
+      """
+      模拟打印每个设计，直到没有未打印的设计为止
+      打印每个设计后，都将其移到列表 completed_models 中
+      """
+      while unprinted_designs:
+          current_design = unprinted_designs.pop()
+
+          print("Printing model: " + current_design)
+          completed_models.append(current_design)
+
+
+  def show_completed_models(completed_models):
+      """显示打印好的所有模型"""
+      print("\nThe following models have been printed:")
+      for completed_model in completed_models:
+          print(completed_model)
+
+  unprinted_designs = ['iphone case', 'robot pendant', 'dodecahedron']
+  completed_models = []
+
+  print_modules(unprinted_designs, completed_models)
+  show_completed_models(completed_models)
+#+END_SRC
+
+#+RESULTS:
+: Printing model: dodecahedron
+: Printing model: robot pendant
+: Printing model: iphone case
+:
+: The following models have been printed:
+: dodecahedron
+: robot pendant
+: iphone case
+
+通过向函数传递 列表的副本 来禁止函数修改列表
+
+*** Exercises
+
+**** 8-9 魔术师
+
+#+BEGIN_SRC python :session :results output
+  magicians = ["alice", "david", "carolina"]
+
+  def show_magicans(magicians):
+      """显示列表中每位魔术师的名字"""
+      for magician in magicians:
+          print(magician.title())
+
+  show_magicans(magicians)
+#+END_SRC
+
+#+RESULTS:
+: Alice
+: David
+: Carolina
+
+**** 8-10 了不起的魔术师
+
+#+BEGIN_SRC python :session :results output
+  def show_magicans(magicians):
+      """显示列表中每位魔术师的名字"""
+      for magician in magicians:
+          print(magician.title())
+
+  def make_great(magicians):
+      """修改列表中每位魔术师的名字"""
+      magicians_copy = magicians[:]
+      del magicians[:]
+      for magician in magicians_copy:
+          magicians.append('the Great ' + magician)
+
+  magicians = ["alice", "david", "carolina"]
+  make_great(magicians)
+  show_magicans(magicians)
+#+END_SRC
+
+#+RESULTS:
+: The Great Alice
+: The Great David
+: The Great Carolina
+
+**** 8-11 不变的魔术师
+
+#+BEGIN_SRC python :session :results output
+  def show_magicans(magicians):
+      """显示列表中每位魔术师的名字"""
+      for magician in magicians:
+          print(magician.title())
+
+  def make_great(magicians):
+      """修改列表中每位魔术师的名字"""
+      magicians_copy = magicians[:]
+      del magicians[:]
+      for magician in magicians_copy:
+          magicians.append('the Great ' + magician)
+      return magicians
+
+  magicians = ["alice", "david", "carolina"]
+  great_magicians = make_great(magicians[:])
+  show_magicans(magicians)
+  show_magicans(great_magicians)
+#+END_SRC
+
+#+RESULTS:
+: Alice
+: David
+: Carolina
+: The Great Alice
+: The Great David
+: The Great Carolina
+
+*** 传递任意数量的实参
+
+*arg 表示任意长度的元组
+
+#+BEGIN_SRC python :session :results output
+  def make_pizza(*toppings):
+      """打印顾客点的所有配料"""
+      print(toppings)
+
+  make_pizza()
+  make_pizza('pepperoni')
+  make_pizza('mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+: ()
+: ('pepperoni',)
+: ('mushrooms', 'green peppers', 'extra cheese')
+
+#+BEGIN_SRC python :session :results output
+  def make_pizza(*toppings):
+      """概述需要制作的比萨"""
+      print("\nMaking a pizza with the following toppings:")
+      for topping in toppings:
+          print("- " + topping)
+
+  make_pizza('pepperoni')
+  make_pizza('mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+: Making a pizza with the following toppings:
+: - pepperoni
+:
+: Making a pizza with the following toppings:
+: - mushrooms
+: - green peppers
+: - extra cheese
+
+结合位置实参和任意数量实参
+
+#+BEGIN_SRC python :session :results output
+  def make_pizza(size, *toppings):
+      """概述需要制作的比萨"""
+      print("\nMaking a " + str(size) +
+            "-inch pizza with the following toppings:")
+      for topping in toppings:
+          print("- " + topping)
+
+  make_pizza(16, "pepperoni")
+  make_pizza(12, "mushroom", "green peppers", "extra cheese")
+#+END_SRC
+
+#+RESULTS:
+: Making a 16-inch pizza with the following toppings:
+: - pepperoni
+:
+: Making a 12-inch pizza with the following toppings:
+: - mushroom
+: - green peppers
+: - extra cheese
+
+**args 任意数量的关键字实参
+
+#+BEGIN_SRC python :session :results output
+  def build_profile(first, last, **user_info):
+      """创建一个字典，其中包括我们知道的有关用户的一切"""
+      profile = {}
+      profile['first_name'] = first
+      profile['last_name'] = last
+      for key, value in user_info.items():
+          profile[key] = value
+      return profile
+
+  user_profile = build_profile('albert', 'einstein',
+                               location='princeton',
+                               field='physics')
+  print(user_profile)
+#+END_SRC
+
+#+RESULTS:
+: {'first_name': 'albert', 'last_name': 'einstein', 'location': 'princeton', 'field': 'physics'}
+
+*** Exercises
+
+**** 8-12 三明治
+
+#+BEGIN_SRC python :session :results output
+  def make_sandwith(*toppings):
+      """概述需要制作的三明治"""
+      print("\nMaking a sandwith with the following toppings:")
+      for topping in toppings:
+          print('- ' + topping)
+
+  make_sandwith('pepperoni')
+  make_sandwith('mushrooms', 'floss')
+  make_sandwith('mushrooms', 'floss', 'cheese')
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Making a sandwith with the following toppings:
+- pepperoni
+
+Making a sandwith with the following toppings:
+- mushrooms
+- floss
+
+Making a sandwith with the following toppings:
+- mushrooms
+- floss
+- cheese
+#+END_EXAMPLE
+
+**** 8-13 用户简介
+
+#+BEGIN_SRC python :session :results output
+  def build_profile(given_name, family_name, **other_info):
+      """创建一个字典，其中包括所知的我的一切"""
+      profile = {'given_name': given_name, 'family_name': family_name}
+      for key, value in other_info.items():
+          profile[key] = value
+      return profile
+
+  my_profile = build_profile('chunyang', 'xu', age=25, country='china', sex='male')
+  print(my_profile)
+#+END_SRC
+
+#+RESULTS:
+: {'given_name': 'chunyang', 'family_name': 'xu', 'age': 25, 'country': 'china', 'sex': 'male'}
+
+**** 8-14 汽车
+
+#+BEGIN_SRC python :session :results output
+  def make_car(factory, model, **other_info):
+      """返回一个字典，包括关于车的所有信息"""
+      profile = {}
+      profile['factory'] = factory
+      profile['model'] = model
+      for key, value in other_info.items():
+          profile[key] = value
+      return profile
+
+  car = make_car('subaru', 'outback', color='blue', tow_package=True)
+  print(car)
+#+END_SRC
+
+#+RESULTS:
+: {'factory': 'subaru', 'model': 'outback', 'color': 'blue', 'tow_package': True}
