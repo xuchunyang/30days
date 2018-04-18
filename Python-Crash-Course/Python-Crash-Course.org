@@ -4570,3 +4570,495 @@ Hello, Carolina!
           full_name = first_name + ' ' + last_name
       return full_name.title()
 #+END_SRC
+
+** Chapter 9
+
+创建一个类
+
+#+NAME: dog_class
+#+BEGIN_SRC python
+  class Dog():
+      """一次模拟小狗的简单尝试"""
+
+      def __init__(self, name, age):
+          """初始化属性 name 和 age"""
+          self.name = name
+          self.age = age
+
+      def sit(self):
+          """模拟小狗被命令蹲下"""
+          print(self.name.title() + " is now sitting.")
+
+      def roll_over(self):
+          """模拟小狗被命令打滚"""
+          print(self.name.title() + " rolled over!")
+#+END_SRC
+
+#+RESULTS:
+
+创建实例
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<dog_class>>
+
+  my_dog = Dog('while', 6)
+
+  print("My dog's name is " + my_dog.name.title() + ".")
+  print("My dog is " + str(my_dog.age) + " years old")
+#+END_SRC
+
+#+RESULTS:
+: My dog's name is While.
+: My dog is 6 years old
+
+调用方法
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<dog_class>>
+
+  my_dog = Dog('while', 6)
+  my_dog.sit()
+  my_dog.roll_over()
+#+END_SRC
+
+#+RESULTS:
+: While is now sitting.
+: While rolled over!
+
+创建多个实例
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<dog_class>>
+
+  my_dog = Dog('willie', 6)
+  your_dog = Dog('lucy', 3)
+
+  print("My dog's name is " + my_dog.name.title() + ".")
+  print("My dog is " + str(my_dog.age) + " years old.")
+  my_dog.sit()
+
+  print("\nYour dog's name is " + your_dog.name.title() + ".")
+  print("Your dog is " + str(your_dog.age) + " years old.")
+  your_dog.sit()
+#+END_SRC
+
+#+RESULTS:
+: My dog's name is Willie.
+: My dog is 6 years old.
+: Willie is now sitting.
+:
+: Your dog's name is Lucy.
+: Your dog is 3 years old.
+: Lucy is now sitting.
+
+*** Exercises
+
+**** 9-1 餐馆
+
+#+NAME: restaurant_class
+#+BEGIN_SRC python :results output
+  class Restaurant():
+      """模拟餐馆的类"""
+
+      def __init__(self, restaurant_name, cuisine_type):
+          """初始化属性 restaurant_name 和 cuisine_type"""
+          self.restaurant_name = restaurant_name
+          self.cuisine_type = cuisine_type
+
+      def describe_restaurant(self):
+          """描述餐馆"""
+          print("The restaurant's name is " + self.restaurant_name.title())
+          print("The restaurant's cuisine is " + self.cuisine_type.title())
+
+      def open_restaurant(self):
+          """指出餐馆正在营业"""
+          print("The restaurant is opening.")
+#+END_SRC
+
+#+RESULTS: restaurant_class
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<restaurant_class>>
+
+  restaurant = Restaurant('Eleven', 'Chinese')
+  print(restaurant.restaurant_name)
+  print(restaurant.cuisine_type)
+  restaurant.describe_restaurant()
+  restaurant.open_restaurant()
+#+END_SRC
+
+#+RESULTS:
+: Eleven
+: Chinese
+: The restaurant's name is Eleven
+: The restaurant's cuisine is Chinese
+: The restaurant is opening.
+
+**** 9-2 三家餐馆
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<restaurant_class>>
+
+  restaurant_0 = Restaurant('foo', 'Chinese')
+  restaurant_1 = Restaurant('bar', 'Mexico')
+  restaurant_2 = Restaurant('baz', 'Lanzhou')
+
+  restaurant_0.describe_restaurant()
+  restaurant_1.describe_restaurant()
+  restaurant_2.describe_restaurant()
+#+END_SRC
+
+#+RESULTS:
+: The restaurant's name is Foo
+: The restaurant's cuisine is Chinese
+: The restaurant's name is Bar
+: The restaurant's cuisine is Mexico
+: The restaurant's name is Baz
+: The restaurant's cuisine is Lanzhou
+
+**** 9-3 用户
+
+#+BEGIN_SRC python :results output
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+
+  me = User('chunyang', 'xu')
+  bob = User('Bob', 'lee')
+  jayce = User('jacye', 'zoo')
+
+  for user in [me, bob, jayce]:
+      print()
+      user.describe_user()
+      user.greet_user()
+#+END_SRC
+
+#+RESULTS:
+:
+: The user's full name is Chunyang Xu
+: Welcome, Chunyang Xu
+:
+: The user's full name is Bob Lee
+: Welcome, Bob Lee
+:
+: The user's full name is Jacye Zoo
+: Welcome, Jacye Zoo
+
+*** 使用类和实例
+
+#+NAME: car_class
+#+BEGIN_SRC python :session :results value pp
+  class Car():
+      """一次描述汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+#+END_SRC
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<car_class>>
+
+  my_new_car = Car('audi', 'a4', '2016')
+  print(my_new_car.get_descriptive_name())
+#+END_SRC
+
+#+RESULTS:
+: 2016 audi a4
+
+#+NAME: car_class2
+#+BEGIN_SRC python
+  class Car():
+      """一次描述汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+          self.odometer_reading = 0
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+      def read_odometer(self):
+          """打印一条指出汽车里程的消息"""
+          print("This car has " + str(self.odometer_reading) + " miles on it.")
+
+#+END_SRC
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<car_class2>>
+
+  my_new_car = Car('audi', 'a4', '2016')
+  print(my_new_car.get_descriptive_name())
+  my_new_car.read_odometer()
+#+END_SRC
+
+#+RESULTS:
+: 2016 audi a4
+: This car has 0 miles on it.
+
+直接修改属性的值
+
+#+begin_src python :results output :noweb yes
+  <<car_class2>>
+
+  my_new_car = Car('audi', 'a4', '2016')
+  print(my_new_car.get_descriptive_name())
+
+  my_new_car.odometer_reading = 23
+  my_new_car.read_odometer()
+#+end_src
+
+#+RESULTS:
+: 2016 audi a4
+: This car has 23 miles on it.
+
+通过方法更新属性值
+
+#+BEGIN_SRC python :results output
+  class Car():
+      """一次描述汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+          self.odometer_reading = 0
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+      def read_odometer(self):
+          """打印一条指出汽车里程的消息"""
+          print("This car has " + str(self.odometer_reading) + " miles on it.")
+
+      def update_odometer(self, mileage):
+          """将里程读数设置成指定的值"""
+          self.odometer_reading = mileage
+
+  my_new_car = Car('audi', 'a4', 2016)
+  print(my_new_car.get_descriptive_name())
+
+  my_new_car.update_odometer(23)
+  my_new_car.read_odometer()
+#+END_SRC
+
+#+RESULTS:
+: 2016 audi a4
+: This car has 23 miles on it.
+
+阻止人回调里程数
+
+#+BEGIN_SRC python :results output
+  class Car():
+      """一次描述汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+          self.odometer_reading = 0
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+      def read_odometer(self):
+          """打印一条指出汽车里程的消息"""
+          print("This car has " + str(self.odometer_reading) + " miles on it.")
+
+      def update_odometer(self, mileage):
+          """将里程读数设置成指定的值"""
+          if mileage >= self.odometer_reading:
+              self.odometer_reading = mileage
+          else:
+              print("You can't roll back an odometer!")
+
+  my_used_car = Car('subaru', 'outback', 2013)
+  print(my_used_car.get_descriptive_name())
+
+  my_used_car.update_odometer(23500)
+  my_used_car.read_odometer()
+
+  my_used_car.update_odometer(100)
+  my_used_car.read_odometer()
+#+END_SRC
+
+#+RESULTS:
+: 2013 subaru outback
+: This car has 23500 miles on it.
+: You can't roll back an odometer!
+: This car has 23500 miles on it.
+
+通过方法对属性的值进行递增
+
+#+BEGIN_SRC python :results output
+  class Car():
+      """一次描述汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+          self.odometer_reading = 0
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+      def read_odometer(self):
+          """打印一条指出汽车里程的消息"""
+          print("This car has " + str(self.odometer_reading) + " miles on it.")
+
+      def update_odometer(self, mileage):
+          """将里程读数设置成指定的值"""
+          if mileage >= self.odometer_reading:
+              self.odometer_reading = mileage
+          else:
+              print("You can't roll back an odometer!")
+
+      def increment_odometer(self, miles):
+          """将里程表读数增加指定的量"""
+          self.odometer_reading += miles
+
+  my_used_car = Car('subaru', 'outback', 2013)
+  print(my_used_car.get_descriptive_name())
+
+  my_used_car.update_odometer(23500)
+  my_used_car.read_odometer()
+
+  my_used_car.increment_odometer(100)
+  my_used_car.read_odometer()
+#+END_SRC
+
+#+RESULTS:
+: 2013 subaru outback
+: This car has 23500 miles on it.
+: This car has 23600 miles on it.
+
+*** Exercises
+
+**** 9-4 就餐人数
+
+#+BEGIN_SRC python :results output
+  class Restaurant():
+      """模拟餐馆的类"""
+
+      def __init__(self, restaurant_name, cuisine_type):
+          """初始化属性 restaurant_name 和 cuisine_type"""
+          self.restaurant_name = restaurant_name
+          self.cuisine_type = cuisine_type
+          self.number_served = 0
+
+      def describe_restaurant(self):
+          """描述餐馆"""
+          print("The restaurant's name is " + self.restaurant_name.title())
+          print("The restaurant's cuisine is " + self.cuisine_type.title())
+
+      def open_restaurant(self):
+          """指出餐馆正在营业"""
+          print("The restaurant is opening.")
+
+      def set_number_served(self, number_served):
+          """设置就过餐的人数"""
+          self.number_served = number_served
+
+      def increment_number_served(self, number):
+          """递增就餐过的人数"""
+          self.number_served += number
+
+
+  my_restaurant = Restaurant('Never come back', 'Korea')
+  print(str(my_restaurant.number_served) + " people had eaten in this restaruant.")
+
+  my_restaurant.number_served = 1000
+  print(str(my_restaurant.number_served) + " people had eaten in this restaruant.")
+
+  my_restaurant.set_number_served(1200)
+  print(str(my_restaurant.number_served) + " people had eaten in this restaruant.")
+
+  my_restaurant.increment_number_served(100)
+  print(str(my_restaurant.number_served) + " people had eaten in this restaruant.")
+#+END_SRC
+
+#+RESULTS:
+: 0 people had eaten in this restaruant.
+: 100 people had eaten in this restaruant.
+
+**** 9-5 尝试登录次数
+
+#+BEGIN_SRC python :results output
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+          self.login_attempts = 0
+
+      def increment_login_attempts(self):
+          """尝试登录的次数增加一"""
+          self.login_attempts += 1
+
+      def reset_login_attempt(self):
+          """重置尝试登录的次数"""
+          self.login_attempts = 0
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+
+  me = User('chunyang', 'xu')
+
+  me.increment_login_attempts()
+  me.increment_login_attempts()
+  me.increment_login_attempts()
+  me.increment_login_attempts()
+  print(str(me.login_attempts))
+
+  me.reset_login_attempt()
+  print(str(me.login_attempts))
+#+END_SRC
+
+#+RESULTS:
+: 4
+: 0
