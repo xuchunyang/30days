@@ -5062,3 +5062,823 @@ Hello, Carolina!
 #+RESULTS:
 : 4
 : 0
+
+*** 继承
+
+#+NAME: car_class_3
+#+BEGIN_SRC python
+  class Car():
+      """一次模拟汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+          self.odometer_reading = 0
+
+      def get_descriptive_name(self):
+          """返回整洁的名字"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name.title()
+
+      def read_odometer(self):
+          """打印里程数"""
+          print('This car has ' + str(self.odometer_reading) + ' miles on it.')
+
+      def update_odometer(self, mileage):
+          """更新里程数"""
+          if mileage >= self.odometer_reading:
+              self.odometer_reading = mileage
+          else:
+              print("You can't roll back odometer!")
+
+      def increment_odometer(self, miles):
+          """增加里程数"""
+          self.odometer_reading += miles
+#+END_SRC
+
+定义子类
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<car_class_3>>
+
+  class ElectricCar(Car):
+      """电动汽车的独特之处"""
+
+      def __init__(self, make, model, year):
+          """初始化父类的属性"""
+          super().__init__(make, model, year)
+
+  my_tesla = ElectricCar('tesla', 'model s', 2016)
+  print(my_tesla.get_descriptive_name())
+#+END_SRC
+
+#+RESULTS:
+: 2016 Tesla Model S
+
+给子类定义属性和方法
+
+#+BEGIN_SRC python :results output :noweb yes
+  <<car_class_3>>
+
+  class ElectricCar(Car):
+      """电动汽车"""
+
+      def __init__(self, make, model, year):
+          """
+          电动汽车的独特之处
+          初始化父类的属性，再初始化电动汽车特有的属性
+          """
+          super().__init__(make, model, year)
+          self.battery_size = 70
+
+      def describe_battery(self):
+          """打印一条描述电瓶容量的消息"""
+          print("This car has a " + str(self.battery_size) + "-kWh battery.")
+
+  my_tesla = ElectricCar('tesla', 'model s', 2016)
+  print(my_tesla.get_descriptive_name())
+  my_tesla.describe_battery()
+#+END_SRC
+
+#+RESULTS:
+: 2016 Tesla Model S
+: This car has a 70-kWh battery.
+
+重写父类的方法
+
+将实例用作属性
+
+#+BEGIN_SRC python :results output
+  class Car():
+      """汽车"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+  class Battery():
+      """电瓶"""
+
+      def __init__(self, battery_size=70):
+          """初始化电瓶的属性"""
+          self.battery_size = battery_size
+
+      def describe_battery(self):
+          """打印一条描述电瓶容量的消息"""
+          print("This car has a " + str(self.battery_size) + "-kWh batter.")
+
+      def get_range(self):
+          """打印一条消息，指出电瓶的续航里程"""
+          if self.battery_size == 70:
+              range = 240
+          elif self.battery_size == 85:
+              range = 270
+
+          message = "This car can go approximately " + str(range)
+          message += " miles on a full charge."
+          print(message)
+
+  class ElectricCar(Car):
+      """电动汽车"""
+
+      def __init__(self, make, model, year):
+          """
+          初始化父类的属性，再初始化电动汽车特有的属性
+          """
+          super().__init__(make, model, year)
+          self.battery = Battery()
+
+  my_tesla = ElectricCar('tesla', 'model s', 2016)
+
+  print(my_tesla.get_descriptive_name())
+  my_tesla.battery.describe_battery()
+  my_tesla.battery.get_range()
+#+END_SRC
+
+#+RESULTS:
+: 2016 tesla model s
+: This car has a 70-kWh batter.
+
+*** Exercises
+
+**** 9-6 冰淇淋小店
+
+#+BEGIN_SRC python :results output
+  class Restaurant():
+      """模拟餐馆的类"""
+
+      def __init__(self, restaurant_name, cuisine_type):
+          """初始化属性 restaurant_name 和 cuisine_type"""
+          self.restaurant_name = restaurant_name
+          self.cuisine_type = cuisine_type
+
+      def describe_restaurant(self):
+          """描述餐馆"""
+          print("The restaurant's name is " + self.restaurant_name.title())
+          print("The restaurant's cuisine is " + self.cuisine_type.title())
+
+      def open_restaurant(self):
+          """指出餐馆正在营业"""
+          print("The restaurant is opening.")
+
+  class IceCreamStand(Restaurant):
+      """冰淇淋小店"""
+
+      def __init__(self, restaurant_name, flavors):
+          """初始化属性"""
+          super().__init__(restaurant_name, "icecream")
+          self.flavors = flavors
+
+      def show_flavors(self):
+          """显示口味"""
+          print("\n这家冰淇淋店有以下口味：")
+          for flavor in self.flavors:
+              print(flavor)
+
+  flavors = ['blackberry', 'cookie dough', 'green tea']
+  my_icecream_stand = IceCreamStand('Scoopy', flavors)
+  my_icecream_stand.show_flavors()
+  flavors = ['nut']
+  my_icecream_stand.show_flavors()
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+
+这家冰淇淋店有以下口味：
+blackberry
+cookie dough
+green tea
+
+这家冰淇淋店有以下口味：
+blackberry
+cookie dough
+green tea
+#+END_EXAMPLE
+
+**** 9-7 管理员
+
+#+BEGIN_SRC python :session :results output
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+
+  class Admin(User):
+      """管理员"""
+
+      def __init__(self, first_name, last_name,
+                   privileges=['can add post', 'can delete post',
+                               'can ban user']):
+          """初始化属性"""
+          super().__init__(first_name, last_name)
+          self.privileges = privileges
+
+      def show_privileges(self):
+          """显示权限"""
+          print("\nThis admin has the following privileges:")
+          for privilege in self.privileges:
+              print('- ' + privilege)
+
+  chunyang = Admin('Chunyang', 'xu')
+  chunyang.show_privileges()
+#+END_SRC
+
+#+RESULTS:
+: This admin has the following privileges:
+: - can add post
+: - can delete post
+: - can ban user
+
+**** 9-8 权限
+
+#+BEGIN_SRC python :session :results output
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+
+  class Privileges():
+      """表示权限的类"""
+
+      def __init__(self, privileges):
+          self.privileges = privileges
+
+      def show_privileges(self):
+          """显示权限"""
+          print("\nThis admin has the following privileges:")
+          for privilege in self.privileges:
+              print('- ' + privilege)
+
+  class Admin(User):
+      """管理员"""
+
+      def __init__(self, first_name, last_name, privileges):
+          """初始化属性"""
+          super().__init__(first_name, last_name)
+          self.privileges = Privileges(privileges)
+
+
+  chunyang = Admin('Chunyang', 'xu',
+                   privileges=['can add post', 'can delete post',
+                               'can ban user'])
+  chunyang.privileges.show_privileges()
+#+END_SRC
+
+#+RESULTS:
+: This admin has the following privileges:
+: - can add post
+: - can delete post
+: - can ban user
+
+
+**** 9-9 电瓶升级
+
+#+BEGIN_SRC python :results output
+  class Car():
+      """汽车"""
+
+      def __init__(self, make, model, year):
+          """初始化汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性信息"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+  class Battery():
+      """电瓶"""
+
+      def __init__(self, battery_size=70):
+          """初始化电瓶的属性"""
+          self.battery_size = battery_size
+
+      def describe_battery(self):
+          """打印一条描述电瓶容量的消息"""
+          print("This car has a " + str(self.battery_size) + "-kWh batter.")
+
+      def get_range(self):
+          """打印一条消息，指出电瓶的续航里程"""
+          if self.battery_size == 70:
+              range = 240
+          elif self.battery_size == 85:
+              range = 270
+
+          message = "This car can go approximately " + str(range)
+          message += " miles on a full charge."
+          print(message)
+
+      def upgrade_battery(self):
+          """把电瓶容量设成 85"""
+          if self.battery_size != 85:
+              self.battery_size = 85
+
+  class ElectricCar(Car):
+      """电动汽车"""
+
+      def __init__(self, make, model, year):
+          """
+          初始化父类的属性，再初始化电动汽车特有的属性
+          """
+          super().__init__(make, model, year)
+          self.battery = Battery()
+
+  my_tesla = ElectricCar('tesla', 'model s', 2016)
+  my_tesla.battery.get_range()
+  my_tesla.battery.upgrade_battery()
+  my_tesla.battery.get_range()
+#+END_SRC
+
+*** 导入类
+
+car.py
+
+#+BEGIN_SRC python :tangle car.py
+  """一个可用于表示汽车的类"""
+
+  class Car():
+      """一次模拟汽车的简单尝试"""
+
+      def __init__(self, make, model, year):
+          """初始化描述汽车的属性"""
+          self.make = make
+          self.model = model
+          self.year = year
+
+      def get_descriptive_name(self):
+          """返回整洁的描述性名称"""
+          long_name = str(self.year) + ' ' + self.make + ' ' + self.model
+          return long_name
+
+      def read_odometer(self):
+          """打印一条消息，指出汽车的里程数"""
+          print("This car has " + str(self.odometer_reading) + " miles on it.")
+
+      def update_odometer(self, mileage):
+          """
+          将里程表读数设置为指定值
+          拒绝将里程表往回拨
+          """
+          if mileage >= self.odometer_reading:
+              self.odometer_reading = mileage
+          else:
+              print("You can't roll back an odometer")
+
+      def increment_odometer(self, miles):
+          """将里程表读数增加指定的量"""
+          self.odometer_reading += miles
+
+  class Battery():
+      """一次模拟电动汽车电瓶的简单尝试"""
+
+      def __init__(self, battery_size=70):
+          """初始化电瓶的属性"""
+          self.battery_size = battery_size
+
+      def describe_battery(self):
+          """打印一条描述电瓶容量的消息"""
+          print("This car has a " + str(self.battery_size) + "-kWh batter.")
+
+      def get_range(self):
+          """打印一条描述电瓶续航里程的消息"""
+          if self.battery_size == 70:
+              range = 240
+          elif self.battery_size == 85:
+              range = 270
+
+          message = "This car can go approximately " + str(range)
+          message += " miles on a full charge."
+          print(message)
+
+  class ElectricCar(Car):
+      """模拟电动汽车的独特之处"""
+
+      def __init__(self, make, model, year):
+          """
+          初始化父类的属性，再初始化电动汽车独有的属性
+          """
+          super().__init__(make, model, year)
+          self.battery = Battery()
+#+END_SRC
+
+my_car.py
+
+#+BEGIN_SRC python :results output
+  from car import Car
+
+  my_new_car = Car('audi', 'a4', 2016)
+  print(my_new_car.get_descriptive_name())
+
+  my_new_car.odometer_reading = 23
+  my_new_car.read_odometer()
+#+END_SRC
+
+#+RESULTS: my_car.py
+: 2016 audi a4
+: This car has 23 miles on it.
+
+my_electric_car.py
+
+#+BEGIN_SRC python :results output
+  from car import ElectricCar
+
+  my_tesla = ElectricCar('tesla', 'model s', 2016)
+
+  print(my_tesla.get_descriptive_name())
+  my_tesla.battery.describe_battery()
+  my_tesla.battery.get_range()
+#+END_SRC
+
+my_cars.py
+
+#+BEGIN_SRC python :results output
+  from car import Car, ElectricCar
+
+  my_beetle = Car('volkswagen', 'beetle', 2016)
+  print(my_beetle.get_descriptive_name())
+
+  my_tesla = ElectricCar('tesla', 'roadster', 2016)
+  print(my_tesla.get_descriptive_name())
+#+END_SRC
+
+*** Exercises
+
+**** 9-10 导入 Restaurant 类
+
+restaurant.py
+
+#+BEGIN_SRC python :tangle restaurant.py
+  class Restaurant():
+      """模拟餐馆的类"""
+
+      def __init__(self, restaurant_name, cuisine_type):
+          """初始化属性 restaurant_name 和 cuisine_type"""
+          self.restaurant_name = restaurant_name
+          self.cuisine_type = cuisine_type
+
+      def describe_restaurant(self):
+          """描述餐馆"""
+          print("The restaurant's name is " + self.restaurant_name.title())
+          print("The restaurant's cuisine is " + self.cuisine_type.title())
+
+      def open_restaurant(self):
+          """指出餐馆正在营业"""
+          print("The restaurant is opening.")
+#+END_SRC
+
+#+BEGIN_SRC python :results output
+  from restaurant import Restaurant
+
+  my_restaurant = Restaurant("Mike and Carry's restaurant", 'chinese')
+  my_restaurant.describe_restaurant()
+#+END_SRC
+
+#+RESULTS:
+: The restaurant's name is Mike And Carry'S Restaurant
+: The restaurant's cuisine is Chinese
+
+
+**** 9-11 导入 admin 类
+
+user.py
+
+#+BEGIN_SRC python :tangle user.py
+  """描述用户的类"""
+
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+
+  class Privileges():
+      """表示权限的类"""
+
+      def __init__(self, privileges):
+          self.privileges = privileges
+
+      def show_privileges(self):
+          """显示权限"""
+          print("\nThis admin has the following privileges:")
+          for privilege in self.privileges:
+              print('- ' + privilege)
+
+  class Admin(User):
+      """管理员"""
+
+      def __init__(self, first_name, last_name, privileges):
+          """初始化属性"""
+          super().__init__(first_name, last_name)
+          self.privileges = Privileges(privileges)
+#+END_SRC
+
+#+BEGIN_SRC python :session :results output
+  from user import Admin
+
+  chunyang = Admin('chunyang', 'xu', ['update a post', 'delete a post',
+                                      'ban a user'])
+  chunyang.privileges.show_privileges()
+#+END_SRC
+
+#+RESULTS:
+: This admin has the following privileges:
+: - update a post
+: - delete a post
+: - ban a user
+
+**** 9-12 多个模块
+
+user2.py
+
+#+BEGIN_SRC python :tangle user2.py
+  """描述用户的类"""
+
+  class User():
+      """表示用户的类"""
+
+      def __init__(self, first_name, last_name):
+          """初始化属性 first_name 和 last_name"""
+          self.first_name = first_name
+          self.last_name = last_name
+
+      def describe_user(self):
+          """描述用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("The user's full name is " + full_name.title())
+
+      def greet_user(self):
+          """问候用户"""
+          full_name = self.first_name + ' ' + self.last_name
+          print("Welcome, " + full_name.title())
+#+END_SRC
+
+admin.py
+
+#+BEGIN_SRC python :tangle admin.py
+  """描述管理员的类"""
+
+  from user2 import User
+
+  class Privileges():
+      """表示权限的类"""
+
+      def __init__(self, privileges):
+          self.privileges = privileges
+
+      def show_privileges(self):
+          """显示权限"""
+          print("\nThis admin has the following privileges:")
+          for privilege in self.privileges:
+              print('- ' + privilege)
+
+  class Admin(User):
+      """管理员"""
+
+      def __init__(self, first_name, last_name, privileges):
+          """初始化属性"""
+          super().__init__(first_name, last_name)
+          self.privileges = Privileges(privileges)
+#+END_SRC
+
+#+BEGIN_SRC python :results output
+  from admin import Admin
+
+  me = Admin('chunyang', 'xu', ['delete a post', 'update a post',
+                                'ban a user'])
+  me.privileges.show_privileges()
+#+END_SRC
+
+#+RESULTS:
+:
+: This admin has the following privileges:
+: - delete a post
+: - update a post
+: - ban a user
+
+*** Python 标准库
+
+favorite_languages.py
+
+#+BEGIN_SRC python :results output
+  from collections import OrderedDict
+
+  favorite_languages = OrderedDict()
+
+  favorite_languages['jen'] = 'python'
+  favorite_languages['sarah'] = 'c'
+  favorite_languages['edward'] = 'ruby'
+  favorite_languages['phil'] = 'python'
+
+  for name, language in favorite_languages.items():
+      print(name.title() + "'s favorite language is " +
+            language.title() + '.')
+#+END_SRC
+
+#+RESULTS:
+: Jen's favorite language is Python.
+: Sarah's favorite language is C.
+: Edward's favorite language is Ruby.
+: Phil's favorite language is Python.
+
+*** Exercises
+
+**** 9-13 使用 OrderDict
+
+#+BEGIN_SRC python :session :results output
+  from collections import OrderedDict
+
+  programming_terms = OrderedDict()
+
+  programming_terms['sorted'] = 'Return a sorted copy of list'
+  programming_terms['set'] = 'Remove dup from list'
+  programming_terms['for'] = 'Loop list'
+  programming_terms['del'] = 'remove element from list, dict'
+
+  for term, meaning in programming_terms.items():
+      print(term + ": " + meaning)
+#+END_SRC
+
+**** 9-14 骰子
+
+#+BEGIN_SRC python :results output
+  from random import randint
+
+  class Die():
+      """一个表示骰子的类"""
+
+      def __init__(self, sides=6):
+          """初始化骰子的属性"""
+          self.sides = sides
+
+      def roll_die(self):
+          """掷骰子，并打印结果"""
+          side = randint(1, self.sides)
+          print(side)
+
+      def roll_die_10(self):
+          """把这个骰子掷 10 次"""
+          repeated_times = 10
+          while repeated_times:
+              self.roll_die()
+              repeated_times -= 1
+
+  die = Die()
+  die.roll_die_10()
+
+  die_10 = Die(sides=10)
+  die_10.roll_die_10()
+
+  die_20 = Die(sides=20)
+  die_20.roll_die_10()
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+2
+6
+6
+4
+2
+2
+5
+2
+1
+1
+6
+3
+1
+9
+9
+9
+5
+1
+10
+6
+15
+19
+2
+1
+17
+17
+6
+10
+1
+9
+#+END_EXAMPLE
+
+**** 9-15 Python Module of the Week
+
+[[https://pymotw.com/3/][Python 3 Module of the Week — PyMOTW 3]]
+
+***** collections OrderedDict
+
+#+begin_quote
+Under Python 3.6, the built-in dict does track insertion order,
+although this behavior is a side-effect of an implementation change
+and should not be relied on.
+#+end_quote
+
+#+BEGIN_SRC python :results output
+  from collections import OrderedDict
+
+  print("Regular dictionary:")
+  d = {}
+  d['a'] = 'A'
+  d['b'] = 'B'
+  d['c'] = 'C'
+
+  for k, v in d.items():
+      print(k, v)
+
+  print("\nOrderDict:")
+  d = OrderedDict()
+  d['a'] = 'A'
+  d['b'] = 'B'
+  d['c'] = 'C'
+
+  for k, v in d.items():
+      print(k, v)
+#+END_SRC
+
+#+RESULTS:
+: Regular dictionary:
+: a A
+: b B
+: c C
+:
+: OrderDict:
+: a A
+: b B
+: c C
+
+***** collections Counter
+
+#+BEGIN_SRC python :results output
+  from collections import Counter
+
+  c = Counter("abcdefgabcabcaba")
+  print(c.most_common(3))
+#+END_SRC
+
+#+RESULTS:
+: [('a', 5), ('b', 4), ('c', 3)]
+
+*** 类编码风格
+
+1. 类名应采用驼峰命名法
+2. 类应该有 docstring
+3. 模块也应该有 docstring
+4. 在类中，可使用一个空行来分隔方法
+5. 在模块中，可使用两个空行来分隔类
+6. 需要同时导入标准库中的模块和你编写的模块时，先编写导入标准库模块的
+   import语句，再添加一个空行，然后编写导入你自己编写的模块的import语句
