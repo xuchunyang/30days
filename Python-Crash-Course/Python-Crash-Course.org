@@ -6423,3 +6423,293 @@ Cosmo
 : little_women.txt has about 189079 words and 'the' occurs 7622 times.
 : non-exist.txt does not exist.
 : alice.txt has about 29461 words and 'the' occurs 1777 times.
+
+*** 存储数据
+
+number_writer.py
+
+#+BEGIN_SRC python :results output
+  import json
+
+  numbers = [2, 3, 5, 7, 11, 13]
+
+  filename = 'numbers.json'
+
+  with open(filename, 'w') as f_obj:
+      json.dump(numbers, f_obj)
+#+END_SRC
+
+number_reader.py
+
+#+BEGIN_SRC python :results output
+  import json
+
+  filename = 'numbers.json'
+  with open(filename) as f_obj:
+      numbers = json.load(f_obj)
+
+  print(numbers)
+#+END_SRC
+
+#+RESULTS:
+: [2, 3, 5, 7, 11, 13]
+
+保存和读取用户生成的数据
+
+remember_me.py
+
+#+BEGIN_SRC python
+  import json
+
+  username = input("What is your name? ")
+
+  filename = 'username.json'
+  with open(filename, 'w') as f_obj:
+      json.dump(username, f_obj)
+      print("We'll remember you when you come back, " + username + ".")
+#+END_SRC
+
+great_user.py
+
+#+BEGIN_SRC python :results output
+  import json
+
+  filename = 'username.json'
+
+  with open(filename) as f_obj:
+      username = json.load(f_obj)
+      print("Welcome back " + username + "!")
+#+END_SRC
+
+#+RESULTS:
+: Welcome back xuchunyang!
+
+remember_me.py
+
+#+BEGIN_SRC python
+  import json
+
+  filename = 'username.json'
+
+  try:
+      with open(filename) as f_obj:
+          username = json.load(f_obj)
+  except FileNotFoundError:
+      username = input("What's your name? ")
+      with open(filename, 'w') as f_obj:
+          json.dump(username, f_obj)
+          print("We'll remember you when you come back, " + username + ".")
+  else:
+      print("Welcome back, " + username + "!")
+#+END_SRC
+
+重构
+
+#+NAME: remember_me.py
+#+BEGIN_SRC python
+  import json
+
+  def greet_user():
+      """问候用户，并指出其名字"""
+      filename = 'username.json'
+      try:
+          with open(filename) as f_obj:
+              username = json.load(f_obj)
+      except FileNotFoundError:
+          username = input("What's your name? ")
+          with open(filename, 'w') as f_obj:
+              json.dump(username, f_obj)
+              print("We will remember you when you come back, " + username + ".")
+      else:
+          print("Welcome back, " + username + "!")
+
+  greet_user()
+#+END_SRC
+
+继续重构，分解 greet_user
+
+#+BEGIN_SRC python
+  import json
+
+  def get_stored_username():
+      """如果存储了用户名，就获取它"""
+      filename = 'username.json'
+      try:
+          with open(filename) as f_obj:
+              username = json.load(f_obj)
+      except FileNotFoundError:
+          return None
+      else:
+          return username
+
+  def greet_user():
+      """问候用户，并指出姓名"""
+      username = get_stored_username()
+      if username:
+          print("Welcome back, " + username + "!")
+      else:
+          username = input("What is your name? ")
+          filename = 'username.json'
+          with open(filename, 'w') as f_obj:
+              json.dump(username, f_obj)
+              print("We'll remember you when you come back, " + username + "!")
+
+  greet_user()
+#+END_SRC
+
+继续重构，继续分解 greet_user
+
+#+BEGIN_SRC python
+  import json
+
+  def get_stored_username():
+      """如果存储了用户名，就获取它"""
+      filename = 'username.json'
+      try:
+          with open(filename) as f_obj:
+              username = json.load(f_obj)
+      except FileNotFoundError:
+          return None
+      else:
+          return username
+
+  def get_new_username():
+      """提示输入用户名"""
+      username = input("What's your name? ")
+      filenmae = 'username.json'
+      with open(filenmae, 'w') as f_obj:
+          json.dump(username, f_obj)
+      return username
+
+  def greet_user():
+      """问候用户，并指出姓名"""
+      username = get_stored_username()
+      if username:
+          print("Welcome back, " + username + "!")
+      else:
+          username = get_new_username()
+          print("We'll remember you when you come back, " + username + "!")
+
+  greet_user()
+#+END_SRC
+
+*** Exercises
+
+**** 10-11 喜欢的数字
+
+favorite_number_writer.py
+
+#+BEGIN_SRC python
+  import json
+
+  while True:
+      favorite_number = input("Enter your favorite number: ")
+      try:
+          favorite_number = int(favorite_number)
+      except ValueError:
+          print(favorite_number + "is not a number, please try again")
+          continue
+      else:
+          break
+
+  filename = 'favorite_number.json'
+  with open(filename, 'w') as f_obj:
+      json.dump(favorite_number, f_obj)
+      print("We will remember your favorite number, " + str(favorite_number))
+#+END_SRC
+
+favorite_number_reader.py
+
+#+BEGIN_SRC python :results output
+  import json
+
+  filename = 'favorite_number.json'
+  with open(filename) as f_obj:
+      favorite_number = json.load(f_obj)
+      print("I know your favorite number! It's " + str(favorite_number))
+#+END_SRC
+
+#+RESULTS:
+: I know your favorite number! It's 12
+
+**** 10-12 记住喜欢的数字
+
+#+BEGIN_SRC python
+  import json
+
+  def get_stored_favorite_number():
+      """如果存储了最喜欢的数字，就提取它"""
+      filename = 'favorite_number.json'
+      try:
+          with open(filename) as f_obj:
+              favorite_number = json.load(f_obj)
+      except FileNotFoundError:
+          return None
+      else:
+          return favorite_number
+
+  def get_new_favorite_number():
+      """提示输入新的最喜欢的数字"""
+      filename = 'favorite_number.json'
+      while True:
+          favorite_number = input("What's your favorite number? ")
+          try:
+              favorite_number = int(favorite_number)
+          except ValueError:
+              print(favorite_number + "is not a number, please try again")
+              continue
+          else:
+              with open(filename, 'w') as f_obj:
+                  json.dump(favorite_number, f_obj)
+              return favorite_number
+
+  favorite_number = get_stored_favorite_number()
+  if favorite_number:
+      print("I know your favorite number! It's " + str(favorite_number))
+  else:
+      favorite_number = get_new_favorite_number()
+      print("We'll remember your favorite number, " + str(favorite_number))
+#+END_SRC
+
+**** 10-13 验证用户
+
+remember_me.py
+
+#+BEGIN_SRC python
+  import json
+
+  def get_stored_username():
+      """如果存储了用户名，就获取它"""
+      filename = 'username.json'
+      try:
+          with open(filename) as f_obj:
+              username = json.load(f_obj)
+      except FileNotFoundError:
+          return None
+      else:
+          return username
+
+  def get_new_username():
+      """提示输入用户名"""
+      username = input("What's your name? ")
+      filenmae = 'username.json'
+      with open(filenmae, 'w') as f_obj:
+          json.dump(username, f_obj)
+      return username
+
+  def greet_user():
+      """问候用户，并指出姓名"""
+      username = get_stored_username()
+      if username:
+          response = input("Are you " + username + "? (y or n) ")
+          if response == 'y':
+              print("Welcome back, " + username + "!")
+          else:
+              username = get_new_username()
+              print("We'll remember you when you come back, " + username + "!")
+      else:
+          username = get_new_username()
+          print("We'll remember you when you come back, " + username + "!")
+
+  greet_user()
+#+END_SRC
