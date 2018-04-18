@@ -4349,3 +4349,224 @@ Making a sandwith with the following toppings:
 
 #+RESULTS:
 : {'factory': 'subaru', 'model': 'outback', 'color': 'blue', 'tow_package': True}
+
+*** 函数 · 模块
+
+一个模块
+
+#+BEGIN_SRC python :tangle pizza.py
+  def make_pizza(size, *toppings):
+      """概述要制作的比萨"""
+      print("\nMaking a " + str(size) +
+            "-inch pizza with the following toppings:")
+      for topping in toppings:
+          print("- " + topping)
+#+END_SRC
+
+导入这个模块
+
+#+BEGIN_SRC python :results output
+  import pizza
+
+  pizza.make_pizza(16, 'pepperoni')
+  pizza.make_pizza(12, 'mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+:
+: Making a 16-inch pizza with the following toppings:
+: - pepperoni
+:
+: Making a 12-inch pizza with the following toppings:
+: - mushrooms
+: - green peppers
+: - extra cheese
+
+导入模块中的特定函数
+
+#+BEGIN_SRC python :results output
+  from pizza import make_pizza
+
+  make_pizza(16, 'pepperoni')
+  make_pizza(12, 'mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+:
+: Making a 16-inch pizza with the following toppings:
+: - pepperoni
+:
+: Making a 12-inch pizza with the following toppings:
+: - mushrooms
+: - green peppers
+: - extra cheese
+
+用 as 给函数设置别名
+
+#+BEGIN_SRC python :results output
+  from pizza import make_pizza as mp
+
+  mp(16, 'pepperoni')
+  mp(12, 'mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+:
+: Making a 16-inch pizza with the following toppings:
+: - pepperoni
+:
+: Making a 12-inch pizza with the following toppings:
+: - mushrooms
+: - green peppers
+: - extra cheese
+
+用 * 导入模块中的所有函数
+
+#+BEGIN_SRC python :results output
+  from pizza import *
+
+  make_pizza(16, 'pepperoni')
+  make_pizza(12, 'mushrooms', 'green peppers', 'extra cheese')
+#+END_SRC
+
+#+RESULTS:
+:
+: Making a 16-inch pizza with the following toppings:
+: - pepperoni
+:
+: Making a 12-inch pizza with the following toppings:
+: - mushrooms
+: - green peppers
+: - extra cheese
+
+*** 函数编写指南
+
+1. 使用描述性的名字
+2. docstring
+3. 形参默认值两侧不加空格
+
+*** Exercises
+
+**** 8-15 打印模型
+
+定义 printing_functions 模块
+
+#+BEGIN_SRC python :tangle printing_functions.py
+  def print_modules(unprinted_designs, completed_models):
+      """
+      模拟打印每个设计，直到没有未打印的设计为止
+      打印每个设计后，都将其移到列表 completed_models 中
+      """
+      while unprinted_designs:
+          current_design = unprinted_designs.pop()
+
+          print("Printing model: " + current_design)
+          completed_models.append(current_design)
+
+
+  def show_completed_models(completed_models):
+      """显示打印好的所有模型"""
+      print("\nThe following models have been printed:")
+      for completed_model in completed_models:
+          print(completed_model)
+#+END_SRC
+
+使用该模块
+
+#+BEGIN_SRC python :results output
+  from printing_functions import print_modules, show_completed_models
+
+  unprinted_designs = ['iphone case', 'robot pendant', 'dodecahedron']
+  completed_models = []
+
+  print_modules(unprinted_designs, completed_models)
+  show_completed_models(completed_models)
+#+END_SRC
+
+#+RESULTS:
+: Printing model: dodecahedron
+: Printing model: robot pendant
+: Printing model: iphone case
+:
+: The following models have been printed:
+: dodecahedron
+: robot pendant
+: iphone case
+
+**** 8-16 导入
+
+定义 greet_users 模块
+
+#+BEGIN_SRC python :tangle greet_users.py
+  def greet_users(names):
+      """向列表中的每位用户都发送简单的问候"""
+      for name in names:
+          msg = "Hello, " + name.title() + "!"
+          print(msg)
+#+END_SRC
+
+使用该模块
+
+#+BEGIN_SRC python :results output
+  usernames = ['alice', 'bob', 'carolina']
+
+  import greet_users
+  greet_users.greet_users(usernames)
+
+  from greet_users import greet_users
+  greet_users(usernames)
+
+  from greet_users import greet_users as gu
+  gu(usernames)
+
+  import greet_users as gu
+  gu.greet_users(usernames)
+
+  from greet_users import *
+  greet_users(usernames)
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+Hello, Alice!
+Hello, Bob!
+Hello, Carolina!
+Hello, Alice!
+Hello, Bob!
+Hello, Carolina!
+Hello, Alice!
+Hello, Bob!
+Hello, Carolina!
+Hello, Alice!
+Hello, Bob!
+Hello, Carolina!
+Hello, Alice!
+Hello, Bob!
+Hello, Carolina!
+#+END_EXAMPLE
+
+**** 8-17 函数编写指南
+
+#+BEGIN_SRC python :session :results value pp
+  def greet_users(names):
+      """向列表中的每位用户都发送简单的问候"""
+      for name in names:
+          msg = "Hello, " + name.title() + "!"
+          print(msg)
+#+END_SRC
+
+#+BEGIN_SRC python :session :results value pp
+  def describe_city(city_name, country_name='China'):
+      """描述一个城市"""
+      print(city_name.title() + " is in " + country_name.title() + ".")
+#+END_SRC
+
+#+BEGIN_SRC python :session :results value pp
+  def get_formatted_name(first_name, last_name, middle_name=''):
+      """返回整洁的姓名"""
+      if middle_name:
+          full_name = first_name + ' ' + middle_name + ' ' + last_name
+      else:
+          full_name = first_name + ' ' + last_name
+      return full_name.title()
+#+END_SRC
