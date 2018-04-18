@@ -3683,3 +3683,361 @@ continue
   for name, response in responses.items():
       print(name + " would like go to " + response + ".")
 #+END_SRC
+
+** Chapter 8
+
+define function:
+- name
+- arg
+- docstring
+- body
+
+#+BEGIN_SRC python :session :results output
+  def greet_user():
+      """Say Hello"""
+      print("Hello!")
+
+  greet_user()
+#+END_SRC
+
+#+RESULTS:
+: Hello!
+
+参数
+
+#+BEGIN_SRC python :session :results output
+  def greet_user(username):
+      """Say Hello"""
+      print("Hello, " + username.title() + "!")
+
+  greet_user("kevin")
+#+END_SRC
+
+#+RESULTS:
+: Hello, Kevin!
+
+*** Exercises
+
+**** 8-1 消息
+
+#+BEGIN_SRC python :session :results output
+  def display_message():
+      print("I learnt how to define and call a function.")
+
+  display_message()
+#+END_SRC
+
+#+RESULTS:
+: I learnt how to define and call a function.
+
+**** 8-2 喜欢的图书
+
+#+BEGIN_SRC python :session :results output
+  def favorite_book(title):
+      """Show the name of my favorite book"""
+      print("One of my favorite book is " + title.title())
+
+  favorite_book('nowhere')
+#+END_SRC
+
+#+RESULTS:
+: One of my favorite book is Nowhere
+
+*** 参数
+
+位置参数
+
+#+BEGIN_SRC python :session :results output
+  def describe_pet(animal_type, pet_name):
+      """Show pet infomation"""
+      print("\nI have a " + animal_type + ".")
+      print("My " + animal_type + "'s name is " + pet_name.title() + ".")
+
+  describe_pet('dog', 'yellow')
+  describe_pet('cat', 'black')
+#+END_SRC
+
+#+RESULTS:
+: I have a dog.
+: My dog's name is Yellow.
+:
+: I have a cat.
+: My cat's name is Black.
+
+关键词实参
+
+#+BEGIN_SRC python :session :results output
+  def describe_pet(animal_type, pet_name):
+      """Describe my pet"""
+      print("\nI have a " + animal_type + ".")
+      print("My " + animal_type + " a name is " + pet_name.title() + ".")
+
+  describe_pet(animal_type='dog', pet_name='yellow')
+  describe_pet(pet_name='yellow', animal_type='dog')
+#+END_SRC
+
+#+RESULTS:
+: I have a dog.
+: My dog a name is Yellow.
+:
+: I have a dog.
+: My dog a name is Yellow.
+
+默认值
+
+#+BEGIN_SRC python :session :results output
+  def describe_pet(pet_name, animal_type='dog'):
+      """Describe my pet"""
+      print("\nI have a " + animal_type + ".")
+      print("My " + animal_type + "'s name is " + pet_name.title() + '.')
+
+  describe_pet(pet_name='white')
+#+END_SRC
+
+#+RESULTS:
+: I have a dog.
+: My dog's name is White.
+
+等效的函数调用
+
+#+BEGIN_SRC python :session :results output
+  describe_pet('willie')
+  describe_pet(pet_name='willie')
+
+  describe_pet('tom', 'cat')
+  describe_pet(pet_name='tom', animal_type='cat')
+  describe_pet('tom', animal_type='cat')
+  # 这种不行
+  # describe_pet(pet_name='tom', 'cat')
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_EXAMPLE
+I have a dog.
+My dog's name is Willie.
+
+I have a dog.
+My dog's name is Willie.
+
+I have a cat.
+My cat's name is Tom.
+
+I have a cat.
+My cat's name is Tom.
+
+I have a cat.
+My cat's name is Tom.
+#+END_EXAMPLE
+
+*** Exercises
+
+**** 8-3 T恤
+
+#+BEGIN_SRC python :session :results output
+  def make_shirt(size, message):
+      """Make T-shirt"""
+      print("Making a " + str(size) + " T shirt with '" + message + "' on it.")
+
+  make_shirt(56, 'Hello World')
+  make_shirt(size=56, message='Hello World')
+#+END_SRC
+
+#+RESULTS:
+: Making a 56 T shirt with 'Hello World' on it.
+: Making a 56 T shirt with 'Hello World' on it.
+
+**** 8-4 大号 T恤
+
+#+BEGIN_SRC python :session :results output
+  def make_shirt(size, message='I love Python'):
+      """Make T-shirt"""
+      print("Making a " + str(size) + " T shirt with '" + message + "' on it.")
+
+  make_shirt(100)
+  make_shirt(80)
+  make_shirt(80, message='Hello Python')
+#+END_SRC
+
+#+RESULTS:
+: Making a 100 T shirt with 'I love Python' on it.
+: Making a 80 T shirt with 'I love Python' on it.
+: Making a 80 T shirt with 'Hello Python' on it.
+
+**** 8-5 城市
+
+#+BEGIN_SRC python :session :results output
+  def describe_city(city_name, country_name='China'):
+      """描述一个城市"""
+      print(city_name.title() + " is in " + country_name.title() + ".")
+
+  describe_city('Beijing')
+  describe_city("Chang'an")
+  describe_city("Seoul", country_name='Korea')
+#+END_SRC
+
+#+RESULTS:
+: Beijing is in China.
+: Chang'An is in China.
+: Seoul is in Korea.
+
+*** 返回值
+
+#+BEGIN_SRC python :session :results output
+  def get_formatted_name(first_name, last_name):
+      """返回整洁的姓名"""
+      full_name = first_name + ' ' + last_name
+      return full_name.title()
+
+  musican = get_formatted_name('jimi', 'hendrix')
+  print(musican)
+#+END_SRC
+
+#+RESULTS:
+: Jimi Hendrix
+
+#+BEGIN_SRC python :session :results output
+  def get_formatted_name(first_name, last_name, middle_name=''):
+      """返回整洁的姓名"""
+      if middle_name:
+          full_name = first_name + ' ' + middle_name + ' ' + last_name
+      else:
+          full_name = first_name + ' ' + last_name
+      return full_name.title()
+
+  musican = get_formatted_name('jimi', 'hendrix')
+  print(musican)
+
+  musican = get_formatted_name('john', 'hooker', 'lee')
+  print(musican)
+#+END_SRC
+
+#+RESULTS:
+: Jimi Hendrix
+: John Lee Hooker
+
+#+begin_quote
+Python将非空字符串解读为True
+#+end_quote
+
+发挥字典
+
+#+BEGIN_SRC python :session :results output
+  def build_person(first_name, last_name, age=''):
+      """返回一个字典，其中包括有关一个人的信息"""
+      person = {'first': first_name, 'last': last_name}
+      if age:
+          person['age'] = age
+      return person
+
+  musican = build_person('jimi', 'hendrix', age=27)
+  print(musican)
+#+END_SRC
+
+#+RESULTS:
+: {'first': 'jimi', 'last': 'hendrix', 'age': 27}
+
+while
+
+#+BEGIN_SRC python :session :results value pp
+  def get_formatted_name(first_name, last_name):
+      """返回整洁的姓名"""
+      full_name = first_name + ' ' + last_name
+      return full_name.title()
+
+  while True:
+      print("\nPlease tell me your name:")
+      print("(enter 'q' at any time to quit)")
+
+      f_name = input("First name: ")
+      if f_name == 'q':
+          break
+
+      l_name = input("Last name: ")
+      if l_name == 'q':
+          break
+
+      formatted_name = get_formatted_name(f_name, l_name)
+      print("\nHello, " + formatted_name + "!")
+
+#+END_SRC
+
+*** Exercises
+
+**** 8-6 城市名
+
+#+BEGIN_SRC python :session :results output
+  def city_country(city, country):
+      """返回包含城市名和所在国家的字符串"""
+      return city.title() + ', ' + country.title()
+
+  print(city_country('Beijing', 'China'))
+  print(city_country('Hongkong', 'China'))
+  print(city_country('Seoul', 'South Korea'))
+#+END_SRC
+
+#+RESULTS:
+: Beijing, China
+: Hongkong, China
+: Seoul, South Korea
+
+**** 8-7 专辑
+
+#+BEGIN_SRC python :session :results output
+  def make_album(artist, title):
+      """返回一个字典，其中包括艺术家的姓名和专辑名"""
+      album = {'artist': artist, 'title': title}
+      return album
+
+  album = make_album('Pink Floyd', 'The Wall')
+  print(album)
+
+  album = make_album('Michale Jackson', 'HIStory')
+  print(album)
+
+  album = make_album('Eminem', 'The Marshall Mathers LP')
+  print(album)
+
+  def make_album_2(artist, title, how_many_songs=0):
+      """返回一个字典，其中包括艺术家的姓名和专辑名"""
+      album = {'artist': artist, 'title': title}
+      if how_many_songs:
+          album['how_many_songs'] = how_many_songs
+      return album
+
+  album = make_album_2('Michale Jackson', 'HIStory', how_many_songs=30)
+  print(album)
+
+  album = make_album('Eminem', 'The Marshall Mathers LP')
+  print(album)
+#+END_SRC
+
+#+RESULTS:
+: {'artist': 'Pink Floyd', 'title': 'The Wall'}
+: {'artist': 'Michale Jackson', 'title': 'HIStory'}
+: {'artist': 'Eminem', 'title': 'The Marshall Mathers LP'}
+: {'artist': 'Michale Jackson', 'title': 'HIStory', 'how_many_songs': 30}
+: {'artist': 'Eminem', 'title': 'The Marshall Mathers LP'}
+
+**** 8-8 用户的专辑
+
+#+BEGIN_SRC python :session :results output
+  def make_album(artist, title):
+      """返回一个字典，其中包括艺术家的姓名和专辑名"""
+      album = {'artist': artist, 'title': title}
+      return album
+
+  while True:
+      print("\nPlease tell me one album")
+      print("(enter 'q' at any time to quit)")
+
+      artist = input("Artist: ")
+      if artist == 'q':
+          break
+
+      title = input("Title: ")
+      if title == 'q':
+          break
+
+      album = make_album(artist, title)
+      print(album)
+#+END_SRC
