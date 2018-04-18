@@ -5882,3 +5882,321 @@ and should not be relied on.
 5. 在模块中，可使用两个空行来分隔类
 6. 需要同时导入标准库中的模块和你编写的模块时，先编写导入标准库模块的
    import语句，再添加一个空行，然后编写导入你自己编写的模块的import语句
+
+** Chapter 10
+
+pi_digits.txt
+
+#+begin_src text :tangle pi_digits.txt
+3.1415926535
+  8979323846
+  2643383279
+#+end_src
+
+读这个文件
+
+#+BEGIN_SRC python :results output
+  with open('pi_digits.txt') as file_object:
+      contents = file_object.read()
+      print(contents)
+#+END_SRC
+
+#+RESULTS:
+: 3.1415926535
+:   8979323846
+:   2643383279
+: 
+
+逐行读取
+
+#+BEGIN_SRC python :results output
+  filename = 'pi_digits.txt'
+
+  with open(filename) as file_object:
+      for line in file_object:
+          print(line)
+#+END_SRC
+
+#+RESULTS:
+: 3.1415926535
+: 
+:   8979323846
+: 
+:   2643383279
+: 
+
+去掉多余的换行
+
+#+BEGIN_SRC python :results output
+  filename = 'pi_digits.txt'
+
+  with open(filename) as file_object:
+      for line in file_object:
+          print(line.rstrip())
+#+END_SRC
+
+#+RESULTS:
+: 3.1415926535
+:   8979323846
+:   2643383279
+
+用方法 readlines 将文件内容的各行存入列表
+
+#+BEGIN_SRC python :results output
+  filename = 'pi_digits.txt'
+
+  with open(filename) as file_object:
+      lines = file_object.readlines()
+
+  for line in lines:
+      print(line.rstrip())
+#+END_SRC
+
+#+RESULTS:
+: 3.1415926535
+:   8979323846
+:   2643383279
+
+使用文件的内容
+
+#+NAME: pi_string.py
+#+BEGIN_SRC python :results output
+  filename = 'pi_digits.txt'
+
+  pi_string = ''
+  with open(filename) as file_object:
+      for line in file_object:
+          pi_string += line.strip()
+
+  print(pi_string)
+  print(len(pi_string))
+#+END_SRC
+
+#+RESULTS: pi_string.py
+: 3.141592653589793238462643383279
+: 32
+
+一个更大的文件
+
+#+BEGIN_SRC python :results output
+  filename = 'pi_million_digits.txt'
+
+  with open(filename) as file_object:
+      lines = file_object.readlines()
+
+  pi_string = ''
+  for line in lines:
+      pi_string += line.strip()
+    
+  print(pi_string[:52] + '...')
+  print(len(pi_string))
+#+END_SRC
+
+#+RESULTS:
+: 3.14159265358979323846264338327950288419716939937510...
+: 1000002
+
+圆周率中包含你的生日吗？
+
+#+BEGIN_SRC python :results output
+  filename = 'pi_million_digits.txt'
+
+  with open(filename) as file_object:
+      lines = file_object.readlines()
+
+  pi_string = ''
+  for line in lines:
+      pi_string += line.strip()
+
+  birthday = input("Enter your birthday, in the form mmddyy: ")
+  if birthday in pi_string:
+      print("Your birthday appears in the first million digits of pi!")
+  else:
+      print("You birthday does not appear in the first million digits of pi.")
+#+END_SRC
+
+*** Exercises
+
+**** 10-1 Python 学习笔记
+
+learning_python.txt
+
+#+begin_src text :tangle learning_python.txt
+In Python you can use 'in' to check if a string is substring of another string
+In Python you can use 'strip' to remove leading and trailing whitespace from a string
+In Python you can define a function
+In Python you can call a function
+In Python you can define function with any length of arguments
+In Python you can read a file at at time or line by line
+In Python you can define a Class
+In Python you can define a Class by inheriting another Class
+#+end_src
+
+#+BEGIN_SRC python :results output
+  filename = 'learning_python.txt'
+
+  print("1. 一次性读取整个文件:")
+  with open(filename) as file_object:
+      contents = file_object.read()
+      print(contents.rstrip())
+
+  print("\n2. 遍历文件对象")
+  with open(filename) as file_object:
+      for line in file_object:
+          print(line.rstrip())
+
+  print("\n3. 用一个列表")
+  with open(filename) as file_object:
+      lines = file_object.readlines()
+
+  for line in lines:
+      print(line.rstrip())
+#+END_SRC
+
+**** 10-2 C 语言学习笔记
+
+#+BEGIN_SRC python :results output
+  filename = 'learning_python.txt'
+
+  with open(filename) as file_object:
+      contents = file_object.read()
+      contents = contents.replace('Python', 'C')
+      print(contents.rstrip())
+#+END_SRC
+
+#+RESULTS:
+: In C you can use 'in' to check if a string is substring of another string
+: In C you can use 'strip' to remove leading and trailing whitespace from a string
+: In C you can define a function
+: In C you can call a function
+: In C you can define function with any length of arguments
+: In C you can read a file at at time or line by line
+: In C you can define a Class
+: In C you can define a Class by inheriting another Class
+
+*** 写入文件
+
+写入空白文件
+
+#+BEGIN_SRC python :results silent
+  filename = 'programming.txt'
+
+  with open(filename, 'w') as file_object:
+      file_object.write("I love programming.")
+#+END_SRC
+
+写入多行
+
+#+BEGIN_SRC python :session :results value pp
+  filename = 'programming.txt'
+
+  with open(filename, 'w') as file_object:
+      file_object.write("I love programming.\n")
+      file_object.write("I love creating new games.\n")
+#+END_SRC
+
+#+RESULTS:
+: 27
+
+附加到文件
+
+#+BEGIN_SRC python :session :results value pp
+  filename = 'programming.txt'
+
+  with open(filename, 'a') as file_object:
+      file_object.write("I also love finding meanings in large database.\n")
+      file_object.write("I love creating apps that can run in a browser.\n")
+#+END_SRC
+
+*** Exercises
+
+**** 10-3 访客
+
+#+BEGIN_SRC python
+  name = input("Enter your name: ")
+
+  filename = 'guest.txt'
+
+  with open(filename, 'w') as file_object:
+      file_object.write(name)
+#+END_SRC
+
+**** 10-4 访客名单
+
+#+BEGIN_SRC python
+  while True:
+      prompt = "Enter you name:"
+      prompt += "\n(enter 'q' at any time to quit) "
+      name = input(prompt)
+      if name == 'q':
+          break
+      print("Hello, " + name.title() + "!")
+      with open('guest_book.txt', 'a') as file_object:
+          file_object.write(name.title() + '\n')
+#+END_SRC
+
+**** 10-5 关于编程的调查
+
+#+BEGIN_SRC python
+  filename = 'programming_reasons.txt'
+
+  while True:
+      reason = input(
+          "Why do you love programming?\n(Enter 'q' at any time to quit) ")
+      if reason == 'q':
+          break
+      with open(filename, 'a') as file_object:
+          file_object.write(reason.strip() + '\n')
+#+END_SRC
+
+*** 异常
+
+处理除零异常
+
+#+BEGIN_SRC python :results output
+  try:
+      print(5/0)
+  except ZeroDivisionError:
+      print("You can't divide by zero!")
+#+END_SRC
+
+#+RESULTS:
+: You can't divide by zero!
+
+try ... execpt ... else ...
+
+#+BEGIN_SRC python
+  print("Give me two numbers, and I'll divide them")
+  print("Enter 'q' to quit.")
+
+  while True:
+      first_name = input("\nFirst number: ")
+      if first_name == 'q':
+          break
+      second_number = input("Second number: ")
+      if second_number == 'q':
+          break
+      try:
+          answer = int(first_name) / int(second_number)
+      except ZeroDivisionError:
+          print("You can't divide by 0!")
+      else:
+          print(answer)
+#+END_SRC
+
+
+处理 FileNotFoundError
+
+#+BEGIN_SRC python :results output
+  filename = 'alice.txt'
+
+  try:
+      with open(filename) as file_object:
+          contents = file_object.read()
+  except FileNotFoundError:
+      msg = "Sorry, the file " + filename + " does not exist."
+      print(msg)
+#+END_SRC
+
+#+RESULTS:
+: Sorry, the file alice.txt does not exist.
