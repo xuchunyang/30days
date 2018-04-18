@@ -6200,3 +6200,226 @@ try ... execpt ... else ...
 
 #+RESULTS:
 : Sorry, the file alice.txt does not exist.
+
+分析文本
+
+#+BEGIN_SRC python :results output
+  filename = 'alice.txt'
+
+  try:
+      with open(filename) as f_obj:
+          contents = f_obj.read()
+  except FileNotFoundError:
+      msg = "Sorry, the file " + filename + " does not exist"
+      print(msg)
+  else:
+      words = contents.split()
+      num_words = len(words)
+      print("The file " + filename + " has about " + str(num_words) + " words.")
+    
+#+END_SRC
+
+#+RESULTS:
+: The file alice.txt has about 29461 words.
+
+word_count.py
+
+#+BEGIN_SRC python :results output
+  def count_words(filename):
+      """计算一个文件大致包含多少个单词"""
+
+      try:
+          with open(filename) as f_obj:
+              contents = f_obj.read()
+      except FileNotFoundError:
+          msg = "Sorry, the file " + filename + " does not exist."
+          print(msg)
+      else:
+          words = contents.split()
+          num_words = len(words)
+          print("The file " + filename + " has about " + str(num_words) + " words")
+
+  filename = 'alice.txt'
+  count_words(filename)
+#+END_SRC
+
+#+RESULTS:
+: The file alice.txt has about 29461 words
+
+#+BEGIN_SRC python :results output
+  def count_words(filename):
+      """计算一个文件大致包含多少个单词"""
+
+      try:
+          with open(filename) as f_obj:
+              contents = f_obj.read()
+      except FileNotFoundError:
+          msg = "Sorry, the file " + filename + " does not exist."
+          print(msg)
+      else:
+          words = contents.split()
+          num_words = len(words)
+          print("The file " + filename + " has about " + str(num_words) + " words")
+
+  filenames = ['alice.txt', 'siddhartha.txt', 'moby_dick.txt', 'little_women.txt']
+  for filename in filenames:
+      count_words(filename)
+#+END_SRC
+
+#+RESULTS:
+: The file alice.txt has about 29461 words
+: Sorry, the file siddhartha.txt does not exist.
+: The file moby_dick.txt has about 215136 words
+: The file little_women.txt has about 189079 words
+
+pass
+
+*** Exercises
+
+**** 10-6 加法运算
+
+#+BEGIN_SRC python
+  first_number = input("First Number: ")
+  second_number = input("Second Number: ")
+
+  try:
+      first_number = int(first_number)
+      second_number = int(second_number)
+  except ValueError:
+      print("Not a number")
+  else:
+      print(str(first_number + second_number))
+#+END_SRC
+
+**** 10-7 加法计算器
+
+#+BEGIN_SRC python :session :results value pp
+  print("Enter two number, and I'll add them")
+  print("enter 'q' to quit")
+
+  while True:
+      print()
+      first_number = input("First number: ")
+      if first_number == 'q':
+          break
+      try:
+          first_number = int(first_number)
+      except ValueError:
+          msg = first_number + " is not number"
+          print(msg)
+          continue
+
+      second_number = input("Second number: ")
+      if second_number == 'q':
+          break
+      try:
+          second_number = int(second_number)
+      except ValueError:
+          msg = second_number + " is not a number"
+          print(msg)
+          continue
+
+      result = first_number + second_number
+      print(str(first_number) + " + " + str(second_number) + " = " + str(result))
+#+END_SRC
+
+**** 10-8 猫和狗
+
+cats.txt
+
+#+begin_src text :tangle cats.txt
+Tom
+Garfield
+Snowball V
+Doraemon
+#+end_src
+
+dogs.txt
+
+#+begin_src text :tangle dogs.txt
+Snoopy
+Santa's Little Helper
+Cosmo
+#+end_src
+
+#+BEGIN_SRC python :results output
+  def print_file(filename):
+      """Print file's contents"""
+      try:
+          with open(filename) as f_obj:
+              contents = f_obj.read()
+      except FileNotFoundError:
+          msg = filename + ' does not exist'
+          print(msg)
+      else:
+          print(contents.rstrip())
+
+  print_file('cats.txt')
+  print_file('dogs.txt')
+#+END_SRC
+
+#+RESULTS:
+: Tom
+: Garfield
+: Snowball V
+: Doraemon
+: Snoopy
+: Santa's Little Helper
+: Cosmo
+
+**** 10-9 沉默的猫和狗
+
+#+BEGIN_SRC python :results output
+  def print_file(filename):
+      """Print file's contents"""
+      try:
+          with open(filename) as f_obj:
+              contents = f_obj.read()
+      except FileNotFoundError:
+          pass
+      else:
+          print(contents.rstrip())
+
+  print_file('birds.txt')
+  print_file('cats.txt')
+  print_file('dogs.txt')
+#+END_SRC
+
+#+RESULTS:
+: Tom
+: Garfield
+: Snowball V
+: Doraemon
+: Snoopy
+: Santa's Little Helper
+: Cosmo
+
+
+**** 10-10 常见单词
+
+#+BEGIN_SRC python :results output
+  def count_word_in_file(filename, word):
+      """显示单词在文件中出现的次数"""
+      try:
+          with open(filename) as f_obj:
+              contents = f_obj.read()
+      except FileNotFoundError:
+          msg = filename + " does not exist."
+          print(msg)
+      else:
+          words = contents.lower().split()
+          word_count = words.count(word)
+          print(filename + " has about " + str(len(words)) + " words and '" +
+                word + "' occurs " + str(word_count) + " times.")
+
+  filenames = ['moby_dick.txt', 'little_women.txt', 'non-exist.txt', 'alice.txt']
+
+  for filename in filenames:
+      count_word_in_file(filename, 'the')
+#+END_SRC
+
+#+RESULTS:
+: moby_dick.txt has about 215136 words and 'the' occurs 14412 times.
+: little_women.txt has about 189079 words and 'the' occurs 7622 times.
+: non-exist.txt does not exist.
+: alice.txt has about 29461 words and 'the' occurs 1777 times.
