@@ -6713,3 +6713,159 @@ remember_me.py
 
   greet_user()
 #+END_SRC
+
+** Chapter 11
+
+测试函数
+
+name_function.py
+
+#+NAME: name_function.py
+#+BEGIN_SRC python :tangle name_function.py
+  def get_formatted_name(first, last, middle=''):
+      """返回一个整洁的全名"""
+      if middle:
+          full_name = first + ' ' + middle + ' ' + last
+      else:
+          full_name = first + ' ' + last
+      return full_name.title()
+#+END_SRC
+
+names.py
+
+#+NAME: names.py
+#+begin_src python
+  from name_function import get_formatted_name
+
+  print("Enter 'q' at any time to quit.")
+  while True:
+      first = input("\nPlease give me a first name: ")
+      if first == 'q':
+          break
+      last = input("Please give me a last name: ")
+      if last == 'q':
+          break
+
+      formatted_name = get_formatted_name(first, last)
+      print("\tNeatly formatted name: " + formatted_name + '.')
+#+end_src
+
+test_name_function.py
+
+#+BEGIN_SRC python :tangle test_name_function.py
+  import unittest
+  from name_function import get_formatted_name
+
+  class NamesTestCase(unittest.TestCase):
+      """测试name_function.py"""
+
+      def test_first_last_name(self):
+          """能够正确处理像 Janis Jophlin 这样的姓名吗?"""
+          formatted_name = get_formatted_name('janis', 'joplin')
+          self.assertEqual(formatted_name, 'Janis Joplin')
+
+      def test_first_last_middle_name(self):
+          """测试能够处理像 Wolfgang Amadeus Mozart这样的姓名吗？"""
+          formatted_name = get_formatted_name('wolfgang', 'mozart', 'amadeus')
+          self.assertEqual(formatted_name, 'Wolfgang Amadeus Mozart')
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python test_name_function.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: ..
+: ----------------------------------------------------------------------
+: Ran 2 tests in 0.000s
+: 
+: OK
+
+*** Exercises
+
+**** 11-1 城市和国家
+
+city_functions.py
+
+#+BEGIN_SRC python :tangle city_functions.py
+  def describe_city(city, country):
+      """返回像 Beijing, China 这样的城市名"""
+      formatted_city_name = city.title() + ', ' + country.title()
+      return formatted_city_name
+#+END_SRC
+
+test_cities.py
+
+#+BEGIN_SRC python :tangle test_cities.py
+  import unittest
+  from city_functions import describe_city
+
+  class CitiesTestCase(unittest.TestCase):
+      """测试 city_functions.py"""
+
+      def test_city_country(self):
+          """能够正确处理 Beijing, China 这样的城市名吗?"""
+          description = describe_city('beijing', 'china')
+          self.assertEqual(description, 'Beijing, China')
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python test_cities.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: .
+: ----------------------------------------------------------------------
+: Ran 1 test in 0.000s
+: 
+: OK
+
+**** 11-2 人口数量
+
+city_functions.py
+
+#+BEGIN_SRC python :tangle city_functions.py
+  def describe_city(city, country, population=None):
+      """返回 City, Country - population xxx 的字符串"""
+      description = city.title() + ', ' + country.title()
+      if population:
+          description += ' - ' + 'population ' + str(population)
+      return description
+#+END_SRC
+
+test_cities.py
+
+#+BEGIN_SRC python :tangle test_cities.py
+  import unittest
+  from city_functions import describe_city
+
+  class CitiesTestCase(unittest.TestCase):
+      """测试 city_functions.py"""
+
+      def test_city_country(self):
+          """能够正确处理 Beijing, China 这样的城市名吗?"""
+          description = describe_city('beijing', 'china')
+          self.assertEqual(description, 'Beijing, China')
+
+      def test_city_country_population(self):
+          """测试正确处理 Beijing, China - population 21710000 这样的城市吗?"""
+          description = describe_city('beijing', 'china', 21710000)
+          self.assertEqual(description, 'Beijing, China - population 21710000')
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python test_cities.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: ..
+: ----------------------------------------------------------------------
+: Ran 2 tests in 0.000s
+: 
+: OK
