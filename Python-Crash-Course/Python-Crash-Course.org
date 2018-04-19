@@ -6869,3 +6869,199 @@ python test_cities.py 2>&1 || true
 : Ran 2 tests in 0.000s
 : 
 : OK
+
+*** 测试类
+
+survey.py
+
+#+BEGIN_SRC python :tangle survey.py
+  class AnonymousSurvey():
+      """收集匿名调查问卷的答案"""
+
+      def __init__(self, question):
+          """存储一个问题，并为存储答案做准备"""
+          self.question = question
+          self.responses = []
+
+      def show_question(self):
+          """显示调查问卷"""
+          print(self.question)
+
+      def store_response(self, new_response):
+          """存储单份调查问卷"""
+          self.responses.append(new_response)
+
+      def show_results(self):
+          """显示收集到的所有答案"""
+          print("Survey result:")
+          for response in self.responses:
+              print('- ' + response)
+#+END_SRC
+
+language_survey.py
+
+#+BEGIN_SRC python :tangle language_survey.py
+  from survey import AnonymousSurvey
+
+  question = "What language did you first learn to speak?"
+  my_survey = AnonymousSurvey(question)
+
+  my_survey.show_question()
+  print("Enter 'q' at any time to quit.\n")
+
+  while True:
+      response = input("Language: ")
+      if response == 'q':
+          break
+      my_survey.store_response(response)
+
+  print("\nThank you to everyone who participated in the survey!")
+  my_survey.show_results()
+#+END_SRC
+
+test_survey.py
+
+#+BEGIN_SRC python :tangle test_survey.py
+  import unittest
+  from survey import AnonymousSurvey
+
+  class TestAnonymousSurvey(unittest.TestCase):
+      """针对 AnonymousSurvey 类的测试"""
+
+      def test_store_single_response(self):
+          """测试单个答案会被妥善地存储"""
+          question = "What language did you first learn to speak?"
+          my_survey = AnonymousSurvey(question)
+          my_survey.store_response('English')
+
+          self.assertIn('English', my_survey.responses)
+
+      def test_store_three_responses(self):
+          """测试三个答案会被妥善地存储"""
+          question = "What language did you first learn to speak?"
+          my_survey = AnonymousSurvey(question)
+          responses = ['Chinese', 'English', 'Spanish']
+          for response in responses:
+              my_survey.store_response(response)
+
+          for response in responses:
+              self.assertIn(response, my_survey.responses)
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python test_survey.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: ..
+: ----------------------------------------------------------------------
+: Ran 2 tests in 0.000s
+: 
+: OK
+
+setUp()
+
+#+BEGIN_SRC python :tangle test_survey2.py
+  import unittest
+  from survey import AnonymousSurvey
+
+  class TestAnonymousSurvey(unittest.TestCase):
+      """针对 AnonymousSurvey 类的测试"""
+
+      def setUp(self):
+          """
+          创建一个调查对象和一组答案，供使用的测试方法使用
+          """
+          question = "What language did you first learn to speak?"
+          self.my_survey = AnonymousSurvey(question)
+          self.responses = ['English', 'Chinese', 'Spanish']
+
+      def test_store_single_response(self):
+          """测试单个答案会被妥善地存储"""
+          self.my_survey.store_response(self.responses[0])
+          self.assertIn(self.responses[0], self.my_survey.responses)
+
+      def test_store_three_responses(self):
+          """测试三个答案会被妥善地存储"""
+          for response in self.responses:
+              self.my_survey.store_response(response)
+          for response in self.responses:
+              self.assertIn(response, self.my_survey.responses)
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python test_survey2.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: ..
+: ----------------------------------------------------------------------
+: Ran 2 tests in 0.000s
+: 
+: OK
+
+*** Exercises
+
+**** 11-3 雇员
+
+#+BEGIN_SRC python :tangle employee.py
+  class Employee():
+      """雇员类"""
+
+      def __init__(self, given_name, family_name, salary):
+          """初始化属性"""
+          self.given_name = given_name
+          self.family_name = family_name
+          self.salary = salary
+
+      def give_raise(self, mount=5000):
+          """加薪"""
+          self.salary += mount
+
+  import unittest
+
+  class TestEmployee(unittest.TestCase):
+      """针对 Employee 类的测试"""
+
+      def setUp(self):
+          """创建一个雇员对象"""
+          self.initial_salary = 4000
+          self.me = Employee('chunyang', 'xu', self.initial_salary)
+
+      def test_give_default_raise(self):
+          """测试 give_raise 的默认值"""
+          self.me.give_raise()
+          self.assertEqual(self.initial_salary + 5000, self.me.salary)
+
+      def test_give_custom_raise(self):
+          """测试 give_raise 的定制参数"""
+          self.me.give_raise(100)
+          self.assertEqual(self.initial_salary + 100, self.me.salary)
+
+
+  unittest.main()
+#+END_SRC
+
+#+begin_src sh :results output
+python employee.py 2>&1 || true
+#+end_src
+
+#+RESULTS:
+: ..
+: ----------------------------------------------------------------------
+: Ran 2 tests in 0.000s
+: 
+: OK
+
+#+begin_quote
+如果你在项目中包含了初步测试，其他程序员将更敬佩你，他们将能够更得心应
+手地尝试使用你编写的代码，也更愿意与你合作开发项目。
+#+end_quote
+
+#+begin_quote
+在项目早期，不要试图去编写全覆盖的测试用例，除非有充分的理由这样做。
+#+end_quote
