@@ -7065,3 +7065,59 @@ python employee.py 2>&1 || true
 #+begin_quote
 在项目早期，不要试图去编写全覆盖的测试用例，除非有充分的理由这样做。
 #+end_quote
+
+* Part two
+
+** 项目1 外星人入侵
+
+*** Chapter 12
+
+**** Exercises
+
+***** 12-1 蓝色天空
+
+#+BEGIN_SRC python
+  import sys
+
+  import pygame
+
+  pygame.init()
+  screen = pygame.display.set_mode((800, 600))
+  # 蓝色天空
+  bg_color = (150, 190, 220)
+
+  while True:
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              sys.exit()
+
+      screen.fill(bg_color)
+      pygame.display.flip()
+#+END_SRC
+
+***** 12-2 游戏角色
+
+#+BEGIN_SRC python :tangle alien_invasion/tom.py
+  import sys
+
+  import pygame
+
+  pygame.init()
+  screen = pygame.display.set_mode((800, 600))
+
+  image = pygame.image.load('images/Tom.bmp')
+  rect = image.get_rect()
+  screen_rect = screen.get_rect()
+
+  rect.centerx = screen_rect.centerx
+  rect.bottom = screen_rect.centery
+
+  while True:
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              sys.exit()
+
+      screen.blit(image, rect)
+
+      pygame.display.flip()
+#+END_SRC
