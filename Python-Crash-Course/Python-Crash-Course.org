@@ -7121,3 +7121,283 @@ python employee.py 2>&1 || true
 
       pygame.display.flip()
 #+END_SRC
+
+** 项目2 数据可视化
+
+简单的折线图
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  squares = [1, 4, 9, 16, 25]
+  plt.plot(squares)
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/eXFZLA.png]]
+:end:
+
+修改标签文字和线条粗细
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  squares = [1, 4, 9, 16, 25]
+  plt.plot(squares, linewidth=5)
+
+  # 设置图标标题
+  plt.title("Square Numbers", fontsize=24)
+  # 给坐标轴加上标签
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  # 设置刻度标记的大小
+  plt.tick_params(axis='both', labelsize=14)
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/Z0wSbh.png]]
+:end:
+
+修正横坐标
+
+#+NAME: mpl_squares.py
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  input_value = [1, 2, 3, 4, 5]
+  squares = [1, 4, 9, 16, 25]
+  plt.plot(input_value, squares, linewidth=5)
+
+  # 设置图标标题
+  plt.title("Square Numbers", fontsize=24)
+  # 给坐标轴加上标签
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  # 设置刻度标记的大小
+  plt.tick_params(axis='both', labelsize=14)
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS: mpl_squares.py
+:results:
+[[file:./obipy-resources/12tqkK.png]]
+:end:
+
+
+散点图
+
+scatter_squares.py
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  plt.scatter(2, 4)
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/2TAgbI.png]]
+:end:
+
+完善它
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  plt.scatter(2, 4, s=200)
+
+  plt.title("Square Numbers", fontsize=24)
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  plt.tick_params(axis='both', which='major', labelsize=14)
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/xKeESc.png]]
+:end:
+
+绘制一系列点
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = [1, 2, 3, 4, 5]
+  y_values = [1, 4, 9, 16, 25]
+
+  plt.scatter(x_values, y_values, s=20)
+
+  plt.title("Square Numbers", fontsize=24)
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  plt.tick_params(axis='both', which='major', labelsize=14)
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/RXhweI.png]]
+:end:
+
+自动计算
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = list(range(1, 1001))
+  y_values = [x**2 for x in x_values]
+
+  plt.scatter(x_values, y_values, c=(0, 0, 0.8), s=40)
+  # plt.scatter(x_values, y_values, s=40)
+
+  # 设置图标标题并给坐标轴加上标签
+  plt.title("Square Numbers", fontsize=24)
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  # 设置每个坐标轴的取值范围
+  plt.axis([0, 1100, 0, 1100000])
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/BLifTk.png]]
+:end:
+
+颜色映射
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = list(range(1, 1001))
+  y_values = [x**2for x in x_values]
+
+  plt.scatter(x_values, y_values, c=y_values, cmap=plt.cm.Blues,
+              edgecolors='none', s=40)
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/8vHv2F.png]]
+:end:
+
+保存到文件
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = list(range(1, 1001))
+  y_values = [x**2for x in x_values]
+
+  plt.scatter(x_values, y_values, c=y_values, cmap=plt.cm.Blues,
+              edgecolors='none', s=40)
+
+  # 设置图标标题并给坐标轴加上标签
+  plt.title("Square Numbers", fontsize=24)
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Square of Value", fontsize=14)
+
+  # 设置每个坐标轴的取值范围
+  plt.axis([0, 1100, 0, 1100000])
+
+  # plt.show()
+  plt.savefig('squares_plot.png', bbox_inches='tight')
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/K0EZYT.png]]
+:end:
+
+*** Exercises
+
+**** 15-1 立方
+
+1-5 的立方
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = [1, 2, 3, 4, 5]
+  y_values = [x**3 for x in x_values]
+
+  plt.scatter(x_values, y_values)
+
+  plt.tick_params(axis='both', which='major', labelsize=14)
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/0alaQI.png]]
+:end:
+
+1-5000 的立方
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = list(range(1, 5001))
+  y_values = [x**3 for x in x_values]
+
+  plt.scatter(x_values, y_values)
+
+  plt.tick_params(axis='both', which='major', labelsize=14)
+
+  # 设置每个坐标轴的取值范围
+  plt.axis([0, 5100, 0, 5100**3])
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/3mBfj2.png]]
+:end:
+
+**** 15-2 彩色立方
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  import matplotlib.pyplot as plt
+
+  x_values = list(range(1, 5001))
+  y_values = [x**3 for x in x_values]
+
+  plt.scatter(x_values, y_values, c=y_values, cmap=plt.cm.Blues, s=40)
+
+  # 设置图标标题并给坐标轴加上标签
+  plt.title("Cube Numbers", fontsize=24)
+  plt.xlabel("Value", fontsize=14)
+  plt.ylabel("Cube of Value", fontsize=14)
+
+  plt.tick_params(axis='both', which='major', labelsize=14)
+
+  # 设置每个坐标轴的取值范围
+  plt.axis([0, 5100, 0, 5100**3])
+
+  plt.show()
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[file:./obipy-resources/Bk0dna.png]]
+:end:
+
