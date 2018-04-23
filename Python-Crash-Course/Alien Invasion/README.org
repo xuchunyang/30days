@@ -1,0 +1,82 @@
+#+TITLE: 外星人入侵
+#+DATE: <2018-04-23 Mon>
+
+* 12-1 蓝色天空
+
+创建一个背景为蓝色的Pygame窗口
+
+#+BEGIN_SRC python :tangle 12-1.py
+  import sys
+  import pygame
+
+  def run_game():
+      pygame.init()
+      screen = pygame.display.set_mode()
+      pygame.display.set_caption("12-1 蓝色天空")
+
+      while True:
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  sys.exit()
+
+          screen.fill((0, 0, 255))
+          pygame.display.flip()
+
+  run_game()
+#+END_SRC
+
+* 12-2 游戏角色
+
+找一幅你喜欢的游戏角色位图图像或将一幅图像转换为位图。创建一个类，将该
+角色绘制到屏幕中央，并将该图像的背景色设置为屏幕背景色，或将屏幕背景色
+设置为该图像的背景色。
+
+duck.py
+
+#+BEGIN_SRC python :tangle duck.py
+  import pygame
+
+  class Duck():
+
+      def __init__(self, screen):
+          self.screen = screen
+          self.image = pygame.image.load('images/duck.bmp')
+          self.rect = self.image.get_rect()
+          screen_rect = screen.get_rect()
+          self.rect.centerx = screen_rect.centerx
+          self.rect.centery = screen_rect.centery
+
+      def blitme(self):
+          self.screen.blit(self.image, self.rect)
+#+END_SRC
+
+12-2.py
+
+#+BEGIN_SRC python :tangle 12-2.py
+  import sys
+
+  import pygame
+
+  from duck import Duck
+
+
+  def run_game():
+      pygame.init()
+      screen = pygame.display.set_mode()
+      pygame.display.set_caption("12-2 游戏角色")
+      duck = Duck(screen)
+
+      while True:
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  sys.exit()
+
+          screen.fill([0, 206, 255])
+          duck.blitme()
+
+          # 让最近绘制的屏幕可见
+          pygame.display.flip()
+
+
+  run_game()
+#+END_SRC
