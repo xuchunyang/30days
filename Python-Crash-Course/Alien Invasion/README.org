@@ -760,3 +760,129 @@ racket.py
 
   run_game()
 #+END_SRC
+
+* 13-6 游戏结束
+
+在为完成练习13-5而编写的代码中，跟踪玩家有多少次未将球接着。在未接着球
+的次数到达三次后，结束游戏。
+
+13-6.py
+
+#+BEGIN_SRC python :tangle 13-6.py
+  import sys
+  from random import randint
+  from time import sleep
+
+  import pygame
+
+
+  class GameStats():
+
+      def __init__(self):
+          self.game_active = True
+          self.chance_left = 3
+
+  class Ball():
+      """球"""
+
+      def __init__(self, screen):
+          """初始化球并设置其初始位置"""
+          self.screen = screen
+          self.image = pygame.image.load('images/alien.bmp')
+          self.rect = self.image.get_rect()
+          self.reset()
+          self.speed_factor = 5
+
+      def reset(self):
+          self.rect.x = randint(0, self.screen.get_rect().width - self.rect.width)
+          self.rect.y = 0
+
+      def update(self):
+          """向下移动球的位置"""
+          self.rect.y += self.speed_factor
+
+      def blitme(self):
+          self.screen.blit(self.image, self.rect)
+
+
+  class Board():
+      """木板"""
+
+      def __init__(self, screen):
+          """初始化木板并设置其初始位置"""
+          self.screen = screen
+          self.rect = pygame.Rect(0, 0, 100, 10)
+          self.screen_rect = screen.get_rect()
+          self.rect.centerx = self.screen_rect.centerx
+          self.rect.bottom = self.screen_rect.bottom
+          self.color = 60, 60, 60
+
+          self.moving_left = False
+          self.moving_right = False
+
+          self.speed_factor = 4
+
+      def update(self):
+          if self.moving_right and self.rect.right <= self.screen_rect.right:
+              self.rect.centerx += self.speed_factor
+          if self.moving_left and self.rect.left > 0:
+              self.rect.centerx -= self.speed_factor
+
+      def draw(self):
+          """在指定位置绘制木板"""
+          pygame.draw.rect(self.screen, self.color, self.rect)
+
+  def check_events(board):
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              sys.exit()
+          elif event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_q:
+                  sys.exit()
+              elif event.key == pygame.K_RIGHT:
+                  board.moving_right = True
+              elif event.key == pygame.K_LEFT:
+                  board.moving_left = True
+          elif event.type == pygame.KEYUP:
+              if event.key == pygame.K_RIGHT:
+                  board.moving_right = False
+              elif event.key == pygame.K_LEFT:
+                  board.moving_left = False
+
+  def update_ball(stats, board, ball):
+      if board.rect.colliderect(ball.rect):
+          print("接到了")
+          ball.reset()
+      elif ball.rect.bottom >= ball.screen.get_rect().bottom:
+          print("没接到，还有 " + str(stats.chance_left) + " 次机会")
+          if stats.chance_left > 0:
+              stats.chance_left -= 1
+              ball.reset()
+          else:
+              stats.game_active = False
+      ball.update()
+
+  def run_game():
+      pygame.init()
+      stats = GameStats()
+      screen = pygame.display.set_mode((960, 720))
+      pygame.display.set_caption("13-5 抓球")
+      board = Board(screen)
+      ball = Ball(screen)
+
+      while True:
+          check_events(board)
+          screen.fill((230, 230, 230))
+
+          if stats.game_active:
+              board.update()
+              update_ball(stats, board, ball)
+
+          board.draw()
+          ball.blitme()
+
+          pygame.display.flip()
+
+  run_game()
+#+END_SRC
+
