@@ -886,3 +886,227 @@ racket.py
   run_game()
 #+END_SRC
 
+* 14-1 按 P 开始游戏
+
+DONE
+
+* 14-2 射击练习
+
+#+BEGIN_SRC python :tangle 14-2.py
+  import sys
+
+  import pygame
+  from pygame.sprite import Sprite, Group
+
+  from button import Button
+
+
+  class GameStats():
+
+      def __init__(self):
+          self.game_active = False
+          self.reset_stats()
+
+      def reset_stats(self):
+          self.missing = 0
+
+
+  class Settings():
+      """存储《外星人入侵》的所有设置的类"""
+
+      def __init__(self):
+          """初始化游戏的设置"""
+          # 屏幕设置
+          self.screen_width = 920
+          self.screen_height = 720
+          self.bg_color = (230, 230, 230)
+
+          # 飞船设置
+          self.ship_speed_factor = 3
+
+          # 子弹设置
+          self.bullet_speed_factor = 4
+          self.bullet_width = 15
+          self.bullet_height = 3
+          self.bullet_color = 60, 60, 60
+
+  class Board():
+      """自动上下移动的木板"""
+
+      def __init__(self, screen):
+          """初始化木板并设置其初始位置"""
+          self.screen = screen
+          self.rect = pygame.Rect(0, 0, 10, 200)
+          self.screen_rect = screen.get_rect()
+          self.rect.center = self.screen_rect.center
+          self.rect.right = self.screen_rect.right
+          self.color = 60, 60, 60
+
+          self.speed_factor = 2
+          # 1 向下，-1 向上
+          self.direction = 1
+
+      def update(self):
+          if self.rect.bottom >= self.screen_rect.bottom:
+              self.direction = -1
+          elif self.rect.top <= 0:
+              self.direction = 1
+          self.rect.centery += self.direction * self.speed_factor
+
+      def draw(self):
+          """在指定位置绘制木板"""
+          pygame.draw.rect(self.screen, self.color, self.rect)
+
+  class Bullet(Sprite):
+      """一个对飞船发射的子弹进行管理的类"""
+
+      def __init__(self, ai_settings, screen, ship):
+          """在飞船所在的位置创建一个子弹对象"""
+          super().__init__()
+          self.screen = screen
+
+          self.rect = pygame.Rect(0, 0, ai_settings.bullet_width,
+                                  ai_settings.bullet_height)
+          self.rect.centery = ship.rect.centery
+          self.rect.right = ship.rect.right
+
+          # 子弹位置
+          self.x = float(self.rect.x)
+
+          self.color = ai_settings.bullet_color
+          self.speed_factor = ai_settings.bullet_speed_factor
+
+      def update(self):
+          """向上移动子弹"""
+          self.x += self.speed_factor
+          self.rect.x = self.x
+
+      def draw_bullet(self):
+          """在屏幕上绘制子弹"""
+          pygame.draw.rect(self.screen, self.color, self.rect)
+
+
+  class Ship():
+
+      def __init__(self, ai_settings, screen):
+          """初始化飞船并设置其初始位置"""
+          self.screen = screen
+
+          # 加载飞船图形并获取其外接矩形
+          self.image = pygame.image.load('images/ship2.bmp')
+          self.rect = self.image.get_rect()
+          self.screen_rect = screen.get_rect()
+
+          # 将每艘新飞船放在屏幕底部中央
+          self.rect.left = self.screen_rect.left
+          self.rect.centery = self.screen_rect.centery
+
+          # 在飞船的属性 center 中存储小数值
+          self.center = float(self.rect.centery)
+
+          # 移动标志
+          self.moving_up = False
+          self.moving_down = False
+
+          self.speed_factor = ai_settings.ship_speed_factor
+
+      def update(self):
+          if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
+              self.center += self.speed_factor
+          if self.moving_up and self.rect.top > 0:
+              self.center -= self.speed_factor    
+
+          # 根据 self.center 更新 rect 对象
+          self.rect.centery = self.center
+
+
+      def blitme(self):
+          """在指定位置绘制飞船"""
+          self.screen.blit(self.image, self.rect)
+
+
+  def check_events(ai_settings, screen, stats, play_button, ship, board, bullets):
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              sys.exit()
+          elif event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_DOWN:
+                  ship.moving_down = True
+              elif event.key == pygame.K_UP:
+                  ship.moving_up = True
+              elif event.key == pygame.K_SPACE:
+                  new_bullet = Bullet(ai_settings, screen, ship)
+                  bullets.add(new_bullet)
+          elif event.type == pygame.KEYUP:
+              if event.key == pygame.K_DOWN:
+                  ship.moving_down = False
+              elif event.key == pygame.K_UP:
+                  ship.moving_up = False
+          elif event.type == pygame.MOUSEBUTTONDOWN:
+              mouse_x, mouse_y = pygame.mouse.get_pos()
+              button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+              if button_clicked and not stats.game_active:
+                  start_game(ai_settings, screen, stats, ship, board, bullets)
+
+  def start_game(ai_settings, screen, stats, ship, board, bullets):
+      pygame.mouse.set_visible(False)
+
+      stats.reset_stats()
+      stats.game_active = True
+
+      bullets.empty()
+
+  def update_bullets(ai_settings, stats, screen, ship, bullets, board):
+      # 更新子弹的位置
+      bullets.update()
+
+      if pygame.sprite.spritecollide(board, bullets, True):
+          print("Hit!")
+
+      check_bullet_bottom(ai_settings, stats, screen, ship, bullets)
+
+  def check_bullet_bottom(ai_settings, stats, screen, ship, bullets):
+      screen_rect = screen.get_rect()
+      for bullet in bullets.copy():
+          if bullet.rect.right >= screen_rect.right:
+              print("Missing!")
+              bullets.remove(bullet)
+              if stats.missing >= 3:
+                  stats.game_active = False
+                  pygame.mouse.set_visible(True)
+              else:
+                  stats.missing += 1
+
+  def run_game():
+      pygame.init()
+      ai_settings = Settings()
+      screen = pygame.display.set_mode(
+          (ai_settings.screen_width, ai_settings.screen_height))
+      pygame.display.set_caption("14-2 射击练习")
+      ship = Ship(ai_settings, screen)
+      bullets = Group()
+      board = Board(screen)
+      stats = GameStats()
+      play_button = Button(ai_settings, screen, "Play")
+
+      while True:
+          check_events(ai_settings, screen, stats, play_button, ship, board, bullets)
+
+          if stats.game_active:
+              ship.update()
+              board.update()
+              update_bullets(ai_settings, stats, screen, ship, bullets, board)
+
+          screen.fill(ai_settings.bg_color)
+          ship.blitme()
+          board.draw()
+          for bullet in bullets:
+              bullet.draw_bullet()
+
+          if not stats.game_active:
+              play_button.draw_button()
+            
+          pygame.display.flip()
+
+  run_game()
+#+END_SRC
