@@ -75,3 +75,186 @@ DONE
 * 15-5 重构
 
 DONE
+
+* 15-6 自动生成标签
+
+一个骰子
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import pygal
+
+
+  class Die():
+
+      def __init__(self, num_sides=6):
+          self.num_sides = num_sides
+
+      def roll(self):
+          return randint(1, self.num_sides)
+
+      def values(self):
+          return list(range(1, self.num_sides+1))
+
+
+  die = Die()
+  results = [die.roll() for num_roll in range(1000)]
+  values = die.values()
+  frequencies = [results.count(value) for value in values]
+
+  hist = pygal.Bar()
+  hist.title = "掷骰子 1000 次的结果"
+  hist.x_labels = values
+  hist.x_title = "点数"
+  hist.y_title = "次数"
+  hist.add("D6", frequencies)
+  filename = "15-6-1.svg"
+  hist.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-6-1.svg]]
+
+两个骰子
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import pygal
+
+
+  results = [randint(1, 6) + randint(1, 6) for i in range(5000)]
+  values = list(range(2, 13))
+  frequencies = [results.count(value) for value in values]
+
+  hist = pygal.Bar()
+  hist.x_labels = values
+  hist.add("D6 + D6", frequencies)
+  filename = "15-6-2.svg"
+  hist.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-6-2.svg]]
+
+* 15-7 两个 D8 骰子
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import pygal
+
+
+  results = [randint(1, 8) + randint(1, 8) for i in range(10_0000)]
+  values = list(range(2, 17))
+  frequencies = [results.count(value) for value in values]
+
+  hist = pygal.Bar()
+  hist.x_labels = values
+  hist.add("D8 + D8", frequencies)
+  filename = "15-7.svg"
+  hist.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-7.svg]]
+
+* 15-8 同时掷三个骰子
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import pygal
+
+
+  results = [randint(1, 6) + randint(1, 6) + randint(1, 6)
+             for i in range(10_0000)]
+  values = list(range(3, 19))
+  frequencies = [results.count(value) for value in values]
+
+  hist = pygal.Bar()
+  hist.x_labels = values
+  hist.add("D6 + D6 + D6", frequencies)
+  filename = "15-8.svg"
+  hist.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-8.svg]]
+
+* 15-9 将点数相乘
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import pygal
+
+
+  results = [randint(1, 6) * randint(1, 6) for i in range(10_0000)]
+  values = sorted(set([i * j for i in range(1, 7) for j in range(1, 7)]))
+  print(values)
+  frequencies = [results.count(value) for value in values]
+
+  hist = pygal.Bar()
+  hist.x_labels = values
+  hist.add("D6 * D6", frequencies)
+  filename = "15-9.svg"
+  hist.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-9.svg]]
+
+* 15-10 练习使用本章介绍的两个库
+
+使用matplotlib通过可视化来模拟掷骰子的情况
+
+#+BEGIN_SRC python :results file
+  from random import randint
+
+  import matplotlib.pyplot as plt
+
+
+  x = [1, 2, 3, 4, 5, 6]
+  results = [randint(1, 6) for i in range(1000)]
+  y = [results.count(i) for i in x]
+
+  plt.plot(x, y)
+  plt.title("Results of rolling one D6 1000 times")
+  plt.xlabel("Result")
+  plt.ylabel("Frequency of Result")
+  filename = "15-10-1.svg"
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-10-1.svg]]
+
+使用Pygal通过可视化来模拟随机漫步的情况
+
+#+BEGIN_SRC python :results file
+  import pygal
+
+  from random_walk import RandomWalk
+
+  rw = RandomWalk(100)
+  rw.fill_walk()
+
+  xy_chart = pygal.XY()
+  xy_chart.title = '随机漫步 100 点'
+  xy_chart.add("XY", list(zip(rw.x, rw.y)))
+  xy_chart.add('End Point',  [(rw.x[-1], rw.y[-1])])
+  filename = "15-10-2.svg"
+  xy_chart.render_to_file(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:15-10-2.svg]]
