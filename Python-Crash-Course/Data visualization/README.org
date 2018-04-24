@@ -258,3 +258,256 @@ DONE
 
 #+RESULTS:
 [[file:15-10-2.svg]]
+
+* 16-1 旧金山
+
+#+BEGIN_SRC python :tangle 16-1.py
+  import csv
+  import sys
+  from datetime import datetime
+
+  import matplotlib.pyplot as plt
+
+
+  # https://www.rapidtables.com/convert/temperature/fahrenheit-to-celsius.html
+  def f2c(f):
+      """Fahrenheit to Celsius"""
+      return (f - 32) * (5/9)
+
+  # 洛杉矶
+  filename = "san_francisco_2014.csv"
+  with open(filename) as f:
+      reader = csv.reader(f, delimiter=';')
+      header_row = next(reader)
+
+      dates, highs, lows = [], [], []
+      for row in reader:
+          try:
+              year = int(row[0])
+              month = int(row[1])
+              day = int(row[2])
+              date = datetime(year, month, day)
+              high = float(row[-2])
+              low = float(row[-1])
+          except ValueError:
+              print(date, 'missing data')
+          else:
+              dates.append(date)
+              # 转换成摄氏度，我不熟悉华氏
+              highs.append(high)
+              lows.append(low)
+
+  fig = plt.figure(dpi=128, figsize=(10, 6))
+  plt.plot(dates, highs, c='red', alpha=0.5)
+  plt.plot(dates, lows, c='blue', alpha=0.5)
+  plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)
+
+  plt.title("Daily high and low temperature - 2014\nSan Francisco, CA")
+  plt.xlabel("")
+  fig.autofmt_xdate()
+  plt.ylabel("Temperature (C)")
+
+  plt.show()
+#+END_SRC
+
+* 16-2 比较锡特卡和死亡谷的气温
+
+#+BEGIN_SRC python :tangle 16-2-1.py
+  import csv
+  from datetime import datetime
+
+  import matplotlib.pyplot as plt
+
+
+  # https://www.rapidtables.com/convert/temperature/fahrenheit-to-celsius.html
+  def f2c(f):
+      """Fahrenheit to Celsius"""
+      return (f - 32) * (5/9)
+
+  def get_data(filename):
+      with open(filename) as f:
+          reader = csv.reader(f)
+          header_row = next(reader)
+
+          dates, highs, lows = [], [], []
+          for row in reader:
+              try:
+                  date = datetime.strptime(row[0], "%Y-%m-%d")
+                  high = int(row[1])
+                  low = int(row[3])
+
+              except ValueError:
+                  print(date, 'missing data')
+              else:
+                  dates.append(date)
+                  # 转换成摄氏度，我不熟悉华氏
+                  high = f2c(high)
+                  highs.append(high)
+                  low = f2c(low)
+                  lows.append(low)
+          return dates, highs, lows
+
+  # 死亡谷 - 加州 - 沙漠
+  filename = "death_valley_2014.csv"
+  dates, highs, lows = get_data(filename)
+
+  fig = plt.figure(dpi=128, figsize=(10, 6))
+  plt.plot(dates, highs, c='red', alpha=0.5)
+  plt.plot(dates, lows, c='blue', alpha=0.5)
+  plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)
+
+  plt.ylim(-10, 45)
+
+  plt.title("Daily high and low temperature - 2014\nDeath VAlley, CA")
+  plt.xlabel("")
+  fig.autofmt_xdate()
+  plt.ylabel("Temperature (C)")
+
+  plt.show()
+#+END_SRC
+
+#+BEGIN_SRC python :tangle 16-2-2.py
+  import csv
+  from datetime import datetime
+
+  import matplotlib.pyplot as plt
+
+
+  # https://www.rapidtables.com/convert/temperature/fahrenheit-to-celsius.html
+  def f2c(f):
+      """Fahrenheit to Celsius"""
+      return (f - 32) * (5/9)
+
+  def get_data(filename):
+      with open(filename) as f:
+          reader = csv.reader(f)
+          header_row = next(reader)
+
+          dates, highs, lows = [], [], []
+          for row in reader:
+              try:
+                  date = datetime.strptime(row[0], "%Y-%m-%d")
+                  high = int(row[1])
+                  low = int(row[3])
+
+              except ValueError:
+                  print(date, 'missing data')
+              else:
+                  dates.append(date)
+                  # 转换成摄氏度，我不熟悉华氏
+                  high = f2c(high)
+                  highs.append(high)
+                  low = f2c(low)
+                  lows.append(low)
+          return dates, highs, lows
+
+  # 阿拉斯加州 - 北极圈
+  filename = "sitka_weather_2014.csv"
+  dates, highs, lows = get_data(filename)
+
+  fig = plt.figure(dpi=128, figsize=(10, 6))
+  plt.plot(dates, highs, c='red', alpha=0.5)
+  plt.plot(dates, lows, c='blue', alpha=0.5)
+  plt.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)
+
+  plt.ylim(-10, 45)
+
+  plt.title("Daily high and low temperature - 2014\nSitka")
+  plt.xlabel("")
+  fig.autofmt_xdate()
+  plt.ylabel("Temperature (C)")
+
+  plt.show()
+#+END_SRC
+
+* 16-3 降雨量
+
+#+BEGIN_SRC python :results file
+  import csv
+  from datetime import datetime
+
+  import matplotlib.pyplot as plt
+
+  def get_data(filename):
+      with open(filename) as f:
+          reader = csv.reader(f)
+          header_row = next(reader)
+
+          dates, rains = [], []
+          for row in reader:
+              try:
+                  date = datetime.strptime(row[0], "%Y-%m-%d")
+                  rain = float(row[-4])
+              except ValueError:
+                  print(date, 'missing data')
+              else:
+                  dates.append(date)
+                  rains.append(rain)
+          return dates, rains
+
+  # 阿拉斯加州 - 北极圈
+  filename = "sitka_weather_2014.csv"
+  dates, rains = get_data(filename)
+
+  fig = plt.figure(dpi=128, figsize=(10, 6))
+  plt.plot(dates, rains)
+
+  plt.title("Daily PrecipitationIn - 2014\nSitka")
+  plt.xlabel("")
+  fig.autofmt_xdate()
+  plt.ylabel("PrecipitationIn")
+
+  filename = 'out.svg'
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:out.svg]]
+
+* 16-4 探索
+
+#+BEGIN_SRC python :results file
+  import csv
+  from datetime import datetime
+
+  import matplotlib.pyplot as plt
+
+  def get_data(filename):
+      with open(filename) as f:
+          reader = csv.reader(f)
+          header_row = next(reader)
+
+          dates, highs, lows = [], [], []
+          for row in reader:
+              try:
+                  date = datetime.strptime(row[0], "%Y-%m-%d")
+                  high = int(row[1])
+                  low = int(row[2])
+              except ValueError:
+                  print(date, 'missing data')
+              else:
+                  dates.append(date)
+                  highs.append(high)
+                  lows.append(low)
+          return dates, highs, lows
+
+  filename = "binhai.csv"
+  dates, highs, lows = get_data(filename)
+  mids = [(high + low) / 2 for high, low in zip(highs, lows)]
+
+  fig = plt.figure(dpi=128, figsize=(10, 6))
+  plt.plot(dates, mids)
+
+  plt.title("Mid Temperature - Binhai")
+  plt.xlabel("")
+  fig.autofmt_xdate()
+  plt.ylabel("Temperature")
+
+  filename = 'binhai.svg'
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:binhai.svg]]
