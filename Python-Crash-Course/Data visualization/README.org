@@ -1,0 +1,65 @@
+#+TITLE: Project 2 | Data Visualization
+#+DATE: <2018-04-24 Tue>
+
+#+PROPERTY: header-args :exports both
+
+* 15-1 立方
+
+数字的三次方被称为其立方。请绘制一个图形，显示前5个整数的立方值，再绘
+制一个图形，显示前5000个整数的立方值。
+
+#+BEGIN_SRC python :results file
+  # 1-5 的立方
+  import matplotlib.pyplot as plt
+
+  x = [1, 2, 3, 4, 5]
+  y = [i**3 for i in x]
+
+  plt.plot(x, y, 'ro')
+  plt.title("Cube Numbers [1, 5]")
+  plt.xlabel("Cube of Value")
+  plt.ylabel("Value")
+
+  filename = 'cube1.png'
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:cube1.png]]
+
+#+BEGIN_SRC python :results file
+  # 1-5000的立方
+  import matplotlib.pyplot as plt
+
+  x = list(range(1, 5001))
+  y = [i**3 for i in x]
+
+  plt.plot(x, y)
+
+  filename = 'cube2.svg'
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:cube2.svg]]
+
+* 15-2 彩色立方
+
+#+BEGIN_SRC python :results file
+  # 1-5000的立方
+  import matplotlib.pyplot as plt
+
+  x = list(range(1, 5001))
+  y = [i**3 for i in x]
+
+  plt.scatter(x, y, c=y, cmap=plt.cm.Blues)
+
+  filename = 'cube3.svg'
+  plt.savefig(filename)
+  return filename
+#+END_SRC
+
+#+RESULTS:
+[[file:cube3.svg]]
