@@ -14,6 +14,7 @@ def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens, bu
     elif event.key == pygame.K_SPACE:
         fire_bullet(ai_settings, screen, ship, bullets)
     elif event.key == pygame.K_q:
+        stats.save_high_socore()
         sys.exit()
     elif event.key == pygame.K_p and not stats.game_active:
         start_game(ai_settings, screen, stats, sb, ship, aliens, bullets)
@@ -36,6 +37,7 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
     """响应按键和鼠标事件"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            stats.save_high_socore()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, ai_settings, screen, stats, sb, ship,
@@ -66,10 +68,7 @@ def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets):
     stats.game_active = True
 
     # 重置记分板图像
-    sb.prep_score()
-    sb.prep_high_score()
-    sb.prep_level()
-    sb.prep_ships()
+    sb.prep_images()
 
     # 清空外星人和子弹列表
     aliens.empty()
@@ -98,7 +97,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
     # 让最近绘制的屏幕可见
     pygame.display.flip()
 
-def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, sound):
     """更新子弹的位置，并删除已消失的子弹"""
     # 更新子弹的位置
     bullets.update()
@@ -109,15 +108,16 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
             bullets.remove(bullet)
 
     check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship,
-                                  aliens, bullets)
+                                  aliens, bullets, sound)
 
 def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship,
-                                  aliens, bullets):
+                                  aliens, bullets, sound):
     """响应子弹和外星人的碰撞"""
     # 删除发生碰撞的子弹和外星人
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if collisions:
+        sound.play()
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
             sb.prep_score()
@@ -125,13 +125,16 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship,
 
     if len(aliens) == 0:
         # 如果整群外星人都被消灭，就提高一个等级
-        bullets.empty()
-        ai_settings.increase_speed()
+        start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
-        stats.level += 1
-        sb.prep_level()
+def start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets):
+    bullets.empty()
+    ai_settings.increase_speed()
 
-        create_fleet(ai_settings, screen, ship, aliens)
+    stats.level += 1
+    sb.prep_level()
+
+    create_fleet(ai_settings, screen, ship, aliens)
 
 def get_number_aliens_x(ai_settings, alien_width):
     """计算每行可容纳多少个外星人"""

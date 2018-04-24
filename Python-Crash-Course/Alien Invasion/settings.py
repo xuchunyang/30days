@@ -15,7 +15,7 @@ class Settings():
         self.bullet_width = 3
         self.bullet_height = 15
         self.bullet_color = 60, 60, 60
-        self.bullet_allowed = 3
+        self.bullet_allowed = 10
 
         # 外星人设置
         self.fleet_drop_speed = 10
@@ -27,6 +27,9 @@ class Settings():
         self.score_scale = 1.5
 
         self.initialize_dynamic_settings()
+
+        # 最高得分保存路径
+        self.history = 'history'
 
     def initialize_dynamic_settings(self):
         """初始化随游戏进行而变化的设置"""

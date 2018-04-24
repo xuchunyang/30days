@@ -1355,3 +1355,44 @@ DONE
 
   run_game()
 #+END_SRC
+
+* 14-4 历史最高分
+
+DONE
+
+* 14-5 重构
+
+DONE
+
+* 14-6 扩展游戏《外星人入侵》
+
+为击中飞船添加音效
+
+14-6.py
+
+#+BEGIN_SRC python :tangle 14-6.py
+  import sys
+  import pygame
+  from pygame.mixer import Sound
+
+  def run_game():
+      pygame.init()
+      pygame.mixer.init()
+      filename = 'sounds/Explosion+3.ogg'
+      sound = Sound(file=filename)
+      screen = pygame.display.set_mode()
+      pygame.display.set_caption("14-6 音效测试")
+      print("按空格键播放音效")
+
+      while True:
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  sys.exit()
+              elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                  sound.play()
+
+          screen.fill((0, 0, 255))
+          pygame.display.flip()
+
+  run_game()
+#+END_SRC
