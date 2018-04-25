@@ -511,3 +511,134 @@ DONE
 
 #+RESULTS:
 [[file:binhai.svg]]
+
+* 17-1 其它语言
+
+修改python_repos.py中的API调用，使其在生成的图表中显示使用其他语言编写
+的最受欢迎的项目。请尝试语言JavaScript、Ruby、C、Java、Perl、Haskell和
+Go等
+
+#+BEGIN_SRC python :results file
+  import requests
+  import pygal
+
+
+  # 执行 API 调用并存储响应
+  url = 'https://api.github.com/search/repositories?q=language:javascript&sort=stars'
+  r = requests.get(url)
+  print("Status Code:", r.status_code)
+
+  # 将 API 响应存储在一个变量中
+  response_dict = r.json()
+  print("Total repositories:", response_dict['total_count'])
+
+  # 搜索有关仓库的信息
+  repo_dicts = response_dict['items']
+
+  names, plot_dicts = [], []
+  for repo_dict in repo_dicts:
+      names.append(repo_dict['name'])
+
+      description = repo_dict['description']
+      if not description:
+          description = "No description provided"
+
+      plot_dict = {
+          'value': repo_dict['stargazers_count'],
+          'label': description,
+          'xlink': repo_dict['html_url'],
+      }
+      plot_dicts.append(plot_dict)
+
+  # 可视化
+  my_config = pygal.Config()
+  my_config.x_label_rotation = 45
+  my_config.show_legend = False
+  my_config.show_y_guides = False
+
+  chart = pygal.Bar(my_config)
+  chart.title = "Most-Starred JavaScript Projects on Github"
+  chart.x_labels = names
+
+  chart.add('', plot_dicts)
+  chart.render_to_file('js_repos.svg')
+  return 'js_repos.svg'
+#+END_SRC
+
+#+RESULTS:
+[[file:js_repos.svg]]
+
+* 17-2 最活跃的讨论
+
+使用hn_submissions.py中的数据，创建一个条形图，显示Hacker News上当前最
+活跃的讨论。条形的高度应对应于文章得到的评论数量，条形的标签应包含文章
+的标题，而每个条形应是到该文章讨论页面的链接。
+
+#+BEGIN_SRC python :tangle 17-2.py
+  import requests
+  import pygal
+
+
+  url = 'https://hacker-news.firebaseio.com/v0/topstories.json'
+  r = requests.get(url)
+  print("Status code:", r.status_code)
+
+  submission_ids = r.json()
+  submission_dicts = []
+
+  titles, plot_dicts = [], []
+
+  for submission_id in submission_ids[:30]:
+      url = ('https://hacker-news.firebaseio.com/v0/item/' +
+             str(submission_id) + '.json')
+      submission_r = requests.get(url)
+      print(submission_r.status_code)
+      response_dict = submission_r.json()
+
+      titles.append(response_dict['title'])
+
+      comments = response_dict.get('descendants', 0)
+      plot_dict = {
+          'value': comments,
+          'xlink': 'https://news.ycombinator.com/item?id=' + str(submission_id),
+      }
+      plot_dicts.append(plot_dict)
+
+  my_config = pygal.Config()
+  my_config.x_label_rotation = 45
+  my_config.show_legend = False
+  my_config.truncate_label = 15
+  my_config.show_y_guides = False
+  my_config.width = 1000
+
+  chart = pygal.Bar(my_config)
+  chart.title = "Hacker News 上最活跃的讨论"
+  chart.x_labels = titles
+
+  chart.add('', plot_dicts)
+  chart.render_to_file('hn.svg')
+#+END_SRC
+
+* 17-3 测试python_repos.py
+
+test_python_repos.py
+
+#+BEGIN_SRC python :tangle test_python_repos.py
+  import unittest
+
+  from python_repos import r, response_dict, repo_dicts
+
+
+  class PythonReposTestCase(unittest.TestCase):
+      """测试 python_repos.py"""
+
+      def test_status_code(self):
+          self.assertEqual(r.status_code, 200)
+
+      def test_repo_dicts_len(self):
+          # Github 默认的分页为 30
+          self.assertEqual(len(repo_dicts), 30)
+
+
+  unittest.main()
+#+END_SRC
