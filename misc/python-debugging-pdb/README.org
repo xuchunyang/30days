@@ -1,0 +1,60 @@
+For [[https://realpython.com/python-debugging-pdb/#getting-started-printing-a-variables-value][Python Debugging With Pdb – Real Python]]
+
+* 如何开始 Debug？
+
+在需要 Debug 的位置的前面插入
+
+#+BEGIN_SRC python :session :results value pp
+import pdb; pdb.set_trace()
+#+END_SRC
+
+另外一种不需要修改源代码（从第一句开始 Debug）
+
+#+begin_src sh
+python -m pdb
+#+end_src
+
+* 如何打印变量的值？
+
+~p expression~ 其中 expression 是一个合法的 Python 表达式
+
+* 如何单步执行代码？
+
+- ~n~ :: 下一句
+- ~s~ :: 下一句（如果遇到函数调用则进入这个函数调用）
+
+* 如何显示正在 Debug 的位置？
+
+- ~ll~ :: 当前函数或者 Frame
+- ~l~ :: 当前行上下 11 行，或者继续上次 ~l~ ，用 ~l .~ 可以总是列出 11 行
+
+* 如何使用断点？
+
+- ~b filename:lineno~ 或 ~b module:fun~ 设置断点
+  - ~b module:fun, condition~ 条件断点
+~ ~b~ :: 打印断点
+- ~disable NUM~ / ~enable NUM~ 开关断点
+- ~clear NUM~ 删除断点
+- ~c~ 执行到下一个断点处
+
+* 如何执行到某一个物理行？
+
+~until~ 执行到下一个「物理行」， ~n~ 执行到下一个「逻辑行」
+
+* 如何自动显示表达式的值？
+
+- ~display expression~ :: 添加
+- ~display~ :: List
+- ~undisplay [expression]~ :: 删除
+
+* 如何切换 Frame？
+
+当前 Frame 指正在执行中的一个函数的作用域。假设目前 PDB 停在 baz 里面，那么只能访问这个函数内的变量，如 ~z~ ，而不能访问 ~x~ 和 ~y~
+
+#+begin_example
+foo(x + bar(y + baz(z)))
+#+end_example
+
+- ~w~ or ~where~ :: 显示当前 Frame
+- ~u~ or ~up~ :: 进入上层 Frame
+- ~d~ or ~down~ :: 进入底层 Frame
